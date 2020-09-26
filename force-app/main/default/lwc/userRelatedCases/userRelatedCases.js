@@ -1,6 +1,7 @@
 import { LightningElement, wire } from 'lwc';
 import getCaseList from '@salesforce/apex/ShowUserRelatedCases_Controller.getCaseList';
 import cloneCase from '@salesforce/apex/ShowUserRelatedCases_Controller.cloneCase';
+import changeCaseStatus from '@salesforce/apex/ShowUserRelatedCases_Controller.changeCaseStatus';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { NavigationMixin } from 'lightning/navigation';
 export default class UserRelatedCases extends NavigationMixin(LightningElement) {
@@ -12,6 +13,10 @@ export default class UserRelatedCases extends NavigationMixin(LightningElement) 
     connectedCallback() {
         //do something
         this.fetchCaseList();
+        //
+        var currentDate = new Date();
+        console.log('currentDate');
+        console.log(currentDate);
     }
 
     handleOnselect(event) {
@@ -49,8 +54,34 @@ export default class UserRelatedCases extends NavigationMixin(LightningElement) 
                 console.log('show comments for this case '+selectedVal[0]);
                 this.navigateToRelatedList(selectedVal[0]);
         }
+        else if(selectedVal[1] == 'ReOpen'){
+            console.log('reopen this case-->'+selectedVal[0]);
+            this.reOpenCase(selectedVal[0]);
+        }
 
 
+    }
+
+    reOpenCase(caseId){
+        changeCaseStatus({ caseId: caseId })
+        .then(result => {
+            console.log('Reopen the Case');
+            console.log(result);
+            if (!result) {
+                this.showToast('Error', 'Case not Reopened', 'error', 'dismissable');
+
+            }
+            else {
+                this.showToast('Success', 'Case Re-open Successfully', 'success', 'dismissable');
+                this.fetchCaseList();
+                
+            }
+            
+            
+        })
+        .catch(error => {
+
+        });
     }
 
     showToast(title, message, variant, mode) {
@@ -69,10 +100,10 @@ export default class UserRelatedCases extends NavigationMixin(LightningElement) 
                 console.log('updating case List');
                 console.log(result);
                 this.cases = result;
-                for(let count=0; count <result.length;count++){
-                    result[count].Clone = result[count].Id +'--'+'Clone';
-                    result[count].View = result[count].Id +'--'+'View';
-                }
+                // for(let count=0; count <result.length;count++){
+                //     result[count].Clone = result[count].Id +'--'+'Clone';
+                //     result[count].View = result[count].Id +'--'+'View';
+                // }
                 console.log(result);
                 console.log(this.cases);
             })

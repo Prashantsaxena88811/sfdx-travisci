@@ -8,15 +8,26 @@
               <th class="case-table" style="width:30%;">Action</th>
             </tr>
             <template for:each={cases} for:item="caseObj">
-            <tr key={caseObj.Id}>
-                <td class="case-table">{caseObj.CaseNumber}</td>
-                <td class="case-table">{caseObj.Reason}</td>
-                <td class="case-table">{caseObj.Priority}</td>
+            <tr key={caseObj.caseObj.Id}>
+                <td class="case-table">{caseObj.caseObj.CaseNumber}</td>
+                <td class="case-table">{caseObj.caseObj.Reason}</td>
+                <td class="case-table">{caseObj.caseObj.Priority}</td>
                 <td class="case-table">
                     <lightning-button-menu alternative-text="Show menu"  onselect={handleOnselect}>
-                    <lightning-menu-item value={caseObj.Clone} label="Clone" icon-size="small"></lightning-menu-item>
-                    <lightning-menu-item value={caseObj.View} label="View/Add Comments" icon-size="small"></lightning-menu-item>
-                    </lightning-button-menu>
+                        <lightning-menu-item value={caseObj.clone} label="Clone Case" icon-size="small"></lightning-menu-item>
+                        <lightning-menu-item value={caseObj.view} label="View/Add Comments" icon-size="small"></lightning-menu-item>
+                        <div if:true={caseObj.isAllowReopenCaseVisible}>
+                            <div if:true={caseObj.isAllowReopenCase}>
+                                <lightning-menu-item value={caseObj.reOpen} label="Re-open Case" icon-size="small"></lightning-menu-item>
+                            </div>
+                            <div if:false={caseObj.isAllowReopenCase}>
+                                <lightning-menu-item value={caseObj.reOpen} label="Re-open Case" icon-size="small" disabled></lightning-menu-item>
+                            </div>
+                            
+                        </div>
+                        
+                    
+                </lightning-button-menu>
                 </td>
             </tr>
             </template>
