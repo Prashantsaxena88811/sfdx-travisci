@@ -1,0 +1,4 @@
+.tableScroll {
+    overflow: auto;
+    overflow-y: hidden;
+}

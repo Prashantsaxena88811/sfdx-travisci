@@ -1,0 +1,209 @@
+.THIS .div1{
+    border: 1px solid #f2f2f2;
+    width: 25%;
+    margin-top: 10px;
+    /* height: 100px; */
+    margin-left: 1%;
+}
+.THIS .div2{
+    border-width: 0px;
+    left: 0px;
+    top: 0px;
+    width: 567px;
+    height: 100px;
+    background: inherit;
+    background-color: rgba(242, 242, 242, 1);
+    border: none;
+    border-radius: 0px;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    font-family: 'Raleway-Medium', 'Raleway Medium', 'Raleway';
+    font-weight: 500;
+    font-style: normal;
+    font-size: 20px;
+    text-align: left;
+    border: 1px solid #f2f2f2;
+}
+
+.THIS .div-image{
+    border-width: 0px;
+    width: 64px;
+    height: 64px;
+    display: flex;
+}
+
+.THIS .main-div{
+   border-width: 0px;
+    width: 30%;
+    height: 364px;
+    background: inherit;
+    background-color: rgba(255, 255, 255, 1);
+    box-sizing: border-box;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(234, 234, 234, 1);
+    border-radius: 8px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    margin-top:15px;
+    margin-left:3%;
+    display: inline-table;
+}
+
+.THIS .head-div{
+    border-width: 0px;
+    width: 100%;
+    height: 100px;
+    background: inherit;
+    background-color: rgba(242, 242, 242, 1);
+    border: none;
+    border-radius: 0px;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    font-family: 'Raleway-Medium', 'Raleway Medium', 'Raleway';
+    font-weight: 500;
+    font-style: normal;
+    font-size: 20px;
+    text-align: left;
+}
+
+.THIS .head-text-div{
+   align-self: center;
+    padding: 2px 2px 2px 90px;
+    box-sizing: border-box;
+    width: 80%;
+    display: inline-table;
+    margin-top: 30px;
+    margin-left: -100px;
+    font-size: 16px;
+}
+.THIS .head-text-div-p{
+}
+.THIS .head-text-div-span{
+}
+.THIS .head-image-div{
+ border-width: 0;
+    height: 64px;
+    display: flex;
+    display: inline-table;
+    float: left;
+    width: 20%;
+    margin-top: 10px;
+}
+
+.THIS .head-img{
+     border-width: 0px;
+    left: 0px;
+    top: 0px;
+    width: 64px;
+    height: 64px;
+}
+
+.THIS .des-div{
+border-width: 0px;
+    width: 100%;
+    height: 50px;
+    display: flex;
+    font-family: 'Raleway-Regular', 'Raleway';
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.THIS .des-div-sec{
+    align-self: flex-start;
+    padding: 0px 0px 0px 0px;
+    box-sizing: border-box;
+    width: 100%;
+     padding:10px;
+}
+
+.THIS .des-div-p{
+}
+
+.THIS .des-div-span{
+}
+
+.THIS .detail-div{
+        border-width: 0px;
+    width: 100%;
+    height: 40px;
+    background: inherit;
+    background-color: rgba(255, 255, 255, 1);
+    box-sizing: border-box;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(234, 234, 234, 1);
+    border-left: 0px;
+    border-top: 0px;
+    border-right: 0px;
+    border-radius: 0px;
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+        margin-top: 10px;
+    font-size:16px;
+
+}
+
+
+.THIS .detail-div-sec{
+   align-self: flex-start;
+    padding: 0 0 0 0;
+    box-sizing: border-box;
+    width: 85%;
+    padding: 10px;
+    font-size:14px;
+    display: inline-table;
+    float: left
+}
+
+
+.THIS .detail-div-p{
+}
+
+
+
+.THIS .detail-div-span{
+}
+.THIS .detail-image-div{
+    border-width: 0;
+    width: 15%;
+    height: 50px;
+    display: flex;
+    float: right;
+    display: inline-table;
+}
+
+
+.THIS .detail-img{
+    border-width: 0px;
+    left: 0px;
+    top: 0px;
+    width: 20px;
+    height: 25px;
+}
+
+.THIS .foot-div{
+    border-width: 0px;
+    width: 100%;
+    height: 40px;
+    font-family: 'Raleway-Regular', 'Raleway';
+    font-weight: 400;
+    font-style: normal;
+    font-size:14px;
+    text-align: left;
+    margin-left:10px;
+    margin-top:10px;
+}
+.THIS .foot-div-sec{
+}
+.THIS .foot-div-p{
+}
+.THIS .foot-div-span{
+}

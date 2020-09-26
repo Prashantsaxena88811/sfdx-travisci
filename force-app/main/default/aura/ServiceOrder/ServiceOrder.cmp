@@ -1,0 +1,63 @@
+<aura:component controller="ServiceOrderController">
+    
+    <!--use JQuery Data Table css,Js and jQUERY js file in lightning component by using ltng:require component-->
+ 
+    <ltng:require
+                  styles="{!join(',',$Resource.bootstrap ,$Resource.datatable  + '/DataTables-1.10.16/media/css/jquery.dataTables.min.css')}"
+                  scripts="{!join(',',
+                           $Resource.jquery,
+                           $Resource.datatable + '/DataTables-1.10.16/media/js/jquery.dataTables.min.js')}"
+                  afterScriptsLoaded="{!c.scriptsLoaded}" />
+    
+    
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>  
+    
+    <aura:attribute name="listOfRecords" type="Object[]"/>     
+    
+    <div style="width:500px;">
+        <table id="tableId" class="table table-striped table-borderedr" cellspacing="0" style="width:800px !important;">
+            <thead>
+                <tr class="tr-head">
+                    <th></th>
+                    <th>Service Order Number</th>
+                    <th>Product</th>
+                    <th>Serial Number</th>
+                    <th>Job Type</th>
+                    <th>Status</th> 
+                    <th>Ship Date</th> 
+                    <th>Fault Description/Comments</th> 
+
+                </tr>
+                 <tr class="tr-head-tb">
+                                         <th></th>
+
+                    <th><input type="text" /></th>
+                    <th><input type="text"/></th>
+                    <th><input type="text"/></th>
+                    <th><input type="text" /></th>
+                    <th><input type="text"/></th> 
+                    <th><input type="text"/></th> 
+                    <th><input type="text" /></th> 
+
+                </tr>
+            </thead>
+            <tbody>
+                <aura:iteration items="{!v.listOfRecords}" var="record">
+                    <tr>
+                        <td><input type="checkbox"></input></td>
+                        <td>{!record.ServiceOrderNumber}</td>
+                        <td>{!record.Product}</td>
+                        <td>{!record.SerialNumber}</td>
+                        <td>{!record.JobType}</td>
+                        <td>{!record.Status}</td>
+                        <td>{!record.ShipDate}</td>
+                        <td>{!record.Comments}</td>
+
+
+                    </tr>
+                </aura:iteration>  
+            </tbody>
+        </table>
+    </div>
+</aura:component>

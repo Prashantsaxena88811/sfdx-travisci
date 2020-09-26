@@ -1,0 +1,57 @@
+<!--
+ - Created by awish on 29-08-2020.
+ --> 
+
+<aura:component description="MultiPicklist">
+    <aura:attribute name="options" type="List" default="[]"/>
+    <aura:attribute name="values" type="List" default="[]"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="selectedOptionValue" type="List"/>
+    <aura:attribute name="selectedcolumns" type="List"/> 
+    <aura:attribute name="defaultColumns" type="List"/>
+    <aura:attribute name="isShowHideSelector" type="boolean" default="false"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    <aura:if isTrue="{!v.isShowHideSelector}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <!-- Modal/Popup Box Header Starts here-->
+                <header class="slds-modal__header">
+                    <lightning:buttonIcon iconName="utility:close"
+                                          onclick="{! c.closeModel }"
+                                          alternativeText="close"
+                                          variant="bare-inverse"
+                                          class="slds-modal__close"/>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate"></h2>
+                </header>
+                <!--Modal/Popup Box Body Starts here-->
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning:dualListbox name="multipleOptions"
+                                           label= "Select Options"
+                                           sourceLabel="Available"
+                                           selectedLabel="Selected"
+                                           options="{!v.options}"
+                                           value="{!v.values}"
+                                           onchange="{! c.handleChange }"/>
+                </div>
+                <!--Modal/Popup Box Footer Starts here-->
+                <footer class="slds-modal__footer">
+                    <lightning:button variant="brand"
+                                      label="Apply"
+                                      title="Apply"
+                                      class="slds-button_destructive"
+                                      onclick="{! c.ApplyColoumn }"/>
+                    <lightning:button variant="brand"
+                                      label="Reset Default"
+                                      title="Reset Default"
+                                      class="slds-button_destructive"
+                                      onclick="{! c.ResetDefaultColoumn }"/>
+                    <lightning:button variant="neutral"
+                                      label="Close"
+                                      title="Close"
+                                      onclick="{! c.closeModel }"/>
+                </footer>
+            </div>
+        </section>
+    </aura:if>
+</aura:component>

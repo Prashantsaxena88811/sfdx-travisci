@@ -1,0 +1,58 @@
+.THIS {
+}
+
+.THIS .field-title {
+    font-size: .75rem;
+    line-height: 1.25;
+    color: #54698d;
+    margin-bottom: .25rem;
+}
+.THIS .positionfixed{
+position:absolute;
+}
+.THIS .borderCss{
+    border-radius : 5px;
+}
+.THIS .slds-nav-vertical__item.slds-is-active .slds-nav-vertical__action {
+    font-weight: bold;
+    box-shadow: none !important;
+}
+
+.THIS .customNavCSS{
+    position: absolute;
+    z-index: 999999 !important;
+    background-color: #fdfcfc;
+   	
+    margin-top: -5%;
+}
+.THIS .slds-modal__container{
+    width: 95%;
+    max-width: 75rem;
+}
+
+.THIS .serviceHistoryCss{
+    background-color: #484056;
+    color: white;
+}
+
+.THIS .height1{
+    height:4rem;
+}
+.THIS .customboxasset{
+    border-radius: 0; 
+    padding-top:1rem;
+    padding-right:0;
+    border-top: 1px solid #d4d4d4;
+    border-left: 1px solid #d4d4d4;
+    border-right: 1px solid #d4d4d4;
+    border-bottom: 1px solid #d4d4d4;
+}
+
+.THIS .custombackgroundColor{
+    background-color: gray;
+    color: white;
+    padding: 5px;
+}
+.THIS .buttonwidth{
+    width:16rem;
+}

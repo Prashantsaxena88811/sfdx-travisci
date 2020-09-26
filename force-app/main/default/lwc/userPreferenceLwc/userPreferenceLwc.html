@@ -1,0 +1,40 @@
+<template>
+    <lightning-card
+            variant="narrow">
+        <h1 slot="title">Modify Filter Notifications</h1>
+    </lightning-card>
+    <template if:true={response.data}>
+        <template for:each={response.data} for:item="acc">
+            <div key={acc.id} class="slds-grid slds-wrap">
+                
+                <div key={acc.id} class="slds-size_1-of-4">
+                    <div class="slds-var-m-around_x-small">
+                        <span>
+                            <lightning-input type="text" data-field="Name" value={acc.Name} read-only label="Asset Filter Name">
+                            </lightning-input>
+                        </span>
+                    </div>
+                </div>
+
+                <div key={acc.Id} class="slds-size_1-of-4">
+                    <div class="slds-var-m-around_x-small">
+                        <span>
+                            <lightning-input key={acc.Id} type="checkbox" label="Status" name="flag" value={acc.Id} checked={acc.isActive__c} onchange={toggeled} data-field="isActive__c" ></lightning-input>
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+        </template>
+    </template>
+
+
+<!--Section 8-->
+<div class="slds-var-m-bottom_x-small">
+    <div class="slds-float_right">
+        <lightning-button name="cancelButton" label="Cancel" onclick={handleClick} class="slds-var-m-left_x-small"></lightning-button>
+        <lightning-button name="saveButton" label="Save" onclick={handleClick} class="slds-var-m-left_x-small" variant="brand"></lightning-button>
+    </div>
+</div>
+
+</template>

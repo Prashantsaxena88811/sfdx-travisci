@@ -1,0 +1,17 @@
+.THIS {
+}
+.THIS .tr-head{
+    background-color: #cecece;
+    height: 35px;
+}
+
+.THIS .tr-head-tb{
+    background-color: #efefef
+}
+.THIS #tableId_wrapper{
+    width:900px !important;
+}
+
+.THIS .dataTable {
+    width:900px !important;
+}

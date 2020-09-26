@@ -1,0 +1,73 @@
+<aura:component >
+    <aura:attribute name="objectVar" type="Object" />
+    <aura:attribute name="fieldName" type="String" />
+    <aura:attribute name="placeholder" type="String" />
+    <aura:attribute name="filterValue" type="String" />
+    <aura:attribute name="showField" type="Boolean" default="false" />
+    <aura:attribute name="isFilter" type="Boolean" default="false" />
+    <aura:attribute name="showClr" type="Boolean" default="false" />
+    <aura:attribute name="openModal" type="Boolean" default="false" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <aura:registerEvent name="myComponentEvent" type="c:componentEventFilter"/>
+    <aura:handler event="c:cmpClearFilter" action="{!c.clearFilterval}" includeFacets="true"/>
+
+    <aura:if isTrue = "{!v.showField}">
+        <aura:if isTrue="{!v.fieldName == 'product_no'}">
+<a href="#" aura:id="oURL" value="" label="" onclick="{!c.openModalBox}">{!v.objectVar.product_no} </a>
+            <aura:set attribute="else">
+                <ui:outputText aura:Id="outputTextId" />
+                </aura:set>
+            </aura:if>
+        
+    </aura:if>
+
+    <aura:if isTrue="{!v.isFilter}">
+        <span>
+        <lightning:input class="inputboxmargin" name="{!v.fieldName}" label="" varient="label-hidden" value = "{!v.filterValue}"
+        placeholder="{!v.placeholder}" onblur="{!c.filterChangeHandler}" onchange="{!c.showClear}"/>
+        </span>
+        <span>
+            <label></label>
+            <aura:if isTrue="{!v.showClr}">
+                <button data-btname="{!v.fieldName}" style="bottom: 16px;position: absolute;right: 23px;" 
+                        class="slds-button slds-button_icon slds-input__icon slds-input__icon_right"
+                        title="Clear the text input" onclick="{!c.clearColumnSearch}">
+                    <lightning:icon iconName="utility:clear" size="x-small" />
+                </button>
+            </aura:if>
+        </span>
+    </aura:if>
+    
+
+<aura:if isTrue="{!v.openModal}">
+
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+          <header class="slds-modal__header">
+            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.closeFilterModal}" >
+                <lightning:icon iconName="utility:close" alternativeText="close" title="close" />
+                <span class="slds-assistive-text">Close</span>
+              </button>
+          
+            <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Asset Details</h2>
+            <p class="slds-m-top_x-small">
+                Details about your asset
+            </p>
+          </header>
+          <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+            
+        
+            TBD
+            <br/>
+</div>
+          
+          <footer class="slds-modal__footer">
+            <button class="slds-button slds-button_neutral" onclick="{!c.closeModal}">Close</button>
+          </footer>
+        </div>
+      </section>
+      <div class="slds-backdrop slds-backdrop_open"></div>
+</aura:if>
+</aura:component>

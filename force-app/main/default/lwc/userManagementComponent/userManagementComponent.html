@@ -1,0 +1,104 @@
+<template>
+  <template if:true={showSpinner}>
+    <!--<lightning-spinner alternative-text="Loading" variant="brand" size="large">
+    </lightning-spinner>-->
+    <div class="demo-only">
+      <div class="slds-spinner_container">
+        <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_inverse">
+          <span class="slds-assistive-text">Loading</span>
+          <div class="slds-spinner__dot-a"></div>
+          <div class="slds-spinner__dot-b"></div>
+        </div>
+      </div>
+      </div>
+  </template>
+
+<lightning-layout>
+    <lightning-layout-item padding="around_x-small" flexibility="auto">
+        <div class="slds-box" style="background: White;">
+            <lightning-layout>
+                <lightning-layout-item class="slds-m-right_x-large" style="font-size:medium;"><b>User Id</b></lightning-layout-item>
+                <lightning-layout-item size="3" flexibility="auto">
+                    <lightning-input type="text" variant="label-hidden" label="User ID" value={contactID} name="UserId" placeholder="Please enter the User Id"></lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item size="2" style="margin-left: 20px;" flexibility="auto">
+                    <a class="aRed" type="button" onclick={handleSearch}>
+                        <div class="slds-grid ">
+                            <div class="slds-col">
+                                <i class="gg-search-loading"></i>
+                            </div>
+                            <div class="slds-col">
+                                &nbsp;Search
+                            </div>
+                        </div>
+                    </a>
+                </lightning-layout-item>
+            </lightning-layout>
+        </div>
+    </lightning-layout-item>
+</lightning-layout>
+<br />
+<div class="redDivWithWhiteText " style="display: flex;">
+    <h2 class="slds-text-heading_large">
+        <b>My Preference</b>
+    </h2>
+</div>
+<div>
+    <div class="slds-box" style="background: White; text-align: left;">
+        This settings applies by default ONLY to asset that did not have an individual asset setting predefined
+        <br />
+        <lightning-input type="checkbox" label="Print cal due date on certificate"></lightning-input>
+    </div>
+
+    <div class="redDivWithWhiteText slds-m-top_x-large " style="display: flex;">
+        <h2 class="slds-text-heading_large">
+            <b>My Preferred Sites</b>
+        </h2>
+    </div>
+
+    <div class="slds-box" style="background: White; text-align: left;">
+        To customize your asset view elect the site that you would like to include when you select My Preferred site in status checking or asset screens.
+        <br /><br />
+        <template if:true={reset}>
+      <div class="slds-scrollable_y" style="background: white; max-height: 46vh;">
+        
+        <table
+          class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped slds-table_bordered slds-table_col-bordered">
+          <thead>
+            <tr class="slds-line-height_reset">
+              <th scope="col" style="width: 15%; background: #d4d4d4; border-color: white;">
+                <div class="slds-truncate" title="Preferred">Preferred</div>
+              </th>
+              <th scope="col" style="width: 85%; background: #d4d4d4; border-color: white;">
+                <div class="slds-truncate" title="Site">Site</div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <template for:each={tableData} for:item="row">
+              <tr class="slds-hint-parent" key={row.siteId}>
+                <td data-label="Preferred" style="width: 15%;">
+                  <div class="slds-truncate">
+                    <lightning-input data-id={row.siteId} type="checkbox" checked={row.preferred}></lightning-input>
+                  </div>
+                </td>
+                <td data-label="Site" style="width: 85%;">
+                  <div class="slds-truncate" title={row.siteName}>
+                    {row.siteName}
+                  </div>
+                </td>
+              </tr>
+            </template>
+        </tbody>
+        </table>
+        <template if:true={showUpdateButton}>
+          <br />
+          <a class="aRed" type="button" onclick={saveData}>
+            Update
+          </a>
+        </template>
+    </div>
+    </template>
+</div>
+</div>
+</template>

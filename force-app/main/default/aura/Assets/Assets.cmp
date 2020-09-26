@@ -1,0 +1,678 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+  <ltng:require styles="{!$Resource.mainstyle}"/>
+    <body style="margin: 0px;">
+      <div id="base" class="">
+         <!-- Unnamed (Rectangle) -->
+         <div id="u0" class="ax_default box_2">
+            <div id="u0_div" class=""></div>
+            <div id="u0_text" class="text " style="display:none; visibility: hidden">
+               <p></p>
+            </div>
+         </div>
+         <!-- Unnamed (Rectangle) -->
+         <div id="u1" class="ax_default box_2" style="cursor: pointer;">
+            <div id="u1_div" class="" tabindex="0"></div>
+            <div id="u1_text" class="text ">
+               <p id="cache12" style=""><span id="cache13" style="">Manage My Assets</span></p>
+            </div>
+         </div>
+         <!-- Unnamed (Rectangle) -->
+         <div id="u2" class="ax_default box_2" style="cursor: pointer;">
+            <div id="u2_div" class="" tabindex="0"></div>
+            <div id="u2_text" class="text ">
+               <p id="cache18" style=""><span id="cache19" style="">License Pool Management</span></p>
+            </div>
+         </div>
+         <!-- Unnamed (Footer) -->
+        
+         <div id="u3" style="display:none; visibility:hidden;"></div>
+         <!-- Unnamed (Group) -->
+         <div id="u46" class="ax_default" data-left="48" data-top="842" data-width="552" data-height="60">
+            <!-- Unnamed (Rectangle) -->
+            <div id="u47" class="ax_default box_2">
+               <div id="u47_div" class=""></div>
+               <div id="u47_text" class="text " style="display:none; visibility: hidden">
+                  <p></p>
+               </div>
+            </div>
+         </div>
+         <!-- Unnamed (Rectangle) -->
+         <div id="u48" class="ax_default box_2">
+            <div id="u48_div" class=""></div>
+            <div id="u48_text" class="text " style="display:none; visibility: hidden">
+               <p></p>
+            </div>
+         </div>
+         <!-- Unnamed (Group) -->
+         <div id="u49" class="ax_default" data-left="684" data-top="495" data-width="552" data-height="122">
+            <!-- Unnamed (Rectangle) -->
+            <div id="u50" class="ax_default box_2">
+               <div id="u50_div" class=""></div>
+               <div id="u50_text" class="text ">
+                  <p><span>Support Case Management</span></p>
+               </div>
+            </div>
+            <!-- Unnamed (Rectangle) -->
+            <div id="u51" class="ax_default box_2">
+               <div id="u51_div" class=""></div>
+               <div id="u51_text" class="text ">
+                  <p><span>Software Download Center (SW, FW, Drivers)</span></p>
+               </div>
+            </div>
+            <!-- Unnamed (Rectangle) -->
+            <div id="u52" class="ax_default box_2">
+               <div id="u52_div" class=""></div>
+               <div id="u52_text" class="text ">
+                  <p><span>Safety / Recall Service Notes</span></p>
+               </div>
+            </div>
+         </div>
+         <!-- Unnamed (Rectangle) -->
+         <div id="u53" class="ax_default box_2">
+            <div id="u53_div" class=""></div>
+            <div id="u53_text" class="text " style="display:none; visibility: hidden">
+               <p></p>
+            </div>
+         </div>
+         <!-- Unnamed (Rectangle) -->
+         <div id="u54" class="ax_default box_2">
+            <div id="u54_div" class=""></div>
+            <div id="u54_text" class="text ">
+               <p><span>Account Management</span></p>
+            </div>
+         </div>
+         <!-- Unnamed (Image) -->
+         <div id="u55" class="ax_default image">
+            <img id="u55_img" class="img " src="https://d1icd6shlvmxi6.cloudfront.net/gsc/FTQCFN/1c/fc/7e/1cfc7e216d344ff280ec6d14ffe10de6/images/home__logged_out/u55.png?token=05e8da79a69088cd1fd9064232afa9a544a9310d72481d8ee18a721542064ac3"></img>
+            <div id="u55_text" class="text " style="display:none; visibility: hidden">
+               <p></p>
+            </div>
+         </div>
+         <!-- Unnamed (Rectangle) -->
+         <div id="u56" class="ax_default box_2">
+            <div id="u56_div" class=""></div>
+            <div id="u56_text" class="text " style="display:none; visibility: hidden">
+               <p></p>
+            </div>
+         </div>
+         <!-- Unnamed (Group) -->
+         <div id="u57" class="ax_default" data-left="1320" data-top="495" data-width="552" data-height="122">
+            <!-- Unnamed (Rectangle) -->
+            <div id="u58" class="ax_default box_2" style="cursor: pointer;">
+               <div id="u58_div" class="" tabindex="0"></div>
+               <div id="u58_text" class="text ">
+                  <p><span>Schedule Calibration / Repair Service</span></p>
+               </div>
+            </div>
+            <!-- Unnamed (Rectangle) -->
+            <div id="u59" class="ax_default box_2" style="cursor: pointer;">
+               <div id="u59_div" class="" tabindex="0"></div>
+               <div id="u59_text" class="text ">
+                  <p><span>Service Order Management</span></p>
+               </div>
+            </div>
+            <!-- Unnamed (Rectangle) -->
+            <div id="u60" class="ax_default box_2" style="cursor: pointer;">
+               <div id="u60_div" class="" tabindex="0"></div>
+               <div id="u60_text" class="text ">
+                  <p><span>Service Catalog</span></p>
+               </div>
+            </div>
+         </div>
+       
+       
+         <!-- Unnamed (Group) -->
+         <div id="u63" class="ax_default" data-left="48" data-top="911" data-width="552" data-height="124">
+            <!-- Unnamed (Group) -->
+            <div id="u64" class="ax_default" data-left="48" data-top="911" data-width="552" data-height="40" style="cursor: pointer;">
+               <!-- Unnamed (Rectangle) -->
+               <div id="u65" class="ax_default box_2">
+                  <div id="u65_div" class="" tabindex="0"></div>
+                  <div id="u65_text" class="text ">
+                     <p id="cache20" style=""><span id="cache21" style="">Reports and Dashboards</span></p>
+                  </div>
+               </div>
+            </div>
+            <!-- Unnamed (Group) -->
+            <div id="u66" class="ax_default" data-left="48" data-top="951" data-width="552" data-height="40" style="cursor: pointer;">
+               <!-- Unnamed (Rectangle) -->
+               <div id="u67" class="ax_default box_2">
+                  <div id="u67_div" class="" tabindex="0"></div>
+                  <div id="u67_text" class="text ">
+                     <p><span>Agreements, Invoices and Quotes</span></p>
+                  </div>
+               </div>
+            </div>
+            <!-- Unnamed (Group) -->
+            <div id="u68" class="ax_default" data-left="48" data-top="995" data-width="552" data-height="40" style="cursor: pointer;">
+               <!-- Unnamed (Rectangle) -->
+               <div id="u69" class="ax_default box_2">
+                  <div id="u69_div" class="" tabindex="0"></div>
+                  <div id="u69_text" class="text ">
+                     <p><span>Account Entitlements</span></p>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <!-- Unnamed (Rectangle) -->
+         <div id="u70" class="ax_default box_2">
+            <div id="u70_div" class=""></div>
+            <div id="u70_text" class="text " style="display:none; visibility: hidden">
+               <p></p>
+            </div>
+         </div>
+         <!-- Unnamed (Rectangle) -->
+         <div id="u71" class="ax_default box_2">
+            <div id="u71_div" class=""></div>
+            <div id="u71_text" class="text ">
+               <p><span>Offerings</span></p>
+            </div>
+         </div>
+         <!-- Unnamed (Image) -->
+         <div id="u72" class="ax_default image">
+            <img id="u72_img" class="img " src="https://d1icd6shlvmxi6.cloudfront.net/gsc/FTQCFN/1c/fc/7e/1cfc7e216d344ff280ec6d14ffe10de6/images/home__logged_out/u72.png?token=92dc91f233513b1d9541a00a5bd36465442d24e7730142a7e4fb23a7eb852c51"></img>
+            <div id="u72_text" class="text " style="display:none; visibility: hidden">
+               <p></p>
+            </div>
+         </div>
+         <!-- Unnamed (Group) -->
+         <div id="u73" class="ax_default" data-left="1320" data-top="911" data-width="552" data-height="124">
+            <!-- Unnamed (Rectangle) -->
+            <div id="u74" class="ax_default box_2">
+               <div id="u74_div" class=""></div>
+               <div id="u74_text" class="text ">
+                  <p><span>Service Catalog</span></p>
+               </div>
+            </div>
+            <!-- Unnamed (Rectangle) -->
+            <div id="u75" class="ax_default box_2">
+               <div id="u75_div" class=""></div>
+               <div id="u75_text" class="text ">
+                  <p><span>Products and Solutions</span></p>
+               </div>
+            </div>
+            <!-- Unnamed (Rectangle) -->
+            <div id="u76" class="ax_default box_2">
+               <div id="u76_div" class=""></div>
+               <div id="u76_text" class="text ">
+                  <p><span>Replacement Products</span></p>
+               </div>
+            </div>
+         </div>
+         <!-- Unnamed (Rectangle) -->
+         <div id="u77" class="ax_default paragraph">
+            <div id="u77_div" class=""></div>
+            <div id="u77_text" class="text ">
+               <p><span>View portfolio of software and service offerings, covering the entire product lifecycle.</span></p>
+            </div>
+         </div>
+         <!-- Unnamed (Rectangle) -->
+         <div id="u78" class="ax_default box_2" style="cursor: pointer;">
+            <div id="u78_div" class="" tabindex="0"></div>
+            <div id="u78_text" class="text ">
+               <p id="cache22" style=""><span id="cache23" style="">And More &gt;</span></p>
+            </div>
+         </div>
+         <!-- Unnamed (Rectangle) -->
+         <div id="u79" class="ax_default box_2">
+            <div id="u79_div" class=""></div>
+            <div id="u79_text" class="text " style="display:none; visibility: hidden">
+               <p></p>
+            </div>
+         </div>
+         <!-- Unnamed (Rectangle) -->
+         <div id="u80" class="ax_default box_2">
+            <div id="u80_div" class=""></div>
+            <div id="u80_text" class="text ">
+               <p><span>KeysightCare Knowledge Center</span></p>
+            </div>
+         </div>
+         <!-- Unnamed (Image) -->
+         <div id="u81" class="ax_default image">
+            <img id="u81_img" class="img " src="https://d1icd6shlvmxi6.cloudfront.net/gsc/FTQCFN/1c/fc/7e/1cfc7e216d344ff280ec6d14ffe10de6/images/home__logged_out/u81.png?token=9cbd79f702bcccf08943bf50c856fba1f78adb224f16b072f8cb5dc48bf92383"></img>
+            <div id="u81_text" class="text " style="display:none; visibility: hidden">
+               <p></p>
+            </div>
+         </div>
+         <!-- Unnamed (Group) -->
+         <div id="u82" class="ax_default" data-left="684" data-top="911" data-width="552" data-height="123">
+            <!-- Unnamed (Rectangle) -->
+            <div id="u83" class="ax_default box_2">
+               <div id="u83_div" class=""></div>
+               <div id="u83_text" class="text ">
+                  <p id="cache0" style=""><span id="cache1" style="">Technical Support Articles</span></p>
+               </div>
+            </div>
+            <!-- Unnamed (Rectangle) -->
+            <div id="u84" class="ax_default box_2">
+               <div id="u84_div" class=""></div>
+               <div id="u84_text" class="text ">
+                  <p id="cache2" style=""><span id="cache3" style="">Document Library</span></p>
+               </div>
+            </div>
+            <!-- Unnamed (Rectangle) -->
+            <div id="u85" class="ax_default box_2">
+               <div id="u85_div" class=""></div>
+               <div id="u85_text" class="text ">
+                  <p id="cache4" style=""><span id="cache5" style="">Discussion Forums</span></p>
+               </div>
+            </div>
+         </div>
+         <!-- Unnamed (Rectangle) -->
+         <div id="u86" class="ax_default paragraph">
+            <div id="u86_div" class=""></div>
+            <div id="u86_text" class="text ">
+               <p><span>Explore thousands of technical articles, product documentation and engage in discussion forums.</span></p>
+            </div>
+         </div>
+         <!-- Unnamed (Rectangle) -->
+         <div id="u87" class="ax_default box_2" style="cursor: pointer;">
+            <div id="u87_div" class="" tabindex="0"></div>
+            <div id="u87_text" class="text ">
+               <p id="cache6" style=""><span id="cache7" style="">And More &gt;</span></p>
+            </div>
+         </div>
+        
+        
+        
+         <!-- Unnamed (Rectangle) -->
+         <div id="u203" class="ax_default paragraph">
+            <div id="u203_div" class=""></div>
+            <div id="u203_text" class="text ">
+               <p><span>Request and manage service orders, download calibration documents and view the service catalog.</span></p>
+               <p><span><br></br></span></p>
+            </div>
+         </div>
+         <!-- Unnamed (Rectangle) -->
+         <div id="u204" class="ax_default paragraph">
+            <div id="u204_div" class=""></div>
+            <div id="u204_text" class="text ">
+               <p><span>Get help for your products with access to support tools and </span></p>
+               <p><span>Keysight experts.</span></p>
+               <p><span><br></br></span></p>
+            </div>
+         </div>
+         <!-- Unnamed (Rectangle) -->
+         <div id="u205" class="ax_default paragraph">
+            <div id="u205_div" class=""></div>
+            <div id="u205_text" class="text ">
+               <p><span>Manage your software and hardware information, access essential product details.</span></p>
+               <p><span><br></br></span></p>
+            </div>
+         </div>
+         <!-- Unnamed (Rectangle) -->
+         <div id="u206" class="ax_default paragraph">
+            <div id="u206_div" class=""></div>
+            <div id="u206_text" class="text ">
+               <p><span>View company agreements, invoices, quotes and dashboards. Manage user and group access.</span></p>
+               <p><span><br></br></span></p>
+            </div>
+         </div>
+         <!-- Registration panel (Dynamic Panel) -->
+         <div id="u207" class="ax_default" data-label="Registration panel" style="z-index: 1003;">
+            <div id="u207_state0" class="panel_state" data-label="State1" style="">
+               <div id="u207_state0_content" class="panel_state_content">
+                  <!-- Unnamed (Rectangle) -->
+                  <div id="u208" class="ax_default box_2">
+                     <div id="u208_div" class=""></div>
+                     <div id="u208_text" class="text " style="display:none; visibility: hidden">
+                        <p></p>
+                     </div>
+                  </div>
+                  <!-- Unnamed (Rectangle) -->
+                  <div id="u209" class="ax_default box_2">
+                     <div id="u209_div" class=""></div>
+                     <div id="u209_text" class="text " style="display:none; visibility: hidden">
+                        <p></p>
+                     </div>
+                  </div>
+                  <!-- Unnamed (Image) -->
+                  <div id="u210" class="ax_default image" style="cursor: pointer;">
+                     <img id="u210_img" class="img " src="https://d1icd6shlvmxi6.cloudfront.net/gsc/FTQCFN/1c/fc/7e/1cfc7e216d344ff280ec6d14ffe10de6/images/home__logged_out/u90.png?token=280da6bf738c8a8ece8572fcd114903d95fb8469b7a02ca101ab97a2f7e9bc12" tabindex="0"></img>
+                     <div id="u210_text" class="text " style="display:none; visibility: hidden">
+                        <p></p>
+                     </div>
+                  </div>
+                  <!-- create/login split (Dynamic Panel) -->
+                  <div id="u211" class="ax_default" data-label="create/login split">
+                     <div id="u211_state0" class="panel_state" data-label="create your account" style="">
+                        <div id="u211_state0_content" class="panel_state_content">
+                           <!-- Unnamed (Rectangle) -->
+                           <div id="u212" class="ax_default heading_1">
+                              <div id="u212_div" class=""></div>
+                              <div id="u212_text" class="text ">
+                                 <p><span>Create your account</span></p>
+                              </div>
+                           </div>
+                           <!-- Unnamed (Rectangle) -->
+                           <div id="u213" class="ax_default heading_1" style="cursor: pointer;">
+                              <div id="u213_div" class="" tabindex="0"></div>
+                              <div id="u213_text" class="text ">
+                                 <p><span>I already have an account</span></p>
+                              </div>
+                           </div>
+                           <!-- Unnamed (Text Field) -->
+                           <div id="u214" class="ax_default form_hint" title="Company email">
+                              <div id="u214_div" class=""></div>
+                              <input id="u214_input" type="text" value="" class="u214_input" title="Company email" style="color: rgb(153, 153, 153);"/>
+                           </div>
+                           <!-- Unnamed (Text Field) -->
+                           <div id="u215" class="ax_default form_hint" title="Company name">
+                              <div id="u215_div" class=""></div>
+                              <input id="u215_input" type="text" value="" class="u215_input" title="Company name" style="color: rgb(153, 153, 153);"/>
+                           </div>
+                           <!-- Unnamed (Text Field) -->
+                           <div id="u216" class="ax_default form_hint" title="First name">
+                              <div id="u216_div" class=""></div>
+                              <input id="u216_input" type="text" value="" class="u216_input" title="First name" style="color: rgb(153, 153, 153);"/>
+                           </div>
+                           <!-- Unnamed (Text Field) -->
+                           <div id="u217" class="ax_default form_hint" title="Last name">
+                              <div id="u217_div" class=""></div>
+                              <input id="u217_input" type="text" value="" class="u217_input" title="Last name" style="color: rgb(153, 153, 153);"/>
+                           </div>
+                           <!-- Unnamed (Text Field) -->
+                           <div id="u218" class="ax_default form_hint" title="Country">
+                              <div id="u218_div" class=""></div>
+                              <input id="u218_input" type="text" value="" class="u218_input" title="Country" style="color: rgb(153, 153, 153);"/>
+                           </div>
+                           <!-- Unnamed (Text Field) -->
+                           <div id="u219" class="ax_default form_hint" title="Create password">
+                              <div id="u219_div" class=""></div>
+                              <input id="u219_input" type="text" value="" class="u219_input" title="Create password" style="color: rgb(153, 153, 153);"/>
+                           </div>
+                           <!-- Unnamed (Text Field) -->
+                           <div id="u220" class="ax_default form_hint" title="Confirm password">
+                              <div id="u220_div" class=""></div>
+                              <input id="u220_input" type="text" value="" class="u220_input" title="Confirm password" style="color: rgb(153, 153, 153);"/>
+                           </div>
+                           <!-- Unnamed (Rectangle) -->
+                           <div id="u221" class="ax_default paragraph">
+                              <div id="u221_div" class=""></div>
+                              <div id="u221_text" class="text ">
+                                 <p><span>By clicking Create Account, you are providing Keysight with your personal data. For information on how we use your personal data, and the choices you have, please review Keysight's Privacy Statement</span></p>
+                              </div>
+                           </div>
+                           <!-- Unnamed (Rectangle) -->
+                           <div id="u222" class="ax_default primary_button">
+                              <div id="u222_div" class=""></div>
+                              <div id="u222_text" class="text ">
+                                 <p><span>Create account</span></p>
+                              </div>
+                           </div>
+                           <!-- Unnamed (Checkbox) -->
+                           <div id="u223" class="ax_default checkbox selected">
+                              <label id="u223_input_label" for="u223_input" style="position: absolute; left: 0px;">
+                                 <img id="u223_img" class="img " src="https://d1icd6shlvmxi6.cloudfront.net/gsc/FTQCFN/1c/fc/7e/1cfc7e216d344ff280ec6d14ffe10de6/images/home__logged_out/u223_selected.svg?token=cab000167f144b1f473c4583435c81f33b3370f54a3f14b31bfc11ea9ed0dfca"> </img>
+                                 <div id="u223_text" class="text ">
+                                    <p><span>Yes, I would like to receive marketing or promotional emails from Keysight.</span></p>
+                                 </div>
+                              </label>
+                               <input id="u223_input" type="checkbox" value="checkbox" checked=""/>
+                           </div>
+                        </div>
+                     </div>
+                     <div id="u211_state1" class="panel_state" data-label="Forgot password" style="visibility: hidden; display: none;">
+                        <div id="u211_state1_content" class="panel_state_content">
+                           <!-- Unnamed (Rectangle) -->
+                           <div id="u224" class="ax_default heading_1">
+                              <div id="u224_div" class=""></div>
+                              <div id="u224_text" class="text ">
+                                 <p><span>Forgot your password?</span></p>
+                              </div>
+                           </div>
+                           <!-- Unnamed (Rectangle) -->
+                           <div id="u225" class="ax_default heading_1" style="cursor: pointer;">
+                              <div id="u225_div" class="" tabindex="0"></div>
+                              <div id="u225_text" class="text ">
+                                 <p><span>I remember it, sign in</span></p>
+                              </div>
+                           </div>
+                           <!-- Unnamed (Text Field) -->
+                           <div id="u226" class="ax_default form_hint" title="Company email">
+                              <div id="u226_div" class=""></div>
+                              <input id="u226_input" type="text" value="" class="u226_input" title="Company email" style="color: rgb(153, 153, 153);"/>
+                           </div>
+                           <!-- Unnamed (Rectangle) -->
+                           <div id="u227" class="ax_default paragraph">
+                              <div id="u227_div" class=""></div>
+                              <div id="u227_text" class="text ">
+                                 <p><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. </span></p>
+                              </div>
+                           </div>
+                           <!-- Unnamed (Rectangle) -->
+                           <div id="u228" class="ax_default primary_button">
+                              <div id="u228_div" class=""></div>
+                              <div id="u228_text" class="text ">
+                                 <p><span>Send my reset link</span></p>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div id="u211_state2" class="panel_state" data-label="Login" style="visibility: hidden; display: none;">
+                        <div id="u211_state2_content" class="panel_state_content">
+                           <!-- Unnamed (Rectangle) -->
+                           <div id="u229" class="ax_default heading_1">
+                              <div id="u229_div" class=""></div>
+                              <div id="u229_text" class="text ">
+                                 <p><span>Login to your account</span></p>
+                              </div>
+                           </div>
+                           <!-- Unnamed (Rectangle) -->
+                           <div id="u230" class="ax_default heading_1" style="cursor: pointer;">
+                              <div id="u230_div" class="" tabindex="0"></div>
+                              <div id="u230_text" class="text ">
+                                 <p><span>I don’t have an account</span></p>
+                              </div>
+                           </div>
+                           <!-- Unnamed (Group) -->
+                           <div id="u231" class="ax_default" data-left="64" data-top="101" data-width="624" data-height="182">
+                              <!-- Unnamed (Text Field) -->
+                              <div id="u232" class="ax_default form_hint" title="Enter your company email">
+                                 <div id="u232_div" class=""></div>
+                                 <input id="u232_input" type="text" value="" class="u232_input" title="Enter your company email" style="color: rgb(153, 153, 153);"/>
+                              </div>
+                              <!-- Unnamed (Text Field) -->
+                              <div id="u233" class="ax_default form_hint" title="Password">
+                                 <div id="u233_div" class=""></div>
+                                 <input id="u233_input" type="text" value="" class="u233_input" title="Password" style="color: rgb(153, 153, 153);"/>
+                              </div>
+                              <!-- Unnamed (Rectangle) -->
+                              <div id="u234" class="ax_default paragraph" style="cursor: pointer;">
+                                 <div id="u234_div" class="" tabindex="0"></div>
+                                 <div id="u234_text" class="text ">
+                                    <p><span>Forgot your password?</span></p>
+                                 </div>
+                              </div>
+                           </div>
+                           <!-- Unnamed (Rectangle) -->
+                           <div id="u235" class="ax_default primary_button" style="cursor: pointer;">
+                              <div id="u235_div" class="" tabindex="0"></div>
+                              <div id="u235_text" class="text ">
+                                 <p><span>Login to my account</span></p>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <!-- Unnamed (Group) -->
+                  <div id="u236" class="ax_default" data-left="1792" data-top="64" data-width="64" data-height="64" style="cursor: pointer;">
+                     <!-- Unnamed (Ellipse) -->
+                     <div id="u237" class="ax_default ellipse">
+                        <img id="u237_img" class="img " src="https://d1icd6shlvmxi6.cloudfront.net/gsc/FTQCFN/1c/fc/7e/1cfc7e216d344ff280ec6d14ffe10de6/images/home__logged_out/u198.svg?token=9a1cfaa9efd8b7288c1de1538ef6fb1c76830e9ae2093fa54f0142e5ce1f61a8" tabindex="0"></img>
+                        <div id="u237_text" class="text " style="display:none; visibility: hidden">
+                           <p></p>
+                        </div>
+                     </div>
+                     <!-- Unnamed (Image) -->
+                     <div id="u238" class="ax_default image">
+                        <img id="u238_img" class="img " src="https://d1icd6shlvmxi6.cloudfront.net/gsc/FTQCFN/1c/fc/7e/1cfc7e216d344ff280ec6d14ffe10de6/images/home__logged_out/u196.png?token=4baed2802dd2a6fa06bc5ef39d2cf464341b814e9fd00016d0747938066d2d5d"></img>
+                        <div id="u238_text" class="text " style="display:none; visibility: hidden">
+                           <p></p>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <!-- Unnamed (Rectangle) -->
+         <div id="u239" class="ax_default box_2" style="cursor: pointer;">
+            <div id="u239_div" class="" tabindex="0"></div>
+            <div id="u239_text" class="text ">
+               <p id="cache16" style=""><span id="cache17" style="">And More &gt;</span></p>
+            </div>
+         </div>
+         <!-- Unnamed (Rectangle) -->
+         <div id="u240" class="ax_default box_2" style="cursor: pointer;">
+            <div id="u240_div" class="" tabindex="0"></div>
+            <div id="u240_text" class="text ">
+               <p id="cache26" style=""><span id="cache27" style="">Obsolescence and Extended Service Lookup</span></p>
+            </div>
+         </div>
+         <!-- Unnamed (Rectangle) -->
+         <div id="u241" class="ax_default box_2" style="cursor: pointer;">
+            <div id="u241_div" class="" tabindex="0"></div>
+            <div id="u241_text" class="text ">
+               <p id="cache24" style=""><span id="cache25" style="">And More &gt;</span></p>
+            </div>
+         </div>
+         <!-- Unnamed (Rectangle) -->
+         <div id="u242" class="ax_default box_2" style="cursor: pointer;">
+            <div id="u242_div" class="" tabindex="0"></div>
+            <div id="u242_text" class="text ">
+               <p id="cache8" style=""><span id="cache9" style="">And More &gt;</span></p>
+            </div>
+         </div>
+         <!-- Unnamed (Rectangle) -->
+         <div id="u243" class="ax_default box_2" style="cursor: pointer;">
+            <div id="u243_div" class="" tabindex="0"></div>
+            <div id="u243_text" class="text ">
+               <p><span>And More &gt;</span></p>
+            </div>
+         </div>
+         <!-- Unnamed (Image) -->
+         <div id="u244" class="ax_default image" title="Login or sign up to unlock this feature">
+            <img id="u244_img" class="img " src="https://d1icd6shlvmxi6.cloudfront.net/gsc/FTQCFN/1c/fc/7e/1cfc7e216d344ff280ec6d14ffe10de6/images/home__logged_out/u101.png?token=cd421b9d06d0ba1bae726b1f820283d8201fde1167114e249e601044c6615cfb"></img>
+            <div id="u244_text" class="text " style="display:none; visibility: hidden">
+               <p></p>
+            </div>
+         </div>
+         <!-- Unnamed (Image) -->
+         <div id="u245" class="ax_default image" title="Login or sign up to unlock this feature">
+            <img id="u245_img" class="img " src="https://d1icd6shlvmxi6.cloudfront.net/gsc/FTQCFN/1c/fc/7e/1cfc7e216d344ff280ec6d14ffe10de6/images/home__logged_out/u101.png?token=cd421b9d06d0ba1bae726b1f820283d8201fde1167114e249e601044c6615cfb"></img>
+            <div id="u245_text" class="text " style="display:none; visibility: hidden">
+               <p></p>
+            </div>
+         </div>
+         <!-- Unnamed (Image) -->
+         <div id="u246" class="ax_default image" title="Login or sign up to unlock this feature">
+            <img id="u246_img" class="img " src="https://d1icd6shlvmxi6.cloudfront.net/gsc/FTQCFN/1c/fc/7e/1cfc7e216d344ff280ec6d14ffe10de6/images/home__logged_out/u101.png?token=cd421b9d06d0ba1bae726b1f820283d8201fde1167114e249e601044c6615cfb"></img>
+            <div id="u246_text" class="text " style="display:none; visibility: hidden">
+               <p></p>
+            </div>
+         </div>
+         <!-- Unnamed (Image) -->
+         <div id="u247" class="ax_default image" title="Login or sign up to unlock this feature">
+            <img id="u247_img" class="img " src="https://d1icd6shlvmxi6.cloudfront.net/gsc/FTQCFN/1c/fc/7e/1cfc7e216d344ff280ec6d14ffe10de6/images/home__logged_out/u101.png?token=cd421b9d06d0ba1bae726b1f820283d8201fde1167114e249e601044c6615cfb"></img>
+            <div id="u247_text" class="text " style="display:none; visibility: hidden">
+               <p></p>
+            </div>
+         </div>
+         <!-- Unnamed (Image) -->
+         <div id="u248" class="ax_default image" title="Login or sign up to unlock this feature">
+            <img id="u248_img" class="img " src="https://d1icd6shlvmxi6.cloudfront.net/gsc/FTQCFN/1c/fc/7e/1cfc7e216d344ff280ec6d14ffe10de6/images/home__logged_out/u101.png?token=cd421b9d06d0ba1bae726b1f820283d8201fde1167114e249e601044c6615cfb"></img>
+            <div id="u248_text" class="text " style="display:none; visibility: hidden">
+               <p></p>
+            </div>
+         </div>
+         <!-- Unnamed (Image) -->
+         <div id="u249" class="ax_default image" title="Login or sign up to unlock this feature">
+            <img id="u249_img" class="img " src="https://d1icd6shlvmxi6.cloudfront.net/gsc/FTQCFN/1c/fc/7e/1cfc7e216d344ff280ec6d14ffe10de6/images/home__logged_out/u101.png?token=cd421b9d06d0ba1bae726b1f820283d8201fde1167114e249e601044c6615cfb"></img>
+            <div id="u249_text" class="text " style="display:none; visibility: hidden">
+               <p></p>
+            </div>
+         </div>
+         <!-- Unnamed (Image) -->
+         <div id="u250" class="ax_default image" title="Login or sign up to unlock this feature">
+            <img id="u250_img" class="img " src="https://d1icd6shlvmxi6.cloudfront.net/gsc/FTQCFN/1c/fc/7e/1cfc7e216d344ff280ec6d14ffe10de6/images/home__logged_out/u101.png?token=cd421b9d06d0ba1bae726b1f820283d8201fde1167114e249e601044c6615cfb"></img>
+            <div id="u250_text" class="text " style="display:none; visibility: hidden">
+               <p></p>
+            </div>
+         </div>
+         <!-- Unnamed (Image) -->
+         <div id="u251" class="ax_default image" title="Login or sign up to unlock this feature">
+            <img id="u251_img" class="img " src="https://d1icd6shlvmxi6.cloudfront.net/gsc/FTQCFN/1c/fc/7e/1cfc7e216d344ff280ec6d14ffe10de6/images/home__logged_out/u101.png?token=cd421b9d06d0ba1bae726b1f820283d8201fde1167114e249e601044c6615cfb"></img>
+            <div id="u251_text" class="text " style="display:none; visibility: hidden">
+               <p></p>
+            </div>
+         </div>
+         <!-- Unnamed (Image) -->
+         <div id="u252" class="ax_default image" title="Login or sign up to unlock this feature">
+            <img id="u252_img" class="img " src="https://d1icd6shlvmxi6.cloudfront.net/gsc/FTQCFN/1c/fc/7e/1cfc7e216d344ff280ec6d14ffe10de6/images/home__logged_out/u101.png?token=cd421b9d06d0ba1bae726b1f820283d8201fde1167114e249e601044c6615cfb"></img>
+            <div id="u252_text" class="text " style="display:none; visibility: hidden">
+               <p></p>
+            </div>
+         </div>
+         <!-- Unnamed (Image) -->
+         <div id="u253" class="ax_default image" title="Login or sign up to unlock this feature">
+            <img id="u253_img" class="img " src="https://d1icd6shlvmxi6.cloudfront.net/gsc/FTQCFN/1c/fc/7e/1cfc7e216d344ff280ec6d14ffe10de6/images/home__logged_out/u101.png?token=cd421b9d06d0ba1bae726b1f820283d8201fde1167114e249e601044c6615cfb"></img>
+            <div id="u253_text" class="text " style="display:none; visibility: hidden">
+               <p></p>
+            </div>
+         </div>
+         <!-- Unnamed (Group) -->
+         <div id="u254" class="ax_default" data-left="41" data-top="306" data-width="567" data-height="100" style="cursor: pointer;">
+            <!-- Unnamed (Rectangle) -->
+            <div id="u255" class="ax_default box_2">
+               <div id="u255_div" class="" tabindex="0"></div>
+               <div id="u255_text" class="text ">
+                  <p id="cache10" style=""><span id="cache11" style="">Assets</span></p>
+               </div>
+            </div>
+         </div>
+         <!-- Unnamed (Group) -->
+         <div id="u256" class="ax_default" data-left="676" data-top="306" data-width="567" data-height="100" style="cursor: pointer;">
+            <!-- Unnamed (Rectangle) -->
+            <div id="u257" class="ax_default box_2">
+               <div id="u257_div" class="" tabindex="0"></div>
+               <div id="u257_text" class="text ">
+                  <p><span>Support</span></p>
+               </div>
+            </div>
+            <!-- Unnamed (Image) -->
+            <div id="u258" class="ax_default image">
+               <img id="u258_img" class="img " src="https://d1icd6shlvmxi6.cloudfront.net/gsc/FTQCFN/1c/fc/7e/1cfc7e216d344ff280ec6d14ffe10de6/images/home__logged_out/u258.png?token=370e04e9288f1aa9a859ec1260b44d6f642e6047ff922d8b46a3833f24788723"></img>
+               <div id="u258_text" class="text " style="display:none; visibility: hidden">
+                  <p></p>
+               </div>
+            </div>
+         </div>
+         <!-- Unnamed (Group) -->
+         <div id="u259" class="ax_default" data-left="1312" data-top="306" data-width="567" data-height="100" style="cursor: pointer;">
+            <!-- Unnamed (Rectangle) -->
+            <div id="u260" class="ax_default box_2">
+               <div id="u260_div" class="" tabindex="0"></div>
+               <div id="u260_text" class="text ">
+                  <p><span>Services</span></p>
+               </div>
+            </div>
+            <!-- Unnamed (Image) -->
+            <div id="u261" class="ax_default image">
+               <img id="u261_img" class="img " src="https://d1icd6shlvmxi6.cloudfront.net/gsc/FTQCFN/1c/fc/7e/1cfc7e216d344ff280ec6d14ffe10de6/images/home__logged_out/u261.png?token=fa384f81fdfe8f2a2aa4f17dedfccf3a0211e9f777e5a117de4b494c4499dd03"></img>
+               <div id="u261_text" class="text " style="display:none; visibility: hidden">
+                  <p></p>
+               </div>
+            </div>
+         </div>
+         <!-- Unnamed (Image) -->
+         <div id="u262" class="ax_default image">
+            <img id="u262_img" class="img " src="https://d1icd6shlvmxi6.cloudfront.net/gsc/FTQCFN/1c/fc/7e/1cfc7e216d344ff280ec6d14ffe10de6/images/home__logged_out/u262.png?token=3c35380d6e118133c672b3ed8817cebbbe45b20f46682796e00f60b4695d500f"></img>
+            <div id="u262_text" class="text " style="display:none; visibility: hidden">
+               <p></p>
+            </div>
+         </div>
+         
+      </div>
+      
+   </body>
+</aura:component>

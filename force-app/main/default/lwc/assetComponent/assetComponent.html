@@ -1,0 +1,196 @@
+<template>
+   <template if:true={isLoading}>
+      <!--<lightning-spinner alternative-text="Loading" variant="brand" size="large">
+      </lightning-spinner>-->
+      <div class="demo-only">
+        <div class="slds-spinner_container">
+          <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_inverse">
+            <span class="slds-assistive-text">Loading</span>
+            <div class="slds-spinner__dot-a"></div>
+            <div class="slds-spinner__dot-b"></div>
+          </div>
+        </div>
+        </div>
+    </template>
+<div class="container">
+    <lightning-card title="Filter" icon-name="utility:setup">
+        <div class="slds-p-around_small">
+            <template if:true={reset}>
+            <!--<div class="slds-grid ">
+               <div class="slds-col slds-m-around_small">
+                  <label class="slds-form-element__label" for="select-01">Organization</label>
+                  <select class="slds-select" onchange={selectionChangeHandler}>
+                                             <option value="ALL">ALL</option>
+                                             <template for:each={setofusers} for:item="option">
+                                                 <option key={option.keyAsString} class="uiInputSelectOption" value={option.keyAsString}>{option.keyAsString}</option>
+                                             </template>
+            </select>
+        </div>
+        <div class="slds-col slds-m-around_small">
+            <label class="slds-form-element__label" for="select-01">Support Status</label>
+            <select class="slds-select" onchange={selectionChangeHandler}>
+                                 <option value="ALL">ALL</option>
+                                 <template for:each={setofusers} for:item="option">
+                                     <option key={option.keyAsString} class="uiInputSelectOption" value={option.keyAsString}>{option.keyAsString}</option>
+                                 </template>
+                             </select>
+        </div>
+        <div class="slds-col slds-m-around_small">
+            <label class="slds-form-element__label" for="select-01">Compliance Condition</label>
+            <select class="slds-select" onchange={selectionChangeHandler}>
+                                 <option value="ALL">ALL</option>
+                                 <template for:each={setofusers} for:item="option">
+                                     <option key={option.keyAsString} class="uiInputSelectOption" value={option.keyAsString}>{option.keyAsString}</option>
+                                 </template>
+                             </select>
+        </div>
+        <div class="slds-col slds-m-around_small">
+            <label class="slds-form-element__label" for="select-01">Host Id</label>
+            <select class="slds-select" onchange={selectionChangeHandler}>
+                                 <option value="ALL">ALL</option>
+                                 <template for:each={setofusers} for:item="option">
+                                     <option key={option.keyAsString} class="uiInputSelectOption" value={option.keyAsString}>{option.keyAsString}</option>
+                                 </template>
+                             </select>
+        </div>
+</div>-->
+<div class="slds-grid">
+    <div class="slds-col slds-m-around_small">
+        <label class="slds-form-element__label" for="select-01">Sites</label>
+        <select class="slds-select" onchange={selectionChangesetofsites}>
+                    <option value="ALL">ALL</option>
+                    <template for:each={setofsites} for:item="option">
+                        <option key={option.keyAsString} class="uiInputSelectOption" value={option.keyAsString}>{option.keyAsString} ({option.docCount})</option>
+                    </template>
+</select>
+
+    </div>
+
+    <div class="slds-col slds-m-around_small">
+        <label class="slds-form-element__label" for="select-01">Users</label>
+        <select class="slds-select" onchange={selectionChangesetofusers}>
+                                    <option value="ALL">ALL</option>
+                                    <template for:each={setofusers} for:item="option">
+                                        <option key={option.keyAsString} class="uiInputSelectOption" value={option.keyAsString}>{option.keyAsString} ({option.docCount})</option>
+                                    </template>
+                                </select>
+    </div>
+    <div class="slds-col slds-m-around_small">
+        <label class="slds-form-element__label" for="select-01">Product</label>
+        <select class="slds-select" onchange={selectionChangesetofProductName}>
+                                    <option value="ALL">ALL</option>
+                                    <template for:each={setofProductName} for:item="option">
+                                        <option key={option.keyAsString} class="uiInputSelectOption" value={option.keyAsString}>{option.keyAsString} ({option.docCount})</option>
+                                    </template>
+                                </select>
+
+    </div>
+    <div class="slds-col slds-m-around_small">
+        <label class="slds-form-element__label" for="select-01">Group</label>
+        <select class="slds-select" onchange={selectionChangesetofGroupName}>
+                                   <option value="ALL">ALL</option>
+                                   <template for:each={setofGroupName} for:item="option">
+                                       <option key={option.keyAsString} class="uiInputSelectOption" value={option.keyAsString}>{option.keyAsString} ({option.docCount})</option>
+                                   </template>
+                               </select>
+
+    </div>
+</div>
+</template>
+</div>
+<div class="slds-grid slds-m-left_large">
+    <div class="slds-grid slds-col_bump-left slds-m-right_xx-large">
+        <a class="aBlueNext" type="button" onclick={callToServerWithFilters}>
+            <div class="slds-grid ">
+                <div class="slds-col">
+                    <i class="gg-play-list-add"></i>
+                </div>
+                <div class="slds-col">
+                    Go
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="slds-grid slds-col">
+        <a class="aBlue" type="button" onclick={resetData}>
+            <div class="slds-grid ">
+                <div class="slds-col">
+                    <i class="gg-play-list-add"></i>
+                </div>
+                <div class="slds-col">
+                    Clear Filter
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+</lightning-card>
+
+<lightning-card title="List of Asset" icon-name="utility:list">
+    <div style="font-size: 20px;color: red;">
+        <b class="slds-m-left_medium">Total Count of Record ({countOfRecord})</b>
+    </div>
+    <div class="slds-scrollable_y" style="background: white; max-height: 26vh;">
+        <lightning-layout multiple-rows="true">
+            <lightning-layout-item size="12" padding="around-medium">
+                <lightning-datatable key-field="id" data={currentPageData} columns={columns} hide-checkbox-column="false" column-widths-mode="auto">
+                </lightning-datatable>
+            </lightning-layout-item>
+
+            <lightning-layout-item size="12" margin="around-small">
+            </lightning-layout-item>
+        </lightning-layout>
+    </div>
+    <div class="slds-grid slds-m-top_x-large">
+        <div class="slds-col_bump-left slds-m-right_small">
+            <a class="aRed" type="button" onclick={prevPage}>
+                <div class="slds-grid ">
+                    <div class="slds-col">
+                        <i class="gg-arrow-left-o"></i>
+                    </div>
+                    <div class="slds-col">
+                        &nbsp;&nbsp;Prev
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="slds-col_bump-right">
+            <a class="aRed" type="button" onclick={nextPage}>
+                <div class="slds-grid ">
+                    <div class="slds-col slds-m-right_small">
+                        Next
+                    </div>
+                    <div class="slds-col">
+                        <i class="gg-arrow-right-o"></i>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="slds-col_bump-left ">
+            <div class="slds-grid ">
+                <div class="slds-col">
+                    <input class="slds-input" onchange={setPageNumber} value={pageNumber} type="text" name="Page Number">
+                </div>
+                <div class="slds-col">
+                    <div style="font-size: 22px;"><b>/ {pageCount}</b></div>
+                </div>
+            </div>
+        </div>
+        <div class="slds-col_bump-right slds-m-left_large">
+            <div class="slds-grid ">
+                <a class="aRed" type="button" onclick={goToPage}>
+                    <div class="slds-grid ">
+                        <div class="slds-col">
+                            <i class="gg-play-list-add"></i>
+                        </div>
+                        <div class="slds-col">
+                            &nbsp;&nbsp;Go to Page
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</lightning-card>
+</div>
+</template>

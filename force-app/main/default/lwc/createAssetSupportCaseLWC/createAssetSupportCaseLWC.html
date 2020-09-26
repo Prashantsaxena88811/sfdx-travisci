@@ -1,0 +1,186 @@
+<template>
+    <template if:true={showArticleSearch}>
+        <!--div onkeyup={searchArticleQuickSearchOptionList}>
+                <lightning-input
+                    name="inline-search-input"
+                    label="This is a search input with a hidden label. The label is still required for accessibility reasons"
+                    variant="label-hidden"
+                    placeholder ="SearchAsset"
+                    type="search"
+                ></lightning-input>
+            </div>
+        <br/> 
+        <lightning-button variant="brand" label="Search" title="Search" onclick={searchArticle}></lightning-button>
+        <br/>     
+        
+        <br />
+        <center>
+            <div>
+                <a href="javascript:void(0)" onclick={opneCaseForm}> 
+                    No,I'd prefer to create a support case
+                </a>   
+            </div>
+        </center>
+        <br/--> 
+
+        <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_1-of-9">
+    
+            </div>
+            <div class="slds-col slds-size_5-of-12" style="border-right: 1px #CCC solid; margin-left: 50px;">
+                <div style="height: 20px;"></div>
+                <div class="slds-form" role="list">
+                    <div class="slds-form__row">
+                      <div class="slds-form__item" role="listitem">
+                        <div class="slds-form-element slds-form-element_stacked slds-is-editing">
+                          <label class="slds-form-element__label" for="stacked-form-element-id-01">
+                            <b style="font-size: 13px;">What kind of case do you need to create?  <abbr class="slds-required" title="required">* </abbr> </b></label>
+                          <div class="slds-form-element__control">
+                            <lightning-combobox name="caseType" label="" onchange={handleCaseTypeValue} value={caseTypeVal} placeholder="Choose One" style="width: 75%; " options={caseTypeOptionList}></lightning-combobox>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div style="height: 8px;"></div>
+                    <div class="slds-form__row">
+                        <div class="slds-form__item" role="listitem">
+                          <div class="slds-form-element slds-form-element_stacked slds-is-editing">
+                            <label class="slds-form-element__label" for="stacked-form-element-id-01">
+                                <b style="font-size: 13px;">Add asset(s) to the case  <abbr class="slds-required" title="required">* </abbr></b></label>
+                            <div class="slds-form-element__control">
+                                <lightning-input name="enter-search" type="search" placeholder="Search eligible asset(s)" style="width: 75%;" value={assetInstance.product_no}></lightning-input>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div style="height: 8px;"></div>
+                      <div class="slds-form__row">
+                        <div class="slds-form__item" role="listitem">
+                          <div class="slds-form-element slds-form-element_stacked slds-is-editing">
+                            <label class="slds-form-element__label" for="stacked-form-element-id-01">
+                                <b style="font-size: 13px;">Severity of case <abbr class="slds-required" title="required">* </abbr></b></label>
+                            <div class="slds-form-element__control">
+                              <lightning-combobox name="caseSeverity" onchange={handleCaseSeverityValue} value={caseSeverity} placeholder="Choose One" style="width: 75%; " options={caseSeverityOptions}></lightning-combobox>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div style="height: 8px;"></div>
+                      <div class="slds-form__row">
+                        <div class="slds-form__item" role="listitem">
+                          <div class="slds-form-element slds-form-element_stacked slds-is-editing">
+                            <label class="slds-form-element__label" for="stacked-form-element-id-01">
+                                <b style="font-size: 13px;">Subject  <abbr class="slds-required" title="required">* </abbr></b></label>
+                            <div class="slds-form-element__control">
+                                <lightning-input type="text" onchange={handleCaseSubjectValue} placeholder="Enter Subject" value={caseSubject} style="width: 75%; "></lightning-input>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div style="height: 8px;"></div>
+                      <div class="slds-form__row">
+                        <div class="slds-form__item" role="listitem">
+                          <div class="slds-form-element slds-form-element_stacked slds-is-editing">
+                            <label class="slds-form-element__label" for="stacked-form-element-id-01">
+                                <b style="font-size: 13px;">Description  <abbr class="slds-required" title="required">* </abbr></b></label>
+                            <div class="slds-form-element__control">
+                                <lightning-textarea placeholder="Enter Description" onchange={handleCaseDescValue} style="width: 75%;" value={caseDescription}></lightning-textarea>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div style="height: 8px;"></div>
+                      <div class="slds-form__row">
+                        <div class="slds-form__item" role="listitem">
+                          <div class="slds-form-element slds-form-element_stacked slds-is-editing">
+                            <label class="slds-form-element__label" for="stacked-form-element-id-01">
+                                <b style="font-size: 13px;">Upload files <abbr class="slds-required" title="required">* </abbr></b></label>
+                            <div class="slds-form-element__control">
+                                <lightning-file-upload label="" name="fileUploader" accept={acceptedFormats} record-id={myRecordId} onuploadfinished={handleUploadFinished} multiple>
+                                </lightning-file-upload>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div style="height: 8px;"></div>
+                      <div class="slds-form__row">
+                        <div class="slds-form__item" role="listitem">
+                          <div class="slds-form-element slds-form-element_stacked slds-is-editing">
+                            <div class="slds-form-element__control">
+                                <button class="slds-button slds-button_brand" style="border-radius: 0; background-color: rgb(91, 52, 138);" onclick={createCase}>Submit</button>
+                                <!--lightning-button variant="brand" onclick={createCase} label="Submit" title="Primary action" class="slds-m-left_x-small caseFormSubmitbtn"></lightning-button-->
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                </div>
+            </div>
+            <div class="slds-col slds-size_5-of-12">
+                <div style="margin-left: 50px;">
+                    <br/>
+                    <template for:each = {ArticleData} for:item="listViewItem">
+                        <div key={listViewItem.value} style="height:18px;"></div>
+                        <div key={listViewItem.value} style="font-size: 13px; color: rgb(91,52,138);">
+                            <h1 id={listViewItem.value}>{listViewItem.label}</h1>
+                        </div>
+                        <div key={listViewItem.value} style="height:24px; border-bottom: 1px #c4c4c4 solid; "></div>
+                     </template>
+                </div>
+            </div>
+    
+            </div>
+        
+            
+        
+    </template>
+    
+    <template if:true={showChooseCaseType}>
+        <select class="slds-select" id="select-01" onchange={selectionChangeHandler}>
+            <template for:each = {caseTypeOptionList} for:item="listViewItem">
+               <option key={listViewItem.value} value={listViewItem.value} >{listViewItem.label}</option>
+            </template>
+       </select>
+        <br/>
+        <br/>
+        <lightning-button variant="brand" label="Continue" title="Continue" onclick={selectCaseType} class="slds-float_right"></lightning-button>
+    </template>
+    
+    <template if:true={showCreateCaseForm}>
+        <!--div class="row">
+            <h2 class="header custombackgroundColor">Identification</h2>
+            <div class="slds-var-m-around_x-small">
+                <lightning-input type="text" label="Support Case Number" id="supportCaseNumber"></lightning-input>
+                <lightning-input type="text" label="Product" id="product" value={assetInstance.product_no}></lightning-input>
+                <lightning-input type="text" label="Serial Number" id="serialNumber" value={assetInstance.serial_no}></lightning-input>
+                <lightning-input type="text" label="Host ID" id="hostId" value={assetInstance.host_id}></lightning-input>
+                <lightning-input type="text" label="Type" id="type" value={caseType}></lightning-input>
+                <lightning-input type="text" label="Status" id="status" value={caseStatus}></lightning-input>
+                <lightning-input type="text" label="Subject" id="subject" value={caseSubject}></lightning-input>
+            </div>
+        </div-->
+
+        <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_1-of-7">
+    
+            </div>
+            <div class="slds-col slds-size_4-of-12" style="border-right: 1px #CCC solid;">
+                
+            </div>
+            <div class="slds-col slds-size_5-of-12">
+                
+            </div>
+    
+            </div>
+
+
+
+
+    </template>
+    <template if:true={showSaveButton}>
+        <div>
+            <lightning-button variant="brand" label="Save" title="Save" onclick={createCase} class="slds-float_right"></lightning-button>
+        </div>
+    </template>
+
+    
+</template>

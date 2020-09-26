@@ -1,0 +1,12 @@
+<aura:component >
+<aura:attribute name="filterList" type="List" default="[]" />
+
+
+<aura:iteration items="{!v.filterList}" var="filter">
+    
+    <lightning:pill label="{!filter}" onremove="{! c.handleRemove }"/> 
+    
+</aura:iteration>
+
+
+</aura:component>

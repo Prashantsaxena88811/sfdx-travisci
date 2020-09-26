@@ -1,0 +1,130 @@
+<template>
+   <div class="dcx_header">
+      <header class="slds-global-header_container">
+         <div class="slds-global-header dcx_headermain">
+            <div class="slds-grid slds-grid_align-center slds-p-top_medium commonSetting">
+               <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_8-of-12">
+                  <div class="slds-grid firstgrid">
+                     <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_2-of-12">
+                        <div class=""><img src={logokeySight}></div>
+                        <!-- <div class="slds-global-header__item">
+                           <div class="slds-global-header__logo"><img src={logokeySight}></div>
+                           </div>-->
+                     </div>
+                     <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_1-of-12">
+                        <a class="slds-text-link_reset" aria-haspopup="false" title="Assets" href="javascript:void(0);">Assets</a>
+                     </div>
+                     <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_1-of-12">
+                        <a class="slds-text-link_reset" href="javascript:void(0);">Support</a>
+                     </div>
+                     <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_1-of-12">
+                        <a class="slds-text-link_reset" href="javascript:void(0);"><span>Services</span></a>
+                     </div>
+                     <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_2-of-12">
+                        <a class="slds-text-link_reset" href="javascript:void(0);"><span>Account Management</span></a>
+                     </div>
+                     <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_2-of-12">
+                        <!--<a class="slds-text-link_reset" href="javascript:void(0);">  <span>Knowledge Center</span></a>--> 
+                        <lightning-button-menu label="Knowledge Center" variant="bare" class="buttonnav">
+                           <lightning-menu-item
+                              prefix-icon-name="utility:lock"
+                              label="Menu item">
+                           </lightning-menu-item>
+                           <lightning-menu-item
+                              prefix-icon-name="utility:lock"
+                              label="Another menu item">
+                           </lightning-menu-item>
+                        </lightning-button-menu>
+                     </div>
+                     <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_1-of-12">
+                        <a class="slds-text-link_reset" href="javascript:void(0);">  <span>Offerings</span></a>
+                     </div>
+                     <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_2-of-12">
+                        <ul class="slds-list_horizontal slds-has-inline-block-links_space">
+                           <li class="slds-item slds-m-left_small">
+                              <div class="slds-dropdown-trigger slds-dropdown-trigger_click">
+                                 <button class="slds-button slds-button_icon slds-button_icon slds-button_icon-container slds-button_icon-small slds-global-actions__notifications slds-global-actions__item-action" title="no new notifications" aria-live="assertive" aria-atomic="true">
+                                    <lightning-icon icon-name="utility:notification" alternative-text="no new notifications" title="Notification" size="x-small"></lightning-icon>
+                                    <span class="slds-assistive-text">no new notifications</span>
+                                 </button>
+                                 <span aria-hidden="true" class="slds-notification-badge">0</span>
+                              </div>
+                           </li>
+                           <li class="slds-item slds-m-left_small">
+                              <div class="slds-dropdown-trigger slds-dropdown-trigger_click">
+                                 <button class="slds-button slds-button_icon slds-button_icon slds-button_icon-container slds-button_icon-small slds-global-actions__notifications slds-global-actions__item-action" title="no new notifications" aria-live="assertive" aria-atomic="true">
+                                    <lightning-icon icon-name="utility:cart" alternative-text="no items" title="Cart" size="x-small"></lightning-icon>
+                                 </button>
+                                 <span aria-hidden="true" class="slds-notification-badge">0</span>
+                              </div>
+                           </li>
+                           <li class="slds-item slds-m-left_small">
+                              <div class="slds-dropdown-trigger slds-dropdown-trigger_click">
+                                 <button class="slds-button slds-button_icon slds-button_icon slds-button_icon-container slds-button_icon-small slds-global-actions__notifications slds-global-actions__item-action" title="no new notifications" aria-live="assertive" aria-atomic="true">
+                                    <lightning-icon icon-name="utility:search" alternative-text="" title="search" size="x-small" onclick={showSearchBar}></lightning-icon>
+                                 </button>
+                              </div>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+               </div>
+               <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_2-of-12 slds-border_left">
+                  <div class="slds-grid seconggrid">
+                     <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_4-of-12">
+                        <div class="liveChat"> <a class="slds-text-link_reset"  title="Live Chat" href="javascript:void(0);">Live Chat</a></div>
+                     </div>
+                     <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_3-of-12">
+                        <div class="liveChat"> <a class="slds-text-link_reset"  title="Sign In" href="javascript:void(0);">Sign In</a></div>
+                     </div>
+                     <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_3-of-12">
+                        <div class="liveChat" >  
+                           <div class="slds-dropdown-trigger slds-dropdown-trigger_click showhide">
+                              <a title="Sign In" href="javascript:void(0);" class="slds-text-link_reset dropdown">Register</a>
+                              <!--<button class="slds-button slds-button_icon slds-button_icon-border-filled" aria-haspopup="true" onmouseout={hideData} onmouseover={showData}title="Show More">
+                              <svg class="slds-button__icon" aria-hidden="true">
+                              <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#down"></use>
+                              </svg>
+                              <span class="slds-assistive-text">Show More</span>
+                              </button>-->
+                              
+                              <div class="slds-dropdown slds-dropdown_right dropdown-content">
+                              <ul class="slds-dropdown__list" role="menu" aria-label="Show More">
+                              <li class="slds-dropdown__item" role="presentation">
+                              <a href="javascript:void(0);" role="menuitem" tabindex="0">
+                              <span class="slds-truncate" title="Menu Item One">Menu Item One</span>
+                              </a>
+                              </li>
+                              <li class="slds-dropdown__item" role="presentation">
+                              <a href="javascript:void(0);" role="menuitem" tabindex="-1">
+                              <span class="slds-truncate" title="Menu Item Two">Menu Item Two</span>
+                              </a>
+                              </li>
+                              <li class="slds-dropdown__item" role="presentation">
+                              <a href="javascript:void(0);" role="menuitem" tabindex="-1">
+                              <span class="slds-truncate" title="Menu Item Three">Menu Item Three</span>
+                              </a>
+                              </li>
+                              <li class="slds-has-divider_top-space" role="separator"></li>
+                              <li class="slds-dropdown__item" role="presentation">
+                              <a href="javascript:void(0);" role="menuitem" tabindex="-1">
+                              <span class="slds-truncate" title="Menu Item Four">Menu Item Four</span>
+                              </a>
+                              </li>
+                              </ul>
+                              </div>
+                              </div>
+                        
+                        
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </header>
+   </div>
+   <template if:true={showSearch}>
+      <c-search-bar place-holder={placeHolder}></c-search-bar>
+   </template>
+</template>

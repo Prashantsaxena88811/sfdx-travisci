@@ -1,0 +1,288 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <head>
+    </head>
+    <body style="margin: 0px;">               
+        <div class='main-div'>
+            <div class='head-div'>
+                <div class='head-text-div'>
+                    <p class='head-text-div-p'>
+                        <span class='head-text-div-span'>Assets</span>
+                    </p>
+                </div>
+                <div class='head-image-div'>
+                    <img class='head-img' src="{!$Resource.assets}"
+                 id="u262_img" data-aura-rendered-by="484:0"></img>
+                </div>
+            </div>
+            <div class='des-div'>
+                <div class='des-div-sec'>
+                    <p class='des-div-p'><span class='des-div-span'>View company agreements, invoices, quotes and dashboards. Manage user and group access.</span></p>
+                </div>
+            </div>
+            <div class='detail-div'>
+                <div class='detail-div-sec'>
+                    <p class='detail-div-p'><span class='detail-div-span'>Reports and Dashboards</span></p>
+                </div>
+                <div class='detail-image-div'>
+                    <img class='detail-img' src="{!$Resource.lockimage}"></img>
+                </div>
+            </div>
+            <div class='detail-div'>
+                <div class='detail-div-sec'>
+                    <p class='detail-div-p'><span class='detail-div-span'>Agreements, Invoices and Quotes</span></p>
+                </div>
+                <div class='detail-image-div'>
+                    <img class='detail-img' src="{!$Resource.lockimage}"></img>
+                </div>
+            </div>
+            <div class='detail-div'>
+                <div class='detail-div-sec'>
+                    <p class='detail-div-p'><span class='detail-div-span'>Obsolescence and Extended Service Lookup</span></p>
+                </div>
+                <div class='detail-image-div'>
+                    <img class='detail-img' src="{!$Resource.lockimage}"></img>
+                </div>
+            </div>
+            <div class='foot-div'>
+                <div class='foot-div-sec'>
+                    <p class='foot-div-p'><span class='foot-div-span'>And More ></span></p>
+                </div>
+            </div>
+        </div>
+        <div class='main-div'>
+            <div class='head-div'>
+                <div class='head-text-div'>
+                    <p class='head-text-div-p'>
+                        <span class='head-text-div-span'>Support</span>
+                    </p>
+                </div>
+                <div class='head-image-div'>
+                    <img class='head-img' src="{!$Resource.support}"
+                 id="u262_img" data-aura-rendered-by="484:0"></img>
+                </div>
+            </div>
+            <div class='des-div'>
+                <div class='des-div-sec'>
+                    <p class='des-div-p'><span class='des-div-span'>View company agreements, invoices, quotes and dashboards. Manage user and group access.</span></p>
+                </div>
+            </div>
+            <div class='detail-div'>
+                <div class='detail-div-sec'>
+                    <p class='detail-div-p'><span class='detail-div-span'>Reports and Dashboards</span></p>
+                </div>
+                <div class='detail-image-div'>
+                    <img class='detail-img' src="{!$Resource.lockimage}"></img>
+                </div>
+            </div>
+            <div class='detail-div'>
+                <div class='detail-div-sec'>
+                    <p class='detail-div-p'><span class='detail-div-span'>Agreements, Invoices and Quotes</span></p>
+                </div>
+                <div class='detail-image-div'>
+                    <img class='detail-img' src="{!$Resource.lockimage}"></img>
+                </div>
+            </div>
+            <div class='detail-div'>
+                <div class='detail-div-sec'>
+                    <p class='detail-div-p'><span class='detail-div-span'>Obsolescence and Extended Service Lookup</span></p>
+                </div>
+                <div class='detail-image-div'>
+                    <img class='detail-img' src="{!$Resource.lockimage}"></img>
+                </div>
+            </div>
+            <div class='foot-div'>
+                <div class='foot-div-sec'>
+                    <p class='foot-div-p'><span class='foot-div-span'>And More ></span></p>
+                </div>
+            </div>
+        </div>
+        <div class='main-div'>
+            <div class='head-div'>
+                <div class='head-text-div'>
+                    <p class='head-text-div-p'>
+                        <span class='head-text-div-span'>Services</span>
+                    </p>
+                </div>
+                <div class='head-image-div'>
+                    <img class='head-img' src="{!$Resource.service}"
+                 id="u262_img" data-aura-rendered-by="484:0"></img>
+                </div>
+            </div>
+            <div class='des-div'>
+                <div class='des-div-sec'>
+                    <p class='des-div-p'><span class='des-div-span'>View company agreements, invoices, quotes and dashboards. Manage user and group access.</span></p>
+                </div>
+            </div>
+            <div class='detail-div'>
+                <div class='detail-div-sec'>
+                    <p class='detail-div-p'><span class='detail-div-span'>Reports and Dashboards</span></p>
+                </div>
+                <div class='detail-image-div'>
+                    <img class='detail-img' src="{!$Resource.lockimage}"></img>
+                </div>
+            </div>
+            <div class='detail-div'>
+                <div class='detail-div-sec'>
+                    <p class='detail-div-p'><span class='detail-div-span'>Agreements, Invoices and Quotes</span></p>
+                </div>
+                <div class='detail-image-div'>
+                    <img class='detail-img' src="{!$Resource.lockimage}"></img>
+                </div>
+            </div>
+            <div class='detail-div'>
+                <div class='detail-div-sec'>
+                    <p class='detail-div-p'><span class='detail-div-span'>Obsolescence and Extended Service Lookup</span></p>
+                </div>
+                <div class='detail-image-div'>
+                    <img class='detail-img' src="{!$Resource.lockimage}"></img>
+                </div>
+            </div>
+            <div class='foot-div'>
+                <div class='foot-div-sec'>
+                    <p class='foot-div-p'><span class='foot-div-span'>And More ></span></p>
+                </div>
+            </div>
+        </div>
+        <div class='main-div'>
+            <div class='head-div'>
+                <div class='head-text-div'>
+                    <p class='head-text-div-p'>
+                        <span class='head-text-div-span'>Account Management</span>
+                    </p>
+                </div>
+                <div class='head-image-div'>
+                    <img class='head-img' src="{!$Resource.accounts}"
+                 id="u262_img" data-aura-rendered-by="484:0"></img>
+                </div>
+            </div>
+            <div class='des-div'>
+                <div class='des-div-sec'>
+                    <p class='des-div-p'><span class='des-div-span'>View company agreements, invoices, quotes and dashboards. Manage user and group access.</span></p>
+                </div>
+            </div>
+            <div class='detail-div'>
+                <div class='detail-div-sec'>
+                    <p class='detail-div-p'><span class='detail-div-span'>Reports and Dashboards</span></p>
+                </div>
+                <div class='detail-image-div'>
+                    <img class='detail-img' src="{!$Resource.lockimage}"></img>
+                </div>
+            </div>
+            <div class='detail-div'>
+                <div class='detail-div-sec'>
+                    <p class='detail-div-p'><span class='detail-div-span'>Agreements, Invoices and Quotes</span></p>
+                </div>
+                <div class='detail-image-div'>
+                    <img class='detail-img' src="{!$Resource.lockimage}"></img>
+                </div>
+            </div>
+            <div class='detail-div'>
+                <div class='detail-div-sec'>
+                    <p class='detail-div-p'><span class='detail-div-span'>Obsolescence and Extended Service Lookup</span></p>
+                </div>
+                <div class='detail-image-div'>
+                    <img class='detail-img' src="{!$Resource.lockimage}"></img>
+                </div>
+            </div>
+            <div class='foot-div'>
+                <div class='foot-div-sec'>
+                    <p class='foot-div-p'><span class='foot-div-span'>And More ></span></p>
+                </div>
+            </div>
+        </div>
+        <div class='main-div'>
+            <div class='head-div'>
+                <div class='head-text-div'>
+                    <p class='head-text-div-p'>
+                        <span class='head-text-div-span'>KeysightCare Knowledge Center</span>
+                    </p>
+                </div>
+                <div class='head-image-div'>
+                    <img class='head-img' src="{!$Resource.knowledge}"
+                 id="u262_img" data-aura-rendered-by="484:0"></img>
+                </div>
+            </div>
+            <div class='des-div'>
+                <div class='des-div-sec'>
+                    <p class='des-div-p'><span class='des-div-span'>View company agreements, invoices, quotes and dashboards. Manage user and group access.</span></p>
+                </div>
+            </div>
+            <div class='detail-div'>
+                <div class='detail-div-sec'>
+                    <p class='detail-div-p'><span class='detail-div-span'>Reports and Dashboards</span></p>
+                </div>
+                <div class='detail-image-div'>
+                    <img class='detail-img' src="{!$Resource.lockimage}"></img>
+                </div>
+            </div>
+            <div class='detail-div'>
+                <div class='detail-div-sec'>
+                    <p class='detail-div-p'><span class='detail-div-span'>Agreements, Invoices and Quotes</span></p>
+                </div>
+                <div class='detail-image-div'>
+                    <img class='detail-img' src="{!$Resource.lockimage}"></img>
+                </div>
+            </div>
+            <div class='detail-div'>
+                <div class='detail-div-sec'>
+                    <p class='detail-div-p'><span class='detail-div-span'>Obsolescence and Extended Service Lookup</span></p>
+                </div>
+                <div class='detail-image-div'>
+                    <img class='detail-img' src="{!$Resource.lockimage}"></img>
+                </div>
+            </div>
+            <div class='foot-div'>
+                <div class='foot-div-sec'>
+                    <p class='foot-div-p'><span class='foot-div-span'>And More ></span></p>
+                </div>
+            </div>
+        </div>
+        <div class='main-div'>
+            <div class='head-div'>
+                <div class='head-text-div'>
+                    <p class='head-text-div-p'>
+                        <span class='head-text-div-span'>Offerings</span>
+                    </p>
+                </div>
+                <div class='head-image-div'>
+                    <img class='head-img' src="{!$Resource.offering}"
+                 id="u262_img" data-aura-rendered-by="484:0"></img>
+                </div>
+            </div>
+            <div class='des-div'>
+                <div class='des-div-sec'>
+                    <p class='des-div-p'><span class='des-div-span'>View company agreements, invoices, quotes and dashboards. Manage user and group access.</span></p>
+                </div>
+            </div>
+            <div class='detail-div'>
+                <div class='detail-div-sec'>
+                    <p class='detail-div-p'><span class='detail-div-span'>Reports and Dashboards</span></p>
+                </div>
+                <div class='detail-image-div'>
+                    <img class='detail-img' src="{!$Resource.lockimage}"></img>
+                </div>
+            </div>
+            <div class='detail-div'>
+                <div class='detail-div-sec'>
+                    <p class='detail-div-p'><span class='detail-div-span'>Agreements, Invoices and Quotes</span></p>
+                </div>
+                <div class='detail-image-div'>
+                    <img class='detail-img' src="{!$Resource.lockimage}"></img>
+                </div>
+            </div>
+            <div class='detail-div'>
+                <div class='detail-div-sec'>
+                    <p class='detail-div-p'><span class='detail-div-span'>Obsolescence and Extended Service Lookup</span></p>
+                </div>
+                <div class='detail-image-div'>
+                    <img class='detail-img' src="{!$Resource.lockimage}"></img>
+                </div>
+            </div>
+            <div class='foot-div'>
+                <div class='foot-div-sec'>
+                    <p class='foot-div-p'><span class='foot-div-span'>And More ></span></p>
+                </div>
+            </div>
+        </div>
+    </body>
+</aura:component>

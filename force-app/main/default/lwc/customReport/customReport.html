@@ -1,0 +1,49 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 09-10-2020
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+  Modifications Log 
+  Ver   Date         Author                               Modification
+  1.0   09-10-2020   ChangeMeIn@UserSettingsUnder.SFDoc   Initial Version
+-->
+<template>
+    <div class="slds-m-top_medium slds-m-bottom_x-large">
+        <lightning-card>
+            <h2 class="slds-text-heading_medium slds-m-bottom_medium">
+                <B>CREATE CUSTOM REPORT</B>
+                <p>Enter a report name and select frequency you wish to receive report digests</p>
+            </h2>
+        </lightning-card>
+        <lightning-card>
+            <div class="slds-p-around_medium lgc-bg">
+                <lightning-input type="text" label="Report Name" class="textInput" placeholder="Enter Report Name">
+                </lightning-input>
+            </div>
+        </lightning-card>
+        <lightning-card>
+            <lightning-pill label="PillBox Filter Label" onremove={handleRemove} onclick={handleClick}></lightning-pill>
+            <lightning-pill label="PillBox Filter Label" onremove={handleRemove} onclick={handleClick}></lightning-pill>
+            <lightning-pill label="PillBox Filter Label" onremove={handleRemove} onclick={handleClick}></lightning-pill>
+        </lightning-card>
+        <lightning-card>
+            <div class="slds-p-around_medium lgc-bg">
+                <lightning-input type="text" label="Report Frequency" class="textInput"
+                    placeholder="Select Report Frequency">
+                </lightning-input>
+            </div>
+        </lightning-card>
+        <lightning-card>
+            <lightning-checkbox-group name="Checkbox Group" label="" options={options} value={value}
+                onchange={handleChange}></lightning-checkbox-group>
+
+        </lightning-card>
+        <lightning-card>
+            <lightning-button label="Cancel" title="Non-primary action" onclick={handleCancel}
+                class="slds-m-left_x-small"></lightning-button>
+            <lightning-button variant="bare" label="Submit" title="Looks like a link" onclick={handleSave}
+                class="slds-m-left_x-small"></lightning-button>
+        </lightning-card>
+    </div>
+</template>

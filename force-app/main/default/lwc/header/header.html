@@ -1,0 +1,8 @@
+<template>
+  <template if:true={isGuestUser}>
+   <c-header-guest ></c-header-guest>
+  </template>
+  <template if:false={isGuestUser}>
+   <c-header-user></c-header-user>
+  </template>
+</template>

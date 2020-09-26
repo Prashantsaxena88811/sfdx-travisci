@@ -1,0 +1,25 @@
+.THIS .slds-button_neutral{
+    color: black !important;
+}
+.THIS .slds-button--neutral { 
+    color: black !important;   
+}
+
+/* Added by Vishwas Team */
+.THIS input{
+    border-radius: 0; 
+    background-color: #f4f4f4;
+}
+.THIS .slds-textarea{
+    border-radius: 0; 
+    background-color: #f4f4f4;
+}
+
+.THIS input[readonly]{
+    border-radius: 0; 
+    background-color: #f4f4f4;
+}
+.THIS select{
+    border-radius: 0; 
+    background-color: #f4f4f4;
+}

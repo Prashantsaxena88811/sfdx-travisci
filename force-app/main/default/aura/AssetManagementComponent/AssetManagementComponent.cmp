@@ -1,0 +1,268 @@
+<!--
+ - Created by Awishkar on 27-08-2020.
+ -->
+
+<aura:component description="AssetManagementComponent"
+                implements="forceCommunity:availableForAllPageTypes"
+                controller="AssetManagementComponent_Controller">
+
+    <aura:attribute name="isDisable" type="boolean" default="true"/>
+    <aura:attribute name="isShowHideSelector" type="boolean" default="false"/>
+    <aura:attribute name="DefaultBody" type="boolean" default="false"/>
+    <aura:attribute name="data" type="Object"/>
+    <aura:attribute name="searchedValue" type="String"/>
+    <aura:attribute name="ResponseData" type="Object"/>
+    <aura:attribute name="filterObj" type="Object"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="defaultColumns" type="List"/>
+    <aura:attribute name="pageCount" type="Decimal" default="1"/>
+    <aura:attribute name="activeSections" type="List" default="['A','B','C','D']"/>
+    <aura:attribute name="MyAssets" type="List" default="[
+    {'label': 'My Assets', 'value': 'option1'}
+    ]"/>
+    <aura:attribute name="valueofMyAssets" type="List" default="option1"/>
+
+    <aura:attribute name="assetTypeOption" type="List" default="[
+    {'label': 'Hardware', 'value': 'option1'},
+    {'label': 'Software', 'value': 'option2'}
+    ]"/>
+    <aura:attribute name="valueofAssets" type="List" default="option1"/>
+
+    <aura:attribute name="locationOption" type="List" default="[
+    {'label': 'Santa Rosa,CA', 'value': 'option1'},
+    {'label': 'San Francisco,CA', 'value': 'option2'},
+    {'label': 'Chicago,IL', 'value': 'option3'},
+    {'label': 'New York, NY', 'value': 'option4'}
+    ]"/>
+    <aura:attribute name="valueofLocation" type="List" default="option1"/>
+    <aura:attribute name="selectedRows" type="List" default="[]"/>
+    <aura:attribute name="ResponseList" type="List" default="[]" access="global"/>
+    <aura:attribute name="isModalOpen" type="boolean" default="false" access="global"/>
+
+    <aura:attribute name="serviceOption" type="List" default="[
+    {'label': 'Cal due &lt;7 days', 'value': 'option1'},
+    {'label': 'Cal due &lt;30 days', 'value': 'option2'},
+    {'label': 'Cal due &lt;90 days', 'value': 'option3'},
+    {'label': 'Custom date range', 'value': 'option4'},
+    {'label': 'Past Due', 'value': 'option5'},
+    {'label': 'Out of service', 'value': 'option6'}
+    ]"/>
+    <aura:attribute name="valueofservice" type="List" default="option1"/>
+
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+
+
+    <div>
+        <div id="mySidenav" class="sidenav mySidenav ">
+            <a href="javascript:void(0)" class="closebtn" onclick="{! c.closeNav }"><b>Asset Filters
+                &nbsp;&times;</b></a>
+            <div class="slds-m-around_x-large">
+                <lightning:accordion
+                        allowMultipleSectionsOpen="true"
+                        onsectiontoggle="{! c.handleSectionToggle }"
+                        activeSectionName="{! v.activeSections }"
+                >
+                    <lightning:accordionSection name="A" label="My Asset Filter">
+                        <div class="slds-box" style="font-size: 8px;">
+                            All your saved filters will appers here for quick refrence. Create a custom filter to get
+                            start.123
+                        </div>
+                        <lightning:checkboxGroup name="Checkbox Group"
+                                                 label=" "
+                                                 options="{! v.MyAssets }"
+                                                 value="{! v.valueofMyAssets }"
+                                                 onchange="{! c.handleChange }"/>
+                    </lightning:accordionSection>
+                    <lightning:accordionSection name="B" label="Asset Type">
+                        <lightning:checkboxGroup name="Checkbox Group"
+                                                 label=" "
+                                                 options="{! v.assetTypeOption }"
+                                                 value="{! v.valueofAssets }"
+                                                 onchange="{! c.handleChange }"/>
+                    </lightning:accordionSection>
+                    <lightning:accordionSection name="C" label="Location">
+                        <lightning:checkboxGroup name="Checkbox Group"
+                                                 label=" "
+                                                 options="{! v.locationOption }"
+                                                 value="{! v.valueofLocation }"
+                                                 onchange="{! c.handleChange }"/>
+                    </lightning:accordionSection>
+                    <lightning:accordionSection name="D" label="Service">
+                        <lightning:checkboxGroup name="Checkbox Group"
+                                                 label=" "
+                                                 options="{! v.serviceOption }"
+                                                 value="{! v.valueofservice }"
+                                                 onchange="{! c.handleChange }"/>
+                    </lightning:accordionSection>
+                </lightning:accordion>
+
+            </div>
+
+        </div>
+        <!--Right Nav Bar-->
+        <div id="mySidenavRight" class="sidenavRight mySidenav ">
+            <lightning:icon class="closeActionIcon" iconName="utility:forward" alternativeText="Close" title="Close"
+                            onclick="{! c.closeNavRight }"/>
+            <aura:if isTrue="{!v.isDisable}">
+                <div class="slds-m-around_x-large" id="dcalc" style="pointer-events: none;opacity: 0.7;">
+                    <lightning:verticalNavigation selectedItem="AssetActions">
+
+                        <lightning:verticalNavigationSection label="Asset Actions">
+                            <lightning:verticalNavigationItem
+                                    label="Create Support Case"
+                                    name="Create_Support_Case"/>
+                            <lightning:verticalNavigationItem
+                                    label="Request a Service"
+                                    name="Request_a_Service"/>
+                            <lightning:verticalNavigationItem
+                                    label="View/Edit Asset"
+                                    name="ViewEdit_Asset"/>
+                            <lightning:verticalNavigationItem
+                                    label="Service/Support History"
+                                    name="ServiceSupport_History"/>
+                            <lightning:verticalNavigationItem
+                                    label="Download Certificate"
+                                    name="Download_Cetificate"/>
+                            <lightning:verticalNavigationItem
+                                    label="View Coverage"
+                                    name="View_Coverage"/>
+                            <lightning:verticalNavigationItem
+                                    label="View Documentation"
+                                    name="View_Documentation"/>
+                            <lightning:verticalNavigationItem
+                                    label="View Saved Articles"
+                                    name="View_Saved_Articles"/>
+                            <lightning:verticalNavigationItem
+                                    label="Add to My Assets"
+                                    name="Add_to_my_Assets"/>
+                        </lightning:verticalNavigationSection>
+                    </lightning:verticalNavigation>
+
+                </div>
+                <aura:set attribute="else">
+                    <div class="slds-m-around_x-large" id="dcalc">
+                        <lightning:verticalNavigation selectedItem="AssetActions">
+
+                            <lightning:verticalNavigationSection label="Asset Actions">
+                                <lightning:verticalNavigationItem
+                                        label="Create Support Case"
+                                        name="Create_Support_Case"/>
+                                <lightning:verticalNavigationItem
+                                        label="Request a Service"
+                                        name="Request_a_Service"/>
+                                <lightning:verticalNavigationItem
+                                        label="View/Edit Asset"
+                                        name="ViewEdit_Asset" onclick="{!c.handleClick}"/>
+                                <lightning:verticalNavigationItem
+                                        label="Service/Support History"
+                                        name="ServiceSupport_History" onclick="{!c.handleClick}"/>
+                                <lightning:verticalNavigationItem
+                                        label="Download Certificate"
+                                        name="Download_Cetificate"/>
+                                <lightning:verticalNavigationItem
+                                        label="View Coverage"
+                                        name="View_Coverage"/>
+                                <lightning:verticalNavigationItem
+                                        label="View Documentation"
+                                        name="View_Documentation"/>
+                                <lightning:verticalNavigationItem
+                                        label="View Saved Articles"
+                                        name="View_Saved_Articles" onclick="{!c.handleClick}"/>
+                                <lightning:verticalNavigationItem
+                                        label="Add to My Assets"
+                                        name="Add_to_my_Assets"/>
+                            </lightning:verticalNavigationSection>
+                        </lightning:verticalNavigation>
+
+                    </div>
+                </aura:set>
+            </aura:if>
+
+
+        </div>
+
+        <div class="slds-grid slds-gutters">
+            <div class="slds-col">
+            <span class="slds-box"
+                  style="font-size:18px;text-align: center;cursor:pointer;height: 100%;writing-mode: vertical-rl;text-orientation: mixed;"
+                  onclick="{! c.openNav }">&#8679; Asset Filters</span>
+
+            </div>
+            <div tabindex="-1" class="slds-col">
+                <div class="slds-grid">
+                    <div style="max-width: 47%;" class="slds-col">
+                        <lightning:input
+                                name="inline-search-input"
+                                label="This is a search input with a hidden label. The label is still required for accessibility reasons"
+                                type="search"
+                                variant="label-hidden"
+                                value="{!v.searchedValue}"
+                                class="slds-m-bottom_medium slds-m-top_medium"
+                        />
+                    </div>
+                    <div class="slds-col">
+                        <div class="slds-grid ">
+                            <a class="a slds-m-bottom_medium slds-m-top_medium" type="button"
+                               onclick="{! c.searchResult }">SEARCH</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-grid" >
+                    <div style="max-width: 160px;" class="slds-box slds-col">
+                        Show results  {!v.ResponseData.response.totalResults}
+                    </div>
+                    <div class="slds-box slds-col" align="right">
+                        
+                        <lightning:button label="Column Selector" title="Column Selector" onclick="{! c.showHideSelectorData }"/>
+                        
+                        <aura:if isTrue="{!v.isShowHideSelector}">
+                            <c:MultiPicklist isShowHideSelector = "{!v.isShowHideSelector}" defaultColumns = "{! v.defaultColumns}" columns = "{! v.columns}"/>
+                        </aura:if>
+                    </div>
+                    
+                </div>
+                
+                <div class="slds-grid slds-p-bottom_small">
+                    <div class="slds-col slds-size_2-of-12">
+                        <lightning:input name="Product" label="" varient="label-hidden" placeholder="Product" value = "{!v.filterObj.product_no}"
+                                         onchange="{!c.filterChangeHandler}"/>
+                    </div>
+                    <div class="slds-col slds-size_2-of-12">
+                        <lightning:input name="SerialNumber" label="" varient="label-hidden" value = "{!v.filterObj.serial_no}"
+                                         placeholder="Serial Number" onchange="{!c.filterChangeHandler}"/>
+                    </div>
+                    <div class="slds-col slds-size_2-of-12">
+                        <lightning:input name="Manufacturer" label="" varient="label-hidden" value = "{!v.filterObj.manufacturer}"
+                                         placeholder="Manufacturer" onchange="{!c.filterChangeHandler}"/>
+                    </div>
+                    <div class="slds-col slds-size_2-of-12">
+                        <lightning:input name="HostId" label="" varient="label-hidden" value = "{!v.filterObj.host_id}" 
+                                         placeholder="Host ID" onchange="{!c.filterChangeHandler}"/>
+                    </div>
+                    <div class="slds-col slds-size_2-of-12">
+                        <lightning:input name="CertificateNumber" label="" varient="label-hidden" value = "{!v.filterObj.last_certificate_no}"
+                                         placeholder="Last Certificate No" onchange="{!c.filterChangeHandler}"/>
+                    </div>
+                </div>
+                <div style="height: 500px">
+                    <lightning:datatable
+                            keyField="id"
+                            data="{! v.data }"
+                            columns="{! v.columns }"
+                            hideCheckboxColumn="false"
+                            enableInfiniteLoading="true"
+                            onloadmore="{! c.loadMoreData }"
+                            onrowselection="{! c.updateSelectedText }"/>
+                    />
+                </div>
+            </div>
+            <div class="slds-col">
+            <span class="slds-box"
+                  style="font-size:18px;text-align: center;cursor:pointer;height: 100%;writing-mode: vertical-rl;text-orientation: mixed;"
+                  onclick="{! c.openNavRight }">&#8592; Asset Actions</span>
+            </div>
+        </div>
+
+	<c:AssetActionsModel  ResponseList = "{!v.ResponseList}"></c:AssetActionsModel>
+    </div>
+</aura:component>

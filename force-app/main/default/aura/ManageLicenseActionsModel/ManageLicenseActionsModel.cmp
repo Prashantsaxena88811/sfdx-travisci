@@ -1,0 +1,114 @@
+<aura:component description="AssetActionsModel" implements="forceCommunity:availableForAllPageTypes">
+<aura:attribute name="data" type="Object"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="defaultColumns" type="List"/>    <aura:attribute name="closeBuilkAssetsection" type="boolean" />
+    <aura:attribute name="parent" type="Aura.Component"/> 
+    <aura:attribute name="showVerticalNav" type="boolean" default="false"/>
+    <aura:attribute name="searchedText" type="String" />
+    <aura:attribute name="selecteditem" type="String" /> 
+    <aura:attribute name="selectedsection" type="String" /> 
+    <aura:attribute name="navigatesection" type="String" default="Navigation Items"/>
+    <aura:handler name="change" value="{! v.selecteditem }" action="{! c.scrolltoSection }"/>
+	<aura:attribute name="selectedcolumns" type="List" default="product_no,type,host_id,quantity,lorem_ipsum"/>    
+    <aura:handler name="init" value="{! this }" action="{! c.scrolltoSection }"/>
+    <aura:attribute name="ResponseList" type="List" default="[]" access="global"/>
+    <div class="slds-grid slds-wrap">
+        
+        <div class="slds-size_10-of-12">
+            <div class="slds-grid customboxasset height1" > 
+                <div class="slds-size_12-of-12 slds-p-left_medium slds-p-right_medium" > 
+                    <span class="slds-p-left_small"><b> MANAGE LICENSES</b></span>
+                </div>
+            </div>
+        </div>            
+        <div class=" slds-size_2-of-12">
+            <div class="customboxasset height1" align="center">
+                <lightning:buttonIcon class="buttonicon" iconName="utility:close" 
+                                      variant="bare"  
+                                      onclick="{! c.closeNav }" title="Close Filters" />
+            </div>
+        </div>        
+        <div class="slds-col slds-size_12-of-12 " >
+            <lightning:layout multipleRows="true" >
+                <lightning:layoutItem size="5" flexibility="auto" padding="around-small">
+                    <div class="slds-p-around_medium ">
+                        <ul>
+                            <li><b>Product</b></li>
+                            <li>Ng040B</li>
+                            <li>Keysight Technologies</li>
+                            <li>UXA Signal Analyser</li>
+                        </ul>                        
+                    </div>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="7" flexibility="auto" padding="around-small">
+                    <div class=" slds-p-around_medium">
+                        <ul>
+                            <li><b>Assigned Licenses</b></li>
+                            <li>Ng040Bva Phase noise Measurement Application</li>
+                            <li>Ng040MOB VMA Vector Modulation Analysis</li>                            
+                        </ul>                        
+                    </div>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="12" flexibility="auto" padding="around-small">
+                    <div id="viewasset" class="slds-p-around_medium" style=" overflow-x:auto;overflow-y:auto; ">
+                        <h2 class="header custombackgroundColor" style="height:2rem;">Available Licenses</h2>
+                        <br/>
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped">
+                            <thead class="fixed_header">
+                             
+                                <tr class="slds-text-title_caps slds-line-height_reset" scope="row" >
+                                    <th style="width:3.25rem;" class="slds-text-align_right slds-is-resizable theadbackground">
+                                                        <div class="slds-form-element">
+                                                            <div class="slds-form-element__control">
+                                                                <label class="slds-checkbox">
+                                                                    <ui:inputCheckbox 
+                                                                                      aura:id="selectAllId"
+                                                                                      change="{!c.selectAllCheckbox}"/>
+                                                                    <span class="slds-checkbox_faux"></span>
+                                                                    <span class="slds-form-element__label"></span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </th>
+                                    <th scope="col" class="slds-is-resizable theadbackground"><div class="slds-truncate" title="Product">Product</div></th>
+                                    <th scope="col" class="slds-is-resizable theadbackground"><div class="slds-truncate" title="Host id">Host Id</div></th>
+                                    <th scope="col" class="slds-is-resizable theadbackground"><div class="slds-truncate" title="Type">Type</div></th>
+                                    <th scope="col" class="slds-is-resizable theadbackground"><div class="slds-truncate" title="Quantity">Quantity</div></th>
+                                    <th scope="col" class="slds-is-resizable theadbackground"><div class="slds-truncate" title="Lorem ipsum">Lorem ipsum</div></th>
+                                </tr>
+                            </thead>
+                            <tbody class="fixed_header">
+   								<aura:iteration items="{!v.data}" var="item" indexVar="indx">
+                                    <tr scope="row">
+                                         <th scope="row" class="slds-text-align_right" style="width:3.25rem;">
+                                                            <div class="slds-form-element">
+                                                                <div class="slds-form-element__control">
+                                                                    <label class="slds-checkbox">
+                                                                        <ui:inputCheckbox text="{!indx}"
+                                                                                          value="{!item.isChecked}"
+                                                                                          change="{!c.checkboxSelect}"/>
+                                                                        <span class="slds-checkbox_faux"></span>
+                                                                        <span class="slds-form-element__label text"></span>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </th>
+                                        <aura:iteration items="{!v.selectedcolumns}" var="col" indexVar="indx">
+                                            <td class="slds-cell-wrap"><div class="slds-truncate">
+                                                <c:auraShowFieldValue objectVar="{!item}" fieldName="{!col}" showField="true"/>
+                                            </div></td>
+                                        </aura:iteration>
+                                        
+                                    </tr>
+                                </aura:iteration>                                                                
+                            </tbody>
+                        </table>
+                    </div>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="5" flexibility="auto" alignmentBump="left" padding="around-small">                    
+                        <lightning:button class=" slds-button_destructive buttonwidth" label="Save" title="Save" />                                                   
+                </lightning:layoutItem>
+            </lightning:layout>            
+        </div>
+    </div> 
+</aura:component>

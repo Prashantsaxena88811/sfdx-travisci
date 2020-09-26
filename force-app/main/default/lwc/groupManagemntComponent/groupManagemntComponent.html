@@ -1,0 +1,192 @@
+<template>
+  <template if:true={isLoading}>
+    <!--<lightning-spinner alternative-text="Loading" variant="brand" size="large">
+    </lightning-spinner>-->
+    <div class="demo-only">
+      <div class="slds-spinner_container">
+        <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_inverse">
+          <span class="slds-assistive-text">Loading</span>
+          <div class="slds-spinner__dot-a"></div>
+          <div class="slds-spinner__dot-b"></div>
+        </div>
+      </div>
+    </div>
+  </template>
+<div class="redDivWithWhiteText " style="display: flex;">
+    <h2 class="slds-text-heading_large">
+        <b>Group</b>
+    </h2>
+</div>
+<div>
+    <div class="slds-box" style="background: White;">
+        <lightning-layout>
+            <lightning-layout-item>
+                <lightning-layout>
+                    <lightning-layout-item class="slds-m-right_x-large" style="font-size:medium;"><b>Group ID</b></lightning-layout-item>
+                    <lightning-layout-item>
+                        <lightning-input class="slds-m-right_x-large" type="text" variant="label-hidden" label="Group ID" value={groupId} name="input1" onchange={setValueOfGroupId} placeholder="Enter your Group Id"></lightning-input>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </lightning-layout-item>
+            <lightning-layout-item>
+                <a class="aRed" type="button" onclick={handleClick}>
+                    <div class="slds-grid ">
+                        <div class="slds-col">
+                            <i class="gg-search-loading"></i>
+                        </div>
+                        <div class="slds-col">
+                            &nbsp;Update
+                        </div>
+                    </div>
+                </a>
+            </lightning-layout-item>
+        </lightning-layout>
+    </div>
+
+    <div class="redDivWithWhiteText slds-m-top_x-large " style="display: flex;">
+        <h2 class="slds-text-heading_large">
+            <b>Members Lists</b>
+        </h2>
+    </div>
+
+    <div class="slds-box" style="background: White;">
+        <div class="redDivWithWhiteText slds-m-top_small slds-m-bottom_small" style="display: flex;">
+            <template if:true={showHideAddButton}>
+              <a class="aBlue" type="button" onclick={openModal}>
+                <div class="slds-grid ">
+                  <div class="slds-col">
+                    <i class="gg-play-list-add"></i>
+                  </div>
+                  <div class="slds-col">
+                    &nbsp;&nbsp;Add User
+                  </div>
+              </div>
+                 </a>
+          </template>
+        </div>
+        <div class="slds-scrollable_y" style="background: white; max-height: 46vh;">
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th class="" scope="col" style="background: #d4d4d4; border-color: white;">
+                            <div class="slds-truncate" title="Email">Contact ID</div>
+                        </th>
+                        <th class="" scope="col" style=" background: #d4d4d4; border-color: white;">
+                            <div class="slds-truncate" title="Email">Email</div>
+                        </th>
+                        <th class="" scope="col" style="width: 85% !important; background: #d4d4d4; border-color: white;">
+                            <div class="slds-truncate" title="">First Name</div>
+                        </th>
+                        <th class="" scope="col" style="width: 85% !important; background: #d4d4d4; border-color: white;">
+                            <div class="slds-truncate" title="">Last Name</div>
+                        </th>
+                        <th class="" scope="col" style="background: #d4d4d4; border-color: white;">
+                            <div class="slds-truncate" title="Status">Status</div>
+                        </th>
+                        <th class="" scope="col" style="background: #d4d4d4; border-color: white;">
+                            <div class="slds-truncate" title="Action">Action</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={groupUsers} for:item="user">
+                <tr class="slds-hint-parent" key={user}>
+                  <th data-label="Contact ID" scope="row">
+                    <div class="slds-truncate" title="Email">
+                      {user.contactID}
+                    </div>
+                  </th>
+                  <th data-label="Opportunity Name" scope="row">
+                    <div class="slds-truncate" title="Email">
+                      {user.email}
+                    </div>
+                  </th>
+                  <td data-label="Account Name">
+                    <div class="slds-truncate" title="First Name">
+                      {user.firstName}
+                    </div>
+                  </td>
+                  <td data-label="Close Date">
+                    <div class="slds-truncate" title="Last Name">
+                      {user.lastName}
+                    </div>
+                  </td>
+                  <td data-label="Status">
+                    <template if:false={user.statusOfAdmin}>
+                      <lightning-button name={user.ContactID} variant="destructive" label="Remove Admin"
+                        onclick={handleClickRemoveAdmin} icon-name="utility:delete"></lightning-button>
+                    </template>
+                    <template if:true={user.statusOfAdmin}>
+                      <lightning-button name={user.ContactID} variant="brand" label="Make Admin"
+                        onclick={handleClickAddAdmin} icon-name="utility:check"></lightning-button>
+                    </template>
+                    </td>
+                    <td data-label="Confidence">
+                        <!--<a  name={user.ContactID} class="aRed"  type="button" onclick={handleClickRemoveFromGroup}>Remove From Group</a>-->
+                        <lightning-button name={user.ContactID} variant="destructive" label="Remove From Group" onclick={handleClickRemoveFromGroup} icon-name="utility:delete"></lightning-button>
+                    </td>
+                    </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- modal start -->
+<template if:true={bShowModal}>
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+      aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+      <div class="slds-modal__container">
+        <!-- modal header start -->
+        <header class="slds-modal__header">
+          <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close"
+            onclick={closeModal}>
+            <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse" size="small">
+            </lightning-icon>
+            <span class="slds-assistive-text">Close</span>
+          </button>
+          <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate"><b style="color: red;font-weight: 550;">Add User</b></h2>
+        </header>
+        <!-- modal body start -->
+        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+          <lightning-layout vertical-align="center">
+            <lightning-layout-item padding="around-small">
+              <h2 class="slds-text-heading_small">
+                <b style="font-style: italic;">Contact Id</b>
+              </h2>
+            </lightning-layout-item>
+            <lightning-layout-item flexibility="auto" padding="around-small">
+              <lightning-input type="text" placeholder="Enter contact id" value={contactID} name="input1"
+                variant="label-hidden" onchange={setValueOfContactId}></lightning-input>
+            </lightning-layout-item>
+          </lightning-layout>
+        </div>
+        <!-- modal footer start-->
+        <footer class="slds-modal__footer">
+          <a class="aBlueNext slds-m-right_medium" type="button" onclick={addUser}>
+            <div class="slds-grid ">
+              <div class="slds-col">
+                <i class="gg-play-list-check"></i>
+              </div>
+              <div class="slds-col">
+                &nbsp;&nbsp;Confirm
+              </div>
+          </div>
+             </a>
+             <a class="aRed slds-m-left_medium" type="button" onclick={closeModal}>
+              <div class="slds-grid ">
+                <div class="slds-col">
+                  Close
+                </div>
+                <div class="slds-col">
+                  <i class="gg-close-o"></i>
+                </div>
+            </div>
+               </a>
+        </footer>
+      </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+  </template>
+<!-- modal end -->
+</template>

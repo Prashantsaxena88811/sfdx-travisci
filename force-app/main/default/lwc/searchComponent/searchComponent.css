@@ -1,0 +1,147 @@
+/*p {
+    font-family: 'Salesforce Sans', Arial, sans-serif;
+    color: rgb(62, 62, 60);
+}
+
+.app {
+    background-color: #fafaf9;
+    height: 100vh;
+    overflow: scroll;
+}
+
+.div1 {
+    background-color: #f50909ce;
+    padding-left: 18px;
+    padding-bottom: 8px;
+    padding-top: 30px;
+}
+
+.div1Paragraph {
+    color: white;
+    padding-top: 4px;
+}
+
+.div2 {
+    background-color: #16263870;
+    padding-left: 18px;
+    height: 70vh;
+    padding-top: 20px;
+}
+
+.div2Paragraph {
+    color: rgb(202, 224, 235);
+    font-stretch: extra-expanded;
+    padding-bottom: 12px;
+}
+
+.icon {
+    margin-right: 10px;
+}
+
+.formattedText1 {
+    background-color: orange;
+    margin-left: 50px;
+    padding: 6px;
+    color: white;
+}
+
+.formattedText2 {
+    background-color: orange;
+    margin-left: 30px;
+    padding: 6px;
+    color: white;
+}
+
+.logout {
+    color: rgba(179, 7, 7, 0.658);
+    margin-left: 2%;
+}
+
+.p1 {
+    margin-left: 10%;
+}*/
+
+.redDivWithWhiteText {
+    /*background: red;*/
+    color: red;
+}
+
+.THIS .slds-button {
+    border-radius: 0.75rem !important;
+}
+
+.THIS .lightning-button {
+    border-radius: 0.75rem !important;
+}
+
+.aRed {
+    position: relative;
+    display: inline-block;
+    padding: 8px;
+    border: 2px solid red;
+    line-height: 0.875rem;
+    text-decoration: none;
+    color: red;
+    white-space: normal;
+    user-select: none;
+    font-size: 1.0rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border-radius: .25rem;
+    border-radius: 1rem;
+    font-weight: 550;
+}
+
+.gg-search-loading {
+    box-sizing: border-box;
+    position: relative;
+    display: block;
+    transform: scale(var(--ggs, 1));
+    width: 16px;
+    height: 16px;
+    border: 2px solid;
+    border-radius: 100%;
+    margin-left: -4px;
+    margin-top: -4px
+}
+
+.gg-search-loading::after,
+.gg-search-loading::before {
+    content: "";
+    display: block;
+    box-sizing: border-box;
+    position: absolute;
+    width: 2px;
+    background: currentColor
+}
+
+.gg-search-loading::after {
+    border-radius: 3px;
+    height: 8px;
+    transform: rotate(-45deg);
+    top: 10px;
+    left: 12px
+}
+
+.gg-search-loading::before {
+    height: 2px;
+    border-radius: 100%;
+    top: 5px;
+    left: 5px;
+    box-shadow: -3px 0 0, 3px 0 0
+}
+
+.slds-spinner::before,
+.slds-spinner::after,
+.slds-spinner__dot-a::before,
+.slds-spinner__dot-b::before,
+.slds-spinner__dot-a::after,
+.slds-spinner__dot-b::after {
+    content: "";
+    position: absolute;
+    animation-duration: 1000ms;
+    animation-iteration-count: infinite;
+    transform: translate3d(0px, 0px, 0px);
+    background: rgb(240, 22, 22);
+    border-radius: 50%;
+}

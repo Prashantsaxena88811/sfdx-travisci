@@ -1,0 +1,51 @@
+.THIS .customWidthHeight{
+	width: 5.875rem;
+    height: 5.875rem;
+}
+
+.THIS .slds-button__icon{
+    
+}
+.THIS .textcolor{
+   
+}
+.THIS .slds-button_neutral{
+    color: black !important;
+}
+.THIS .slds-button--neutral { 
+    color: black !important;  
+}
+.THIS .slds-nav-vertical__item.slds-is-active .slds-nav-vertical__action {
+    font-weight: bold;
+    box-shadow: none !important;
+}
+.THIS .customPaddingLeft{
+    padding-left: 30%;
+}
+
+.THIS .customPaddingRight{
+    padding-right: 30%;
+}
+
+.THIS .custombackgroundColor{
+    background-color: gray;
+    color: white;
+    padding: 5px;
+}
+
+.THIS .slds-rich-text-editor__toolbar{
+    display:none;
+}
+
+.THIS .customNavCSS{
+   position: absolute;
+    z-index: 999999 !important;
+    background-color: #fdfcfc;
+   	
+    margin-top: -5%;
+    
+}
+
+.THIS .changedBackGround{
+    background-color: red;
+}

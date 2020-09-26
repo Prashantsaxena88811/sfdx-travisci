@@ -1,0 +1,258 @@
+/**
+* Created by awish on 27-08-2020.
+*/
+.THIS {
+}
+.THIS .closeActionIcon{
+    cursor : pointer;
+}
+.THIS .slds-button_neutral{
+    color: black !important;
+}
+.THIS .slds-button--neutral { 
+    color: black !important;  
+}
+.THIS .closeActionIcon svg{
+    fill:#817aea;
+}
+.THIS .transback {
+    background: rgba(6, 6, 6, .75) !important;
+    height: 99.7vh;
+}
+.THIS .slds-nav-vertical__item.slds-is-active .slds-nav-vertical__action {
+    font-weight: bold;
+    box-shadow: none !important;
+}
+.THIS .sidenav {
+    height: 100%;
+    width: 0;   
+    background-color: white;
+    overflow-x: auto;
+    
+    
+    z-index: 10;
+    
+}
+.THIS .displaynone{
+    display:none;
+}
+.THIS .sidenavRight {
+    
+
+    position:absolute;
+    
+    right: 3%;
+    background-color: white;
+    overflow-x: auto;
+    transition: 0.1s;
+    
+    z-index: 10;
+}
+.THIS .viewassetsidenavRight{        
+    width: 0;
+    position:absolute;
+    
+    right: 17.5%;
+    background-color: white;
+    overflow-x: auto;
+    transition: 0.1s;    
+    z-index: 10;
+}
+.THIS .buttonicon{
+    border-radius: 2rem !important; 
+}
+.THIS .sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 18px;
+    color: #818181;
+    display: block;
+    
+}
+
+.THIS .sidenav a:hover {
+    color: #f1f1f1;
+}
+.THIS .vericaltext{
+    width:1px;
+    word-wrap: break-word;
+    font-family: monospace; /* this is just for good looks */
+}
+
+.THIS .slds-scrollable_y {min-height: 150px}
+.THIS .slds-scrollable_x{
+    max-height: 90% !important;
+}
+
+.THIS .a{
+    position: relative;
+    display: inline-block;
+    padding: 1px;
+    background: #c70101;
+    border: 3px solid #fff;
+    border-radius: 1.25rem;
+    line-height: 1.875rem;
+    text-decoration: none;
+    color: #fdfeff;
+    white-space: normal;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    font-size: 1.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+/*
+.THIS .slds-table{
+table-layout: fixed;
+width: 1062px;
+display: block !important;
+height: 410px !important;
+overflow: auto !important;
+}*/
+
+.THIS .fixed_header tbody{
+    display:block;
+    
+}
+.THIS .fixed_header thead tr{
+    display:block;
+}
+.THIS .slds-button_icon-border{
+    border:none !important;
+}
+.THIS .slds-input_custom  {
+    height:40px !important; 
+}
+.THIS .textcolor {
+    
+    color: #595d5f !important;
+    /*width: 224px !important;
+    height: 45px !important; */
+}
+.THIS .theadbackground{
+    background-color: rgba(219, 219, 219, 1); /*#dcdbe2;*/
+}
+.THIS .slds-table_striped tbody tr:nth-of-type(even)>td {
+    background-color: rgba(246, 246, 246, 1) !important;
+}
+.THIS .slds-table_striped tbody tr:nth-of-type(even)>th {
+    background-color: rgba(246, 246, 246, 1) !important;
+}
+.THIS .slds-table--striped tbody tr:nth-of-type(even)>td {
+    background-color: rgba(246, 246, 246, 1) !important;
+}
+.THIS .slds-table--striped tbody tr:nth-of-type(even)>th {
+    background-color: rgba(246, 246, 246, 1) !important;    
+}
+
+.THIS .slds-table_striped tbody tr:nth-of-type(even)>td::hover{
+    background-color: rgba(246, 246, 246, 1) !important;
+}
+.THIS .slds-table_striped tbody tr:nth-of-type(even)>th::hover{
+    background-color: rgba(246, 246, 246, 1) !important;
+}
+.THIS .slds-table--striped tbody tr:nth-of-type(even)>td::hover{
+    background-color: rgba(246, 246, 246, 1) !important;
+}
+.THIS .slds-table--striped tbody tr:nth-of-type(even)>th::hover{
+    background-color: rgba(246, 246, 246, 1) !important;    
+}
+.THIS table tbody tr:hover {background-color:#f5f5f5 !important;}
+.THIS  .adjustmargin{
+    padding-right: 0.5rem;
+}
+.THIS .inputboxmargin{
+    margin-top: -1rem;
+}
+.THIS .search-box{
+    display:none !important;
+}
+.THIS .slds-gutters .slds-col{
+    padding-left: 0 !important;
+}
+.THIS .slds-col{
+    padding-left: 0 !important;
+}
+.THIS .slds-nav-vertical__item{
+    
+    border-bottom: 1px solid #d4d4d4 !important;
+}
+.THIS .siteforceContentArea .comm-layout-column:not(:empty) {
+    padding-top: 0 !important; 
+    
+}
+.THIS .siteforceContentArea  {
+    padding-top: 0 !important;
+}
+.THIS .custombox{
+    padding: 1rem;
+    border-radius: 0; 
+    border-left: 1px solid #d4d4d4;
+    border-right: 1px solid #d4d4d4;
+    border-bottom: 1px solid #d4d4d4;
+}
+.THIS .customboxunlock{
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+    height: 4rem;
+    border: 1px solid #d4d4d4;
+}
+.THIS .customboxicon{
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+}
+.THIS .navrightcustombox{        
+    border: 1px solid #d4d4d4;
+    
+}
+.THIS .contenttopmargin{
+    margin-top: -1rem !important;
+}
+.THIS .paddingnav{
+    padding-top: 0.01rem;
+}
+
+/* width */
+.THIS ::-webkit-scrollbar {
+    width:6px;
+    
+}
+
+/* Track */
+.THIS ::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+}
+
+/* Handle */
+.THIS ::-webkit-scrollbar-thumb {
+    background: #888; 
+}
+
+/* Handle on hover */
+.THIS ::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+}
+
+.THIS .customBorder{
+    border: 2px solid black;
+    border-radius: 6px;
+    
+}
+.THIS .bgcolor1 li {
+    
+    text-align:center;
+    float:left;
+    background: #ff3232;
+    /* Old browsers */
+    background: linear-gradient(to right, white 50%, green 50%);
+    background-size: 200% 100%;
+    background-position:left bottom;
+    
+    transition:all 2s ease;
+}
+.THIS .slds-input__icon-group_right {
+    right: 1.5rem;
+}

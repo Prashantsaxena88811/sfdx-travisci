@@ -1,0 +1,194 @@
+<template>
+    <!-- Section 1-->
+    <div class="slds-grid slds-wrap">
+        <div class="slds-size_1-of-4">
+            <div class="slds-var-m-around_x-small">
+                <span>
+                    <lightning-input type="text" placeholder="First Name" data-field="FirstName" value={firstName} label="First (Given) Name">
+                    </lightning-input>
+                </span>
+            </div>
+        </div>
+        <div class="slds-size_1-of-4">
+            <div class="slds-var-m-around_x-small">
+                <span>
+                    <lightning-input type="text" placeholder="Last Name" data-field="LastName" value={lastName} label="Last (Family) Name"></lightning-input>
+                </span>
+            </div>
+        </div>
+        <!--<div class="slds-size_1-of-4">
+            <div class="slds-var-m-around_x-small">
+                <span>
+                    <lightning-input type="text" placeholder="Choose Prefix" label="Prefix">
+                    </lightning-input>                
+                </span>
+            </div>
+        </div>-->
+    </div>
+
+    <!--Section 2-->
+    <div class="slds-grid slds-wrap">
+        <div class="slds-size_1-of-4">
+            <div class="slds-var-m-around_x-small">
+                <span>
+                    <lightning-input type="text" placeholder="Email" value={email} disabled data-field="email" label="Email">
+                    </lightning-input>
+                </span>
+            </div>
+        </div>
+        <div class="slds-size_1-of-4">
+            <div class="slds-var-m-around_x-small">
+                <span>
+                    <lightning-input type="tel" placeholder="000-000-1111" value={phoneNumber} data-field="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                        label="Phone Number">
+                    </lightning-input>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!--Section 3-->
+    <div class="slds-grid slds-wrap">
+        <div class="slds-size_1-of-2">
+            <div class="slds-var-m-around_x-small">
+                <span>
+                    <lightning-input type="text" placeholder="1234 AnyStreet" value={address} data-field="address" label="Address">
+                    </lightning-input>
+                </span>
+            </div>
+        </div>
+        <div class="slds-size_1-of-4">
+            <div class="slds-var-m-around_x-small">
+                <span>
+                    <lightning-input type="text" placeholder="City" value={city} data-field="city" label="City">
+                    </lightning-input>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!--Section 4-->
+<!--    
+    <div class="slds-grid slds-wrap">
+        <div class="slds-size_1-of-4">
+            <div class="slds-var-m-around_x-small">
+                <span>
+                    <lightning-input type="text" placeholder="Enter City" label="City">
+                    </lightning-input>
+                </span>
+            </div>
+        </div>
+        <div class="slds-size_1-of-4">
+            <div class="slds-var-m-around_x-small">
+                <span>
+                    <lightning-input type="text" placeholder="Choose State" label="State">
+                    </lightning-input>
+                </span>
+            </div>
+        </div>
+        <div class="slds-size_1-of-4">
+            <div class="slds-var-m-around_x-small">
+                <span>
+                    <lightning-input type="number" placeholder="000000" label="Zip / Postal Code">
+                    </lightning-input>
+                </span>
+            </div>
+        </div>
+        <div class="slds-size_1-of-4">
+            <div class="slds-var-m-around_x-small">
+                <span>
+                    <lightning-input type="text" placeholder="Country or Area" label="Country or Area">
+                    </lightning-input>
+                </span>
+            </div>
+        </div>
+    </div>
+-->
+    <!--Section 5-->
+    <div class="slds-grid slds-wrap">
+        <div class="slds-size_1-of-4">
+            <div class="slds-var-m-around_x-small">
+                <span>
+                    <lightning-input type="text" placeholder="Enter Title" value={title} data-field="title" label="Job Title">
+                    </lightning-input>
+                </span>
+            </div>
+        </div>
+        <div class="slds-size_1-of-4">
+            <div class="slds-var-m-around_x-small">
+                <span>
+                    <lightning-input type="text" placeholder="Enter Department" value={department} data-field="department" label="Department">
+                    </lightning-input>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!--Section 6-->
+<!--    
+    <div class="slds-grid slds-wrap">
+        <div class="slds-size_1-of-4">
+            <div class="slds-var-m-around_x-small">
+                <span>
+                    <lightning-input type="password" label="Current Password">
+                    </lightning-input>
+                </span>
+            </div>
+        </div>
+        <div class="slds-size_1-of-4">
+            <div class="slds-var-m-around_x-small">
+                <span>
+                    <lightning-input type="password" placeholder="Enter Password" label="New Password">
+                    </lightning-input>
+                </span>
+            </div>
+        </div>
+        <div class="slds-size_1-of-4">
+            <div class="slds-var-m-around_x-small">
+                <span>
+                    <lightning-input type="password" placeholder="Repeat Password" label="Confirm Password">
+                    </lightning-input>
+                </span>
+            </div>
+        </div>
+    </div>
+-->
+    <!--Section 7-->
+<!--    
+    <div class="slds-grid slds-wrap">
+        <div class="slds-size_1-of-4"></div>
+        <div class="slds-size_2-of-4">
+            <div class="slds-var-m-around_x-small">
+                <span>
+                    <span>Password should contain minimum 10 characters</span><br/>
+                    <span>Password should not contain words/strings from First Name, Last Name and Email</span><br />
+                    <span>Password should contain characters from four of the following categories</span><br/>
+                    <span>At least one uppercase letter (A-Z)</span><br />
+                    <span>At least one loercase letter (a-z)</span><br />
+                    <span>At least one number(0-9)</span><br />
+                    <span>At least one special Character"</span><br />
+                </span>
+            </div>
+        </div>
+        <div class="slds-size_1-of-4"></div>
+    </div>
+-->
+<!--Section for Reset Password-->
+<div class="slds-grid slds-wrap">
+    <div class="slds-size_1-of-4">
+        <div class="slds-var-m-around_x-small">
+            <span>
+                <lightning-button name="resetButton" label="Reset Password" onclick={handleResetPassword} class="slds-var-m-left_x-small"></lightning-button>
+            </span>
+        </div>
+    </div>
+</div>
+
+    <!--Section 8-->
+    <div class="slds-var-m-bottom_x-small">
+        <div class="slds-float_right">
+            <lightning-button name="cancelButton" label="Cancel" onclick={handleClick} class="slds-var-m-left_x-small"></lightning-button>
+            <lightning-button name="saveButton" label="Save" onclick={handleClick} class="slds-var-m-left_x-small" variant="brand"></lightning-button>
+        </div>
+    </div>
+</template>

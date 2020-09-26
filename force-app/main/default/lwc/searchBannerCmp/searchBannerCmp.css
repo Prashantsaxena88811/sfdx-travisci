@@ -1,0 +1,24 @@
+.searchBanner{
+    height: 200px; 
+    margin-top:-15px; 
+    padding:0; 
+    text-align: center; 
+    background-color: rgb(237, 236, 238);
+}
+.searchbox{
+    border-radius: 0;
+    width:40%; 
+    padding:3px; 
+    padding-left:25px; 
+    font-size: 12px;
+    border: none;
+}
+.searchBtn{
+    background-color: rgb(38,38,38); 
+    color: white; 
+    border:none; 
+    padding:10px 40px 10px 40px; 
+    margin-left:-3px; 
+    font-size:12px;
+    font-family: Oswald; 
+}

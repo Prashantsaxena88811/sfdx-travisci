@@ -1,5 +1,5 @@
 <template>
-    <div class="slds-m-around_medium">
+    <div class="slds-m-around_medium slds-scrollable" style="min-height: 5rem;max-height: 25rem;">
         <table>
             <tr>
               <th class="case-table" style="width:30%;">CaseNumber</th>
@@ -14,7 +14,8 @@
                 <td class="case-table">{caseObj.Priority}</td>
                 <td class="case-table">
                     <lightning-button-menu alternative-text="Show menu"  onselect={handleOnselect}>
-                    <lightning-menu-item value={caseObj.Id} label="Clone" icon-size="small"></lightning-menu-item>
+                    <lightning-menu-item value={caseObj.Clone} label="Clone" icon-size="small"></lightning-menu-item>
+                    <lightning-menu-item value={caseObj.View} label="View/Add Comments" icon-size="small"></lightning-menu-item>
                     </lightning-button-menu>
                 </td>
             </tr>

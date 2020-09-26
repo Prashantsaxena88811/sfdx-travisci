@@ -1,0 +1,243 @@
+<template>
+
+    <div id="containerDiv" onmousemove={handlemousemove} onmouseup={handlemouseup} ondblclick={handledblclickresizable}
+        class="slds-table_header-fixed_container slds-border_right slds-border_left tableScroll"
+        onscroll={tableOuterDivScrolled}>
+
+        <div id="tableViewInnerDiv" onscroll={tableScrolled} class="slds-scrollable_y tableViewInnerDiv">
+            <table
+                class="slds-table slds-table_bordered slds-table_header-fixed slds-table_resizable-cols slds-table_fixed-layout">
+                <thead>
+                    <tr>
+                        <th class="slds-is-resizable dv-dynamic-width" scope="col" style={fixedWidth} title="Column 1">
+                            <div class="slds-cell-fixed" style={fixedWidth}>
+                                <a class="slds-th__action slds-text-link--reset ">
+                                    <lightning-input type="checkbox" variant="label-hidden" name="Allcheckbox"
+                                        onchange={handleAllCheckChange}></lightning-input>
+                                </a>
+                                <div class="slds-resizable">
+                                    <span class="slds-resizable__handle" onmousedown={handlemousedown}>
+                                        <span class="slds-resizable__divider"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="slds-is-resizable dv-dynamic-width" scope="col" style={fixedWidth} title="Column 2">
+                            <div class="slds-cell-fixed" style={fixedWidth}>
+                                <a class="slds-th__action slds-text-link--reset ">
+                                    <div class="slds-truncate" title="Support Case Number">Service Notes</div>
+                                </a>
+                                <div class="slds-resizable">
+                                    <span class="slds-resizable__handle" onmousedown={handlemousedown}>
+                                        <span class="slds-resizable__divider"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="slds-is-resizable dv-dynamic-width" scope="col" style={fixedWidth} title="Column 3">
+                            <div class="slds-cell-fixed" style={fixedWidth}>
+                                <a class="slds-th__action slds-text-link--reset ">
+                                    <div class="slds-truncate" title="Product">Product</div>
+                                </a>
+                                <div class="slds-resizable">
+                                    <span class="slds-resizable__handle" onmousedown={handlemousedown}>
+                                        <span class="slds-resizable__divider"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="slds-is-resizable dv-dynamic-width" scope="col" style={fixedWidth} title="Column 4">
+                            <div class="slds-cell-fixed" style={fixedWidth}>
+                                <a class="slds-th__action slds-text-link--reset ">
+                                    <div class="slds-truncate" title="Serial Number">Txn Number</div>
+                                </a>
+                                <div class="slds-resizable">
+                                    <span class="slds-resizable__handle" onmousedown={handlemousedown}>
+                                        <span class="slds-resizable__divider"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="slds-is-resizable dv-dynamic-width" scope="col" style={fixedWidth} title="Column 5">
+                            <div class="slds-cell-fixed" style={fixedWidth}>
+                                <a class="slds-th__action slds-text-link--reset ">
+                                    <div class="slds-truncate" title="Host Id">WAP Id</div>
+                                </a>
+                                <div class="slds-resizable">
+                                    <span class="slds-resizable__handle" onmousedown={handlemousedown}>
+                                        <span class="slds-resizable__divider"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="slds-is-resizable dv-dynamic-width" scope="col" style={fixedWidth} title="Column 6">
+                            <div class="slds-cell-fixed" style={fixedWidth}>
+                                <a class="slds-th__action slds-text-link--reset ">
+                                    <div class="slds-truncate" title="Type">Type</div>
+                                </a>
+                                <div class="slds-resizable">
+                                    <span class="slds-resizable__handle" onmousedown={handlemousedown}>
+                                        <span class="slds-resizable__divider"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="slds-is-resizable dv-dynamic-width" scope="col" style={fixedWidth} title="Column 7">
+                            <div class="slds-cell-fixed" style={fixedWidth}>
+                                <a class="slds-th__action slds-text-link--reset ">
+                                    <div class="slds-truncate" title="Status">Status</div>
+                                </a>
+                                <div class="slds-resizable">
+                                    <span class="slds-resizable__handle" onmousedown={handlemousedown}>
+                                        <span class="slds-resizable__divider"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="slds-is-resizable dv-dynamic-width" scope="col" style={fixedWidth} title="Column 8">
+                            <div class="slds-cell-fixed" style={fixedWidth}>
+                                <a class="slds-th__action slds-text-link--reset ">
+                                    <div class="slds-truncate" title="Subject">Tag</div>
+                                </a>
+                                <div class="slds-resizable">
+                                    <span class="slds-resizable__handle" onmousedown={handlemousedown}>
+                                        <span class="slds-resizable__divider"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </th>
+                        <!-- <th class="slds-is-resizable dv-dynamic-width" scope="col" style={fixedWidth} title="Column 9">
+                            <div class="slds-cell-fixed" style={fixedWidth}>
+                                <a class="slds-th__action slds-text-link--reset ">
+                                    <div class="slds-truncate" title="Created">Created</div>
+                                </a>
+                                <div class="slds-resizable">
+                                    <span class="slds-resizable__handle" onmousedown={handlemousedown}>
+                                        <span class="slds-resizable__divider"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </th> -->
+
+                        <th scope="col">
+                            <div class="slds-cell-fixed">
+
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="slds-hint-parent">
+                        <th data-label="" scope="row">
+                            <div class="slds-truncate dv-dynamic-width" style={fixedWidth} title="Cloudhub">
+                                <lightning-icon size="x-small" icon-name="utility:close" alternative-text="close"
+                                    title="close"></lightning-icon>
+                            </div>
+                        </th>
+                        <td data-label="">
+                            <div class="slds-truncate dv-dynamic-width" style={fixedWidth} title="Cloudhub">
+                                <lightning-input type="text" variant="label-hidden" name="CaseNumber"
+                                    onkeyup={handleKeyUpColumnSearch}></lightning-input>
+                            </div>
+                        </td>
+                        <td data-label="">
+                            <div class="slds-truncate dv-dynamic-width" style={fixedWidth} title="Cloudhub">
+                                <lightning-input type="text" variant="label-hidden" name="Product__c"
+                                    onkeyup={handleKeyUpColumnSearch}></lightning-input>
+                            </div>
+                        </td>
+                        <td data-label="">
+                            <div class="slds-truncate dv-dynamic-width" style={fixedWidth} title="Cloudhub">
+                                <lightning-input type="text" variant="label-hidden" name=""
+                                    onkeyup={handleKeyUpColumnSearch}></lightning-input>
+                            </div>
+                        </td>
+                        <td data-label="">
+                            <div class="slds-truncate dv-dynamic-width" style={fixedWidth} title="Cloudhub">
+                                <lightning-input type="text" variant="label-hidden" name=""
+                                    onkeyup={handleKeyUpColumnSearch}></lightning-input>
+                            </div>
+                        </td>
+                        <td data-label="">
+                            <div class="slds-truncate dv-dynamic-width" style={fixedWidth} title="Cloudhub">
+                                <lightning-input type="text" variant="label-hidden" name="Type"
+                                    onkeyup={handleKeyUpColumnSearch}></lightning-input>
+                            </div>
+                        </td>
+                        <td data-label="">
+                            <div class="slds-truncate dv-dynamic-width" style={fixedWidth} title="Cloudhub">
+                                <lightning-input type="text" variant="label-hidden" name="Status"
+                                    onkeyup={handleKeyUpColumnSearch}></lightning-input>
+                            </div>
+                        </td>
+                        <td data-label="">
+                            <div class="slds-truncate dv-dynamic-width" style={fixedWidth} title="Cloudhub">
+                                <lightning-input type="text" variant="label-hidden" name="Subject"
+                                    onkeyup={handleKeyUpColumnSearch}></lightning-input>
+                            </div>
+                        </td>
+                        <td data-label="">
+                            <div class="slds-truncate dv-dynamic-width" style={fixedWidth} title="Cloudhub">
+                                <lightning-input type="text" variant="label-hidden" name="CreatedDate"
+                                    onkeyup={handleKeyUpColumnSearch}></lightning-input>
+                            </div>
+                        </td>
+                    </tr>
+                    <template for:each={supportCases} for:item="cse">
+                        <tr class="slds-hint-parent" key={cse.Id}>
+                            <th data-label="" scope="row">
+                                <div class="slds-truncate dv-dynamic-width" style={fixedWidth} title="Cloudhub">
+                                    <lightning-input type="checkbox" variant="label-hidden" data-id="checkbox" name={cse.Id}
+                                        onchange={handleCheckBoxChange}></lightning-input>
+                                </div>
+                            </th>
+                            <td data-label="">
+                                <div class="slds-truncate dv-dynamic-width" style={fixedWidth} title="Cloudhub">
+                                    {cse.CaseNumber}
+                                </div>
+                            </td>
+                            <td data-label="">
+                                <div class="slds-truncate dv-dynamic-width" style={fixedWidth} title="Cloudhub">
+                                    {cse.Product__c}
+                                </div>
+                            </td>
+                            <td data-label="">
+                                <div class="slds-truncate dv-dynamic-width" style={fixedWidth} title="Cloudhub">
+
+                                </div>
+                            </td>
+                            <td data-label="">
+                                <div class="slds-truncate dv-dynamic-width" style={fixedWidth} title="Cloudhub">
+
+                                </div>
+                            </td>
+                            <td data-label="">
+                                <div class="slds-truncate dv-dynamic-width" style={fixedWidth} title="Cloudhub">
+                                    {cse.Type}
+                                </div>
+                            </td>
+                            <td data-label="">
+                                <div class="slds-truncate dv-dynamic-width" style={fixedWidth} title="Cloudhub">
+                                    {cse.Status}
+                                </div>
+                            </td>
+                            <td data-label="">
+                                <div class="slds-truncate dv-dynamic-width" style={fixedWidth} title="Cloudhub">
+                                    {cse.Subject}
+                                </div>
+                            </td>
+                            <!-- <td data-label="">
+                                <div class="slds-truncate dv-dynamic-width" style={fixedWidth} title="Cloudhub">
+                                    {cse.CreatedDate}
+                                </div>
+                            </td> -->
+                        </tr>
+                    </template>
+
+</tbody>
+
+</table>
+</div>
+</div>
+
+</template>

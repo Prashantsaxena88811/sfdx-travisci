@@ -1,0 +1,285 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" access="global" >
+    
+    <aura:attribute name="parent" type="Aura.Component"/> 
+    <aura:attribute name="createAssetSelection" type="boolean" default="true"/>
+    <aura:attribute name="createAsset" type="boolean" default="false"/>
+    <aura:attribute name="toggleHeader" type="boolean" default="true"/>
+    <aura:attribute name="showVerticalNav" type="boolean" default="false"/>
+    <aura:attribute name="assetCreated" type="boolean" default="false"/>
+    <aura:attribute name="header" type="boolean" default="true"/>
+    <aura:attribute name="importMultipleAssets" type="boolean" default="false"/>
+    <aura:attribute name="navigatesection" type="String" default="Select Section Edit"/> 
+    <aura:attribute name="showEditAssets" type="boolean"/>  
+    <aura:attribute name="editasset" type="boolean" /> 
+    <aura:attribute name="selectedsection" type="String" default=""/> 
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+    <aura:attribute name="titlename" type="String" default="Create a single asset"/> 
+    
+    
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+        <div class="slds-modal__container">
+            <aura:if isTrue="{!v.header}">
+            <header class="slds-modal__header">
+                <aura:if isTrue="{!v.toggleHeader}">
+                    <!--lightning:buttonIcon class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" iconName="utility:close" variant="bare" onclick="{! c.closeModal }"/-->
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Add Asset
+                        <!--lightning:button label="Close" class="slds-float_right" onclick="{! c.closeModal }"/-->
+                    </h2>
+                    <aura:set attribute="else">
+                        <lightning:layout>
+                            <lightning:layoutItem class="slds-float_left slds-border_right" size="6">
+                                <div>
+                                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">{!v.titlename}</h2>
+                                </div>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem class="slds-float_left" size="6">
+                                <div>
+                                    <aura:if isTrue="{!v.showVerticalNav}">
+                                        <lightning:verticalNavigation class="customNavCSS" selectedItem="{!v.selectedsection}"  
+                                                                      shaded="true">
+                                            <lightning:verticalNavigationSection>
+                                                <lightning:verticalNavigationItem label="Close" name="Close1" onclick="{!c.handleSelectedNavigation}"/>
+                                                <lightning:verticalNavigationItem label="Identification" name="Identification1" onclick="{!c.handleSelectedNavigation}"/>
+                                                <lightning:verticalNavigationItem label="Configuration" name="Configuration1" onclick="{!c.handleSelectedNavigation}"/>
+                                                <lightning:verticalNavigationItem label="Attachments" name="Attachments1" onclick="{!c.handleSelectedNavigation}" />
+                                                <lightning:verticalNavigationItem label="System Integration" name="System Integration1" onclick="{!c.handleSelectedNavigation}"/>
+                                                <lightning:verticalNavigationItem label="Service" name="Service1" onclick="{!c.handleSelectedNavigation}"/>
+                                                <lightning:verticalNavigationItem label="History" name="History1" onclick="{!c.handleSelectedNavigation}"/>
+                                                <lightning:verticalNavigationItem label="Lifecycle" name="Lifecycle1" onclick="{!c.handleSelectedNavigation}"/>
+                                                <lightning:verticalNavigationItem label="Ordering &amp; Receiving" name="Ordering &amp; Receiving1" onclick="{!c.handleSelectedNavigation}"/>
+                                                <lightning:verticalNavigationItem label="Valuation" name="Valuation1" onclick="{!c.handleSelectedNavigation}"/>
+                                                <lightning:verticalNavigationItem label="Inventory" name="Inventory1" onclick="{!c.handleSelectedNavigation}"/>
+                                            </lightning:verticalNavigationSection>
+                                        </lightning:verticalNavigation>
+                                        
+                                        <aura:set attribute="else"> 
+                                            <div onclick="{!c.handleNavigation}">
+                                                <lightning:buttonIcon class="buttonicon " iconName="utility:list" 
+                                                      variant="bare"  
+                                                      title="Navigate"  /> 
+                                                <span  onclick="{!c.handleNavigation}" ><a onclick="{!c.handleNavigation}">
+                                                    <span class="slds-p-left_small"> &nbsp; &nbsp; {!v.navigatesection}</span></a>
+                                                </span>
+                                            </div>
+                                        </aura:set>
+                                    </aura:if>
+                                </div>
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                   </aura:set>
+                </aura:if>
+            </header>
+            </aura:if>
+               
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                <aura:if isTrue="{!v.createAssetSelection}">
+                    <p><center>You can create a single asset or upload multiple files at a time.</center></p>
+                    <br/><lightning:layout>
+                    <lightning:layoutItem class="customPaddingLeft" size="6">
+                        <center>
+                            <lightning:buttonIcon class="customWidthHeight" iconName="utility:table" size="large"  variant="border-filled" onclick="{! c.createSingleAsset }"/>
+                            <p>Create a single asset</p>
+                        </center>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem  class="customPaddingRight" size="6">
+                        <center>
+                            <lightning:buttonIcon class="customWidthHeight" iconName="utility:database" size="large"  variant="border-filled" onclick="{! c.createMultipleAssets }"/>
+                            <p>Import multiple assets</p>
+                        </center>
+                    </lightning:layoutItem>
+                    </lightning:layout>
+                </aura:if>
+                
+                <aura:if isTrue="{!v.createAsset}">
+                    <div id="Identification1" class="row">
+                        <h2 class="header custombackgroundColor">Identification</h2>
+                        <div class="slds-m-around_x-small">
+                            <lightning:input name="input1" label="Equipment number" />
+                            <lightning:input name="input2" label="Barcode/RFID"/>
+                            <lightning:input name="input3" label="Model number"/>
+                            <lightning:input name="input4" label="Project name"/>
+                            <lightning:input name="input4" label="Serial number"/>
+                            <lightning:input name="input4" label="Loan daily rate(%)"/>
+                            <lightning:input name="input4" label="Manufacturer"/>
+                            <lightning:input name="input1" label="Auto calc loan daily cost" />
+                            <lightning:input name="input2" label="Alternate name"/>
+                            <lightning:input name="input3" label="Loan daily cost"/>
+                            <lightning:inputRichText label="Description" labelVisible="true"/>
+                            <lightning:input name="input4" label="Product cose"/>
+                            <lightning:input name="input4" label="Book currency"/>
+                        </div>
+                    </div>
+                    
+                    <br/>
+                    
+                    <div id="Configuration1" class="row">
+                        <h2 class="header custombackgroundColor">Configuration</h2>
+                        <div class="slds-m-around_x-small">
+                            <lightning:input name="input1" label="Firmware version" />
+                            <lightning:input name="input2" label="Hardware version"/>
+                            <lightning:input name="input3" label="Accessories"/>
+                            <lightning:input name="input4" label="Software version"/>
+                             <lightning:inputRichText label="Licenses" labelVisible="true"/>
+                        </div>
+                    </div>
+					<br/>
+                    <div id="Attachments1" class="row">
+                        <h2 class="header custombackgroundColor">Attachments</h2>
+                        <div class="slds-m-around_x-small">
+                            <lightning:fileUpload label="Attach receipt"
+                                                  name="fileUploader"
+                                                  multiple="true"
+                                                  accept="{!v.filetype}"
+                                                  recordId="{!v.recordId}"
+                                                  onuploadfinished="{!c.handleUploadFinished}" />
+                        </div>
+                        
+                    </div>
+                    <br/>
+                    <div id="System Integration1" class="row">
+                        <h2 class="header custombackgroundColor">System Integration</h2>
+                        <div class="slds-m-around_x-small">
+                            <lightning:input name="input1" label="System parent" />
+                            <lightning:input name="input2" label="System child"/>
+                            <lightning:input name="input3" label="Part of system calibration"/>
+                            <lightning:input name="input4" label="System components"/>
+                        </div>
+                    </div>
+                    <br/>
+                    <div id="Service1" class="row">
+                        <h2 class="header custombackgroundColor">Service</h2>
+                        <div class="slds-m-around_x-small">
+                            <lightning:input name="input1" label="Last reported condition" />
+                            <lightning:input name="input2" label="Calibration provider"/>
+                            <lightning:input name="input3" label="Service logistics"/>
+                            <lightning:input name="input4" label="Calibration type"/>
+                            <lightning:input name="input4" label="Last calibration date"/>
+                            <lightning:input name="input4" label="Calibration due date"/>
+                            <lightning:input name="input4" label="Service Cost"/>
+                            <lightning:input name="input4" label="Repair provider"/>
+                        </div>
+                    </div>
+                    <br/>
+                    <div id="History1" class="row">
+                        <h2 class="header custombackgroundColor">History</h2>
+                        
+                    </div>
+                    <br/>
+                    <div id="Lifecycle1" class="row">
+                        <h2 class="header custombackgroundColor">Lifecycle</h2>
+                        <div class="slds-m-around_x-small">
+                            <lightning:select name="Lifecycle" label="Set Lifecycle Status">
+                                <option value="">choose one</option>
+                                <option value="Active">Active</option>
+                                <option value="Inactive -out for service">Inactive -out for service</option>
+                                <option value="Disposed">Disposed</option>
+                                <option value="Lost">Lost</option>
+                                <option value="Excluded - Duplicate">Excluded - Duplicate</option>
+                            </lightning:select>
+                        </div>
+                        
+                    </div>
+                    <br/>
+                    <div id="Ordering &amp; Receiving1" class="row">
+                        <h2 class="header custombackgroundColor">Ordering &amp; Receiving</h2>
+                        <div class="slds-m-around_x-small">
+                            <lightning:input name="input1" label="Ownership status" />
+                            <lightning:input name="input1" label="Planned disposal date" />
+                            <lightning:input name="input1" label="Owning company" />
+                            <lightning:input name="input1" label="Order date" />
+                            <lightning:input name="input1" label="Order number" />
+                            <lightning:input name="input1" label="Receiving date" />
+                            <lightning:input name="input1" label="Purchase price" />
+                            <lightning:input name="input1" label="Lifecycle status" />
+                            <lightning:input name="input1" label="Invoice number" />
+                        </div>
+                    </div>
+                    <br/>
+                     <div id="Valuation1" class="row">
+                        <h2 class="header custombackgroundColor ">Valuation</h2>
+                         <div class="slds-m-around_x-small">
+                             <lightning:input name="input1" label="Book value" />
+                             <lightning:input name="input1" label="Book value date" />
+                             <lightning:input name="input1" label="Depreciation rate" />
+                         </div>
+                     </div>
+                    <br/>
+                    <div id="Inventory1" class="row">
+                        <h2 class="header custombackgroundColor">Inventory</h2>
+                        <div class="slds-m-around_x-small">
+                            <lightning:input name="input1" label="Organization" />
+                            <lightning:input name="input1" label="Location" />
+                            <lightning:input name="input1" label="Coordinator" />
+                            <lightning:input name="input1" label="User" />
+                            <lightning:input name="input1" label="Inventory date" />
+                            <lightning:input name="input1" label="Last used date" />
+                        </div>
+                     </div>
+                    
+                    
+                    
+                </aura:if>
+                <aura:if isTrue="{!v.importMultipleAssets}">
+                    
+                    <p><center>Import multiple assets</center></p>
+                    <br/><lightning:layout>
+                    <lightning:layoutItem class="customPaddingLeft" size="6">
+                        <center>
+                            <lightning:buttonIcon class="customWidthHeight" iconName="utility:table" size="large"   variant="border-filled" onclick="{! c.createSingleAsset }"/>
+                            <p>Download Template</p>
+                        </center>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem  class="customPaddingRight" size="6">
+                        <center>
+                            <lightning:buttonIcon class="customWidthHeight" iconName="utility:database" size="large"  variant="border-filled"/>
+                            <p>Select file</p>
+                        </center>
+                    </lightning:layoutItem>
+                    </lightning:layout>
+                    
+                </aura:if>
+                
+                <aura:if isTrue="{!v.assetCreated}">
+                    <p><center>Asset added Successfully!</center></p>
+                    <br/>
+                    <lightning:layout multipleRows="true">
+                        <lightning:layoutItem size="12">
+                            <center><lightning:icon class="changedBackGround slds-align_absolute-cente" iconName="action:approval"/></center>
+                        <br/></lightning:layoutItem>
+                        <lightning:layoutItem size="12">
+                            <lightning:button label="View Assets" variant="neutral" class="slds-align_absolute-center"/>
+                        <br/></lightning:layoutItem>
+                        <lightning:layoutItem size="12">
+                            <center><lightning:button label="Add another Asset" variant="brand" class="slds-button_destructive slds-align_absolute-cente" onclick="{!c.createSingleAsset}"/></center>
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                    
+                </aura:if>
+                
+            </div>
+            <footer class="slds-modal__footer">
+                <aura:if isTrue="{!v.editasset}">
+                    <lightning:button label="Cancel"  onclick="{!c.closeModal}"/>
+                    <lightning:button label="Save &amp; Update asset" variant="brand" class="slds-button_destructive buttonwidth slds-float_right" onclick="{!c.createAsset}"/>
+                    
+                    <aura:set attribute="else">
+                        <aura:if isTrue="{!v.createAsset}">
+                            <lightning:button label="Go Back" variant="brand" class="slds-float_left  slds-button_destructive buttonwidth " onclick="{!c.showAssetSelection}"/>
+                            <lightning:button label="Save &amp; add asset" variant=" brand" class="slds-button_destructive buttonwidth slds-float_right" onclick="{!c.createAsset}"/>
+                        </aura:if>
+                         <lightning:button label="Close" class="slds-float_right" onclick="{! c.closeModal }"/>
+                    </aura:set>
+                </aura:if>
+                
+                
+                
+            </footer>
+        </div>
+    </section>
+    
+    <div class="slds-backdrop slds-backdrop_open"></div>
+    
+    
+    
+    
+</aura:component>

@@ -1,0 +1,793 @@
+<!--
+ - Created by Awishkar on 27-08-2020.
+ -->
+
+<aura:component description="AssetManagementComponent_Copycmp"
+                implements="forceCommunity:availableForAllPageTypes"
+                controller="AssetManagementComponent_Controller">
+    
+    <aura:attribute name="isDisable" type="boolean" default="true"/>
+    
+    
+    <aura:attribute name="isShowHideSelector" type="boolean" default="false"/>
+    <aura:attribute name="DefaultBody" type="boolean" default="false"/>
+    <aura:attribute name="data" type="Object"/>
+    <aura:attribute name="searchedValue" type="String"/>
+    <aura:attribute name="ResponseData" type="Object"/>
+    <aura:attribute name="filterObj" type="Object"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="defaultColumns" type="List"/>
+    <aura:attribute name="pageCount" type="Decimal" default="1"/>
+    <aura:attribute name="activeSections" type="List" default="['A','B','C','D']"/>
+    <aura:attribute name="MyAssets" type="List" default="[
+                                                         {'label': 'My Assets', 'value': 'option1'}
+                                                         ]"/>
+    <aura:attribute name="valueofMyAssets" type="List" default="option1"/>
+    
+    <aura:attribute name="assetTypeOption" type="List" default="[
+                                                                {'label': 'Hardware', 'value': 'option1'},
+                                                                {'label': 'Software', 'value': 'option2'}
+                                                                ]"/>
+    <aura:attribute name="valueofAssets" type="List" default="option1"/>
+    
+    <aura:attribute name="locationOption" type="List" default="[
+                                                               {'label': 'Santa Rosa,CA', 'value': 'option1'},
+                                                               {'label': 'San Francisco,CA', 'value': 'option2'},
+                                                               {'label': 'Chicago,IL', 'value': 'option3'},
+                                                               {'label': 'New York, NY', 'value': 'option4'}
+                                                               ]"/>
+    <aura:attribute name="valueofLocation" type="List" default="option1"/>
+    <aura:attribute name="selectedRows" type="List" default="[]"/>
+    <aura:attribute name="ResponseList" type="List" default="[]" access="global"/>
+    <aura:attribute name="isModalOpen" type="boolean" default="false" access="global"/>
+    <aura:attribute name="openRightNav" type="boolean" default="false" />
+     <aura:attribute name="bulkactions" type="boolean" default="false" />
+    <aura:attribute name="serviceOption" type="List" default="[
+                                                              {'label': 'Cal due &lt;7 days', 'value': 'option1'},
+                                                              {'label': 'Cal due &lt;30 days', 'value': 'option2'},
+                                                              {'label': 'Cal due &lt;90 days', 'value': 'option3'},
+                                                              {'label': 'Custom date range', 'value': 'option4'},
+                                                              {'label': 'Past Due', 'value': 'option5'},
+                                                              {'label': 'Out of service', 'value': 'option6'}
+                                                              ]"/>
+    <aura:attribute name="valueofservice" type="List" default="option1"/>
+    <aura:attribute name="selectedcolumns" type="List" default="product_no,manufacturer,host_id,last_certificate_no"/>
+    <aura:attribute name="showSearchableRow" type="boolean" default="true"/>
+    <aura:attribute name="closeViewAssetsection" type="boolean" default="false"/>
+    
+    <aura:attribute name="showCreateAsset" type="boolean" default="false"/>
+    
+    <aura:attribute name="selectedCount" type="Integer" default="0"/>
+    <aura:attribute name="nobulkactions" type="Integer" default="0"/> 
+    <aura:attribute name="totalRecordsCount" type="Integer"/>
+
+
+    <aura:attribute name="autoCompleteOptions" type="List" default="[]"/>
+    <aura:attribute name="showList" type="Boolean" default="false" />
+    <aura:attribute name="openDropDown" type="Boolean" default="false" />
+
+
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+    <aura:handler name="change" value="{! v.closeViewAssetsection }" action="{! c.closeviewasset }"/>
+    <aura:handler name="change" value="{! v.closeBuilkAssetsection }" action="{! c.closebulksset }"/>
+    <aura:attribute name="closeBuilkAssetsection" type="boolean" default="false"/>
+    <aura:attribute name="showAddAssets" type="boolean" default="false" access="global"/>
+    <aura:attribute name="selectedCheck" type="boolean" default="false"/>
+    <aura:attribute name="showEditAssets" type="boolean" default="false"/>
+    <aura:attribute name="selecteditem" type="String" default="abc"/>
+    
+    <div class="slds-grid slds-gutters ">
+       
+        <div id="assetfilter" class="slds-col">
+            <span id="assetfilterspan" aura:id="assetfilterspan1" class="custombox"
+                  style="font-size:18px;text-align: center;cursor:pointer;height: 100%;writing-mode: vertical-rl;"
+                  onclick="{! c.openNav }">&#8679; Asset Filters</span>
+            <div id="mySidenav" class="sidenav mySidenav ">
+                <div class="custombox">
+                    <span class="slds-m-around_xx-small">
+                        <span class="assettext"><b>Asset Filters
+                            &nbsp;</b>
+                            <span style="float:right;"> 
+                                <lightning:buttonIcon class="buttonicon" iconName="utility:close" 
+                                                      variant="border-filled" 
+                                                      onclick="{! c.closeNav }" title="Close Filters" />
+                                
+                            </span>
+                        </span>
+                        
+                        
+                    </span>
+                    <div class="slds-m-around_xx-small slds-m-top-medium">
+                        <lightning:accordion
+                                             allowMultipleSectionsOpen="true"
+                                             onsectiontoggle="{! c.handleSectionToggle }"
+                                             activeSectionName="{! v.activeSections }"
+                                             >
+                            <lightning:accordionSection name="A" label="My Asset Filter">
+                                <div class="slds-box" style="font-size: 11px;">
+                                    All your saved filters will appers here for quick refrence. Create a custom filter to get
+                                    start.123
+                                </div>
+                                <lightning:checkboxGroup name="Checkbox Group"
+                                                         label=" "
+                                                         options="{! v.MyAssets }"
+                                                         value="{! v.valueofMyAssets }"
+                                                         onchange="{! c.handleChange }"/>
+                            </lightning:accordionSection>
+                            <lightning:accordionSection name="B" label="Asset Type">
+                                <lightning:checkboxGroup name="Checkbox Group"
+                                                         label=" "
+                                                         options="{! v.assetTypeOption }"
+                                                         value="{! v.valueofAssets }"
+                                                         onchange="{! c.handleChange }"/>
+                            </lightning:accordionSection>
+                            <lightning:accordionSection name="C" label="Location">
+                                <lightning:checkboxGroup name="Checkbox Group"
+                                                         label=" "
+                                                         options="{! v.locationOption }"
+                                                         value="{! v.valueofLocation }"
+                                                         onchange="{! c.handleChange }"/>
+                            </lightning:accordionSection>
+                            <lightning:accordionSection name="D" label="Service">
+                                <lightning:checkboxGroup name="Checkbox Group"
+                                                         label=" "
+                                                         options="{! v.serviceOption }"
+                                                         value="{! v.valueofservice }"
+                                                         onchange="{! c.handleChange }"/>
+                            </lightning:accordionSection>
+                        </lightning:accordion>
+                        
+                    </div>
+                </div>  
+            </div>
+        </div>
+        <div id="assetbody" class="slds-col ">
+            <lightning:layout >
+                
+                <lightning:layoutItem size="12" >
+                    <lightning:layout multipleRows="true">
+                        <lightning:layoutItem size="6" >
+                            <!--div class="slds-m-top_small slds-m-right_small slds-col" style="max-width: 28rem;"-->
+                            <div class="{! v.openDropDown ? 'slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open' : 'slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click'}"
+                    aria-expanded="true" aria-haspopup="listbox" role="combobox">
+                            <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right" role="none">    
+                            <lightning:input
+                                                 aura:id="globalsearch"
+                                                 name="inline-search-input"
+                                                 label="This is a search input with a hidden label. The label is still required for accessibility reasons"
+                                                 type="search"
+                                                 variant="label-hidden"
+                                                 value="{!v.searchedValue}"
+                                                 placeholder ="Search Assets"
+                                                 onclick="{!c.handleSearchClick}"
+                                                 onkeyup="{! c.searchKeyWord }"
+                                                 onblur = "{!c.handleSearchBlur}"
+                                                 />
+                                                 <aura:if isTrue="{! empty(v.searchKeyWord)}">
+                                                    <span
+                                                        class="slds-icon_container slds-icon-utility-search slds-input__icon slds-input__icon_right">
+                                                        <lightning:icon iconName="utility:search" size="x-small" />
+                                                    </span>
+                                                    <aura:set attribute="else">
+                                                        <button class="slds-button slds-button_icon slds-input__icon slds-input__icon_right"
+                                                            title="Clear the text input" onclick="{!c.clearOption}">
+                                                            <lightning:icon iconName="utility:clear" size="x-small" />
+                                                        </button>
+                                                    </aura:set>
+                                                </aura:if>
+                                                
+                                                 <div id="listbox-id-11" class="slds-dropdown slds-dropdown_length-5 slds-dropdown_fluid"
+                                                 role="listbox">
+                                                 <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+                                                     <aura:iteration items="{!v.autoCompleteOptions}" var="result">
+                                                         <li role="presentation" class="slds-listbox__item" data-id="{!result.value}"
+                                                             data-value="{!result.value}" onclick="{!c.searchResult}">
+                                                             <div id="{!result.value}"
+                                                                 class="slds-media slds-listbox__option slds-listbox__option_plain slds-media_small"
+                                                                 role="option">
+                                                                 <span class="slds-media__figure slds-listbox__option-icon"></span>
+                                                                 <span class="slds-media__body">
+                                                                     <span class="slds-truncate" title="{!result.value}">
+                                                                         <span>{!result.value}</span>
+                                                                     </span>
+                                                                 </span>
+                                                             </div>
+                                                         </li>
+                                                     </aura:iteration>
+                                                 </ul>
+                                             </div>  
+                                             
+                                            </div>  
+                                            </div>                           
+                            <!--/div-->
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="4" >
+                            <div class=" slds-m-left_small slds-m-right_small slds-col" align="right">
+                                
+                                <lightning:button class=" textcolor" label="Column Selector" title="Column Selector" onclick="{! c.showHideSelectorData }"/>
+                                
+                                <aura:if isTrue="{!v.isShowHideSelector}">
+                                    <c:MultiPicklist isShowHideSelector = "{!v.isShowHideSelector}" defaultColumns = "{! v.defaultColumns}" columns = "{! v.columns}" selectedcolumns ="{!v.selectedcolumns}"/>
+                                </aura:if>
+                            </div>
+                        </lightning:layoutItem>
+                         <lightning:layoutitem size="2">
+                            <lightning:button class=" textcolor" label="Add Assets" variant="neutral" onclick="{!c.handleAddAssets}" />
+                        </lightning:layoutitem>
+                        <lightning:layoutItem size="2" >
+                            <br/><a style="text-decoration: none;" onclick="{!c.handleShowSystem}">
+                                <div class="customBorder">
+                                    <lightning:buttonIconStateful iconName="utility:check" selected="{!v.selectedCheck}" />
+                                    &nbsp;&nbsp;Show Systems
+                                </div>
+                            </a>
+                            <!--div  class=" slds-box " style="height:3rem;">
+                                <span style="align: center;">Show results  </span>
+                            </div-->
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="2" >
+                            <br/><div  class="slds-m-top_small slds-m-bottom_x-small  slds-m-left_small slds-m-right_medium  slds-col" style="height:2rem;">
+                                <aura:if isTrue="{!v.ResponseData.response.totalResults != 0}">
+                                    <span style="text-align: center;">{!v.ResponseData.response.totalResults} &nbsp; Results</span>
+                                    <aura:set attribute="else">
+                                        <span style="text-align: center;">No Results found! </span>
+                                    </aura:set>
+                                </aura:if>
+                                
+                            </div>
+                        </lightning:layoutItem>
+                       
+                        <lightning:layoutItem size="12" >
+                            <div class="slds-grid slds-gutters ">
+                                <div class="slds-col" style="width:97%;">
+                                    <div style="height: 590px; overflow-x:auto;overflow-y:auto; ">
+                                        
+                                        <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped">
+                                            <thead class="fixed_header">
+                                                <tr class="slds-text-title_caps slds-line-height_reset" scope="row" >
+                                                    <th style="width:3.25rem;" class="slds-text-align_right slds-is-resizable theadbackground">
+                                                        <div class="slds-form-element">
+                                                            <div class="slds-form-element__control">
+                                                                <label class="slds-checkbox">
+                                                                    <ui:inputCheckbox disabled="{!v.totalRecordsCount == 0}"
+                                                                                      aura:id="selectAllId"
+                                                                                      change="{!c.selectAllCheckbox}"/>
+                                                                    <span class="slds-checkbox_faux"></span>
+                                                                    <span class="slds-form-element__label"></span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </th>
+                                                    <c:auraIfContains items="{!v.selectedcolumns}"  element="product_no">
+                                                        <th scope="col" class="theadbackground">
+                                                            <div class="slds-truncate" title="product_no ">product_no</div>
+                                                        </th>                
+                                                    </c:auraIfContains>
+                                                    
+                                                    <c:auraIfContains items="{!v.selectedcolumns}"  element="manufacturer"> 
+                                                        <th scope="col" class="slds-is-resizable theadbackground"><div class="slds-truncate" title="manufacturer">manufacturer</div></th>
+                                                    </c:auraIfContains>
+                                                    <c:auraIfContains items="{!v.selectedcolumns}"  element="host_id">
+                                                        <th scope="col" class="slds-is-resizable theadbackground"><div class="slds-truncate" title="host_id">host_id</div></th>
+                                                    </c:auraIfContains>
+                                                    <c:auraIfContains items="{!v.selectedcolumns}"  element="last_certificate_no">
+                                                        <th scope="col" class="slds-is-resizable theadbackground"><div class="slds-truncate" title="last_certificate_no">last_certificate_no</div></th>
+                                                    </c:auraIfContains>
+                                                    <c:auraIfContains items="{!v.selectedcolumns}"  element="SiteName">
+                                                        <th scope="col" class="slds-is-resizable theadbackground"><div class="slds-truncate" title="SiteName">SiteName</div></th>
+                                                    </c:auraIfContains>
+                                                    <c:auraIfContains items="{!v.selectedcolumns}"  element="sales_order_no">
+                                                        <th scope="col" class="slds-is-resizable theadbackground"><div class="slds-truncate" title="sales_order_no">sales_order_no</div></th>
+                                                    </c:auraIfContains>
+                                                    
+                                                    <c:auraIfContains items="{!v.selectedcolumns}"  element="manuf_model_no">
+                                                        <th scope="col" class="slds-is-resizable theadbackground"><div class="slds-truncate" title="manuf_model_no">manuf_model_no</div></th>
+                                                    </c:auraIfContains>
+                                                    <c:auraIfContains items="{!v.selectedcolumns}"  element="purchase_order_no">
+                                                        <th scope="col" class="slds-is-resizable theadbackground"><div class="slds-truncate" title="purchase_order_no">purchase_order_no</div></th>
+                                                    </c:auraIfContains>
+                                                    <c:auraIfContains items="{!v.selectedcolumns}"  element="serial_no">
+                                                        <th scope="col" class="slds-is-resizable theadbackground"><div class="slds-truncate" title="serial_no">serial_no</div></th>
+                                                    </c:auraIfContains>
+                                                    <c:auraIfContains items="{!v.selectedcolumns}"  element="keysight_care_eligible">
+                                                        <th scope="col" class="slds-is-resizable theadbackground"><div class="slds-truncate" title="keysight_care_eligible ">keysight_care_eligible </div></th>
+                                                    </c:auraIfContains>
+                                                    <c:auraIfContains items="{!v.selectedcolumns}"  element="keysight_care_coverage">
+                                                        <th scope="col" class="slds-is-resizable theadbackground"><div class="slds-truncate" title="keysight_care_coverage">keysight_care_coverage</div></th>
+                                                    </c:auraIfContains>
+                                                    <c:auraIfContains items="{!v.selectedcolumns}"  element="cal_due_date">
+                                                        <th scope="col" class="slds-is-resizable theadbackground"><div class="slds-truncate" title="cal_due_date ">cal_due_date</div></th>
+                                                    </c:auraIfContains>
+                                                    <c:auraIfContains items="{!v.selectedcolumns}"  element="last_cal_date">
+                                                        <th scope="col" class="slds-is-resizable theadbackground"><div class="slds-truncate" title="last_cal_date">last_cal_date</div></th>
+                                                    </c:auraIfContains>
+                                                    <c:auraIfContains items="{!v.selectedcolumns}"  element="last_cal_type">
+                                                        <th scope="col" class="slds-is-resizable theadbackground"><div class="slds-truncate" title="last_cal_type">last_cal_type</div></th>
+                                                    </c:auraIfContains>
+                                                    <c:auraIfContains items="{!v.selectedcolumns}"  element="last_cal_result">
+                                                        <th scope="col" class="slds-is-resizable theadbackground"><div class="slds-truncate" title="last_cal_result">last_cal_result</div></th>
+                                                    </c:auraIfContains>
+                                                    <c:auraIfContains items="{!v.selectedcolumns}"  element="eos_date">
+                                                        <th scope="col" class="slds-is-resizable theadbackground"><div class="slds-truncate" title="eos_date">eos_date</div></th>
+                                                    </c:auraIfContains>
+                                                    
+                                                    <c:auraIfContains items="{!v.selectedcolumns}"  element="extended_service_period">
+                                                        <th scope="col" class="slds-is-resizable theadbackground"><div class="slds-truncate" title="extended_service_period">extended_service_period</div></th>
+                                                    </c:auraIfContains>
+                                                    <c:auraIfContains items="{!v.selectedcolumns}"  element="id">
+                                                        <th scope="col" class="slds-is-resizable theadbackground"><div class="slds-truncate" title="id">id</div></th>
+                                                    </c:auraIfContains>
+                                                    <c:auraIfContains items="{!v.selectedcolumns}"  element="row_id">
+                                                        <th scope="col" class="slds-is-resizable theadbackground"><div class="slds-truncate" title="row_id">row_id</div></th>
+                                                    </c:auraIfContains>        
+                                                    
+                                                </tr>
+                                            </thead>
+                                            
+                                            <tbody class="fixed_header">
+                                                <aura:if isTrue ="{!v.showSearchableRow}">
+                                                    <tr scope="row">    
+                                                        <td style="width:0.25rem; ">
+                                                            <lightning:buttonIcon iconName="utility:close" class="adjustmargin"  size="small" alternativeText="Delete Row" title="Delete Row" onclick="{!c.deleteRow}" />
+                                                        </td>
+                                                        <c:auraIfContains items="{!v.selectedcolumns}"  element="product_no"> 
+                                                            <td><lightning:input class="inputboxmargin" name="Product" label="" varient="label-hidden" placeholder="Product" value = "{!v.filterObj.product_no}"
+                                                                                 onkeyup="{!c.filterChangeHandler}"/>
+                                                                
+                                                            </td></c:auraIfContains>
+                                                        
+                                                        <c:auraIfContains items="{!v.selectedcolumns}"  element="manufacturer"> 
+                                                            <td><lightning:input class="inputboxmargin"  name="Manufacturer" label="" varient="label-hidden" value = "{!v.filterObj.manufacturer}"
+                                                                                 placeholder="Manufacturer" onkeyup="{!c.filterChangeHandler}"/>
+                                                            </td>
+                                                        </c:auraIfContains>
+                                                        <c:auraIfContains items="{!v.selectedcolumns}"  element="host_id"> 
+                                                            <td> <lightning:input class="inputboxmargin"  name="HostId" label="" varient="label-hidden" value = "{!v.filterObj.host_id}" 
+                                                                                  placeholder="Host ID" onkeyup="{!c.filterChangeHandler}"/></td>
+                                                        </c:auraIfContains>
+                                                        <c:auraIfContains items="{!v.selectedcolumns}"  element="last_certificate_no">   
+                                                            <td><lightning:input class="inputboxmargin"  name="CertificateNumber" label="" varient="label-hidden" value = "{!v.filterObj.last_certificate_no}"
+                                                                                 placeholder="Last Certificate No" onkeyup="{!c.filterChangeHandler}"/></td>
+                                                        </c:auraIfContains>
+                                                        <c:auraIfContains items="{!v.selectedcolumns}"  element="SiteName">
+                                                            
+                                                            <td><lightning:input class="inputboxmargin" name="SiteName" label="" varient="label-hidden" value = "{!v.filterObj.SiteName}"
+                                                                                 placeholder="Site Name" onkeyup="{!c.filterChangeHandler}"/></td>
+                                                        </c:auraIfContains>
+                                                        <c:auraIfContains items="{!v.selectedcolumns}"  element="sales_order_no">
+                                                            
+                                                            <td><lightning:input class="inputboxmargin" name="sales_order_no" label="" varient="label-hidden" value = "{!v.filterObj.sales_order_no}"
+                                                                                 placeholder="Sales Order No" onkeyup="{!c.filterChangeHandler}"/></td>
+                                                        </c:auraIfContains>
+                                                        
+                                                        <c:auraIfContains items="{!v.selectedcolumns}"  element="manuf_model_no">
+                                                            
+                                                            <td><lightning:input class="inputboxmargin" name="manuf_model_no" label="" varient="label-hidden" value = "{!v.filterObj.manuf_model_no}"
+                                                                                 placeholder="Manufacture Model No" onkeyup="{!c.filterChangeHandler}"/></td>
+                                                        </c:auraIfContains>
+                                                        <c:auraIfContains items="{!v.selectedcolumns}"  element="purchase_order_no">
+                                                            <td><lightning:input class="inputboxmargin" name="purchase_order_no" label="" varient="label-hidden" value = "{!v.filterObj.purchase_order_no}"
+                                                                                 placeholder="Purchase  Order No" onkeyup="{!c.filterChangeHandler}"/></td>
+                                                        </c:auraIfContains>
+                                                        <c:auraIfContains items="{!v.selectedcolumns}"  element="serial_no">                                    
+                                                            <td><lightning:input class="inputboxmargin" name="serial_no" label="" varient="label-hidden" value = "{!v.filterObj.serial_no}"
+                                                                                 placeholder="Serial No" onkeyup="{!c.filterChangeHandler}"/></td>
+                                                        </c:auraIfContains>
+                                                        <c:auraIfContains items="{!v.selectedcolumns}"  element="keysight_care_eligible">                                    
+                                                            <td><lightning:input class="inputboxmargin" name="keysight_care_eligible" label="" varient="label-hidden" value = "{!v.filterObj.keysight_care_eligible}"
+                                                                                 placeholder="Keysight Care Eligible" onkeyup="{!c.filterChangeHandler}"/></td>
+                                                        </c:auraIfContains>
+                                                        <c:auraIfContains items="{!v.selectedcolumns}"  element="keysight_care_coverage">
+                                                            
+                                                            <td><lightning:input class="inputboxmargin" name="keysight_care_coverage" label="" varient="label-hidden" value = "{!v.filterObj.keysight_care_coverage}"
+                                                                                 placeholder="Keysight Care Coverage" onkeyup="{!c.filterChangeHandler}"/></td>
+                                                        </c:auraIfContains>
+                                                        <c:auraIfContains items="{!v.selectedcolumns}"  element="cal_due_date">
+                                                            
+                                                            <td><lightning:input class="inputboxmargin" name="cal_due_date" label="" varient="label-hidden" value = "{!v.filterObj.cal_due_date}"
+                                                                                 placeholder="Cal Due Date" onkeyup="{!c.filterChangeHandler}"/></td>
+                                                        </c:auraIfContains>
+                                                        <c:auraIfContains items="{!v.selectedcolumns}"  element="last_cal_date">
+                                                            <td><lightning:input class="inputboxmargin" name="last_cal_date" label="" varient="label-hidden" value = "{!v.filterObj.last_cal_date}"
+                                                                                 placeholder="Last Cal Date" onkeyup="{!c.filterChangeHandler}"/></td>
+                                                        </c:auraIfContains>
+                                                        <c:auraIfContains items="{!v.selectedcolumns}"  element="last_cal_type">                                    
+                                                            <td><lightning:input class="inputboxmargin" name="last_cal_type" label="" varient="label-hidden" value = "{!v.filterObj.last_cal_type}"
+                                                                                 placeholder="Last Cal Type" onkeyup="{!c.filterChangeHandler}"/></td>
+                                                        </c:auraIfContains>
+                                                        <c:auraIfContains items="{!v.selectedcolumns}"  element="last_cal_result">
+                                                            
+                                                            <td><lightning:input class="inputboxmargin" name="last_cal_result" label="" varient="label-hidden" value = "{!v.filterObj.last_cal_result}"
+                                                                                 placeholder="Last Cal Result" onkeyup="{!c.filterChangeHandler}"/></td>
+                                                        </c:auraIfContains>
+                                                        <c:auraIfContains items="{!v.selectedcolumns}"  element="eos_date">
+                                                            
+                                                            <td><lightning:input class="inputboxmargin" name="eos_date" label="" varient="label-hidden" value = "{!v.filterObj.eos_date}"
+                                                                                 placeholder="Eos Date" onkeyup="{!c.filterChangeHandler}"/></td>
+                                                        </c:auraIfContains>
+                                                        
+                                                        <c:auraIfContains items="{!v.selectedcolumns}"  element="extended_service_period">
+                                                            <td><lightning:input class="inputboxmargin" name="extended_service_period" label="" varient="label-hidden" value = "{!v.filterObj.extended_service_period}"
+                                                                                 placeholder="Extended Service Period" onkeyup="{!c.filterChangeHandler}"/></td>
+                                                        </c:auraIfContains>
+                                                        <c:auraIfContains items="{!v.selectedcolumns}"  element="id">
+                                                            
+                                                            <td><lightning:input class="inputboxmargin" name="id" label="" varient="label-hidden" value = "{!v.filterObj.id}"
+                                                                                 placeholder="Id" onkeyup="{!c.filterChangeHandler}"/></td>
+                                                        </c:auraIfContains>
+                                                        <c:auraIfContains items="{!v.selectedcolumns}"  element="row_id">
+                                                            
+                                                            <td><lightning:input class="inputboxmargin" name="row_id" label="" varient="label-hidden" value = "{!v.filterObj.row_id}"
+                                                                                 placeholder="Row Id" onkeyup="{!c.filterChangeHandler}"/></td>
+                                                        </c:auraIfContains>        
+                                                        
+                                                        
+                                                    </tr>
+                                                </aura:if>
+                                                <aura:iteration items="{!v.data}" var="item" indexVar="indx">
+                                                    <tr scope="row">
+                                                        <th scope="row" class="slds-text-align_right" style="width:3.25rem;">
+                                                            <div class="slds-form-element">
+                                                                <div class="slds-form-element__control">
+                                                                    <label class="slds-checkbox">
+                                                                        <ui:inputCheckbox text="{!indx}"
+                                                                                          value="{!item.isChecked}"
+                                                                                          change="{!c.checkboxSelect}"/>
+                                                                        <span class="slds-checkbox_faux"></span>
+                                                                        <span class="slds-form-element__label text"></span>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </th>
+                                                        <c:auraIfContains items="{!v.selectedcolumns}"  element="product_no">
+                                                            <td class="slds-cell-wrap"><div class="slds-truncate">{!item.product_no}</div></td>
+                                                        </c:auraIfContains>
+                                                        <c:auraIfContains items="{!v.selectedcolumns}"  element="manufacturer"> 
+                                                            <td  class="slds-cell-wrap"><div class="slds-truncate">{!item.manufacturer}</div></td>
+                                                        </c:auraIfContains>
+                                                        <c:auraIfContains items="{!v.selectedcolumns}"  element="host_id"> 
+                                                            <td  class="slds-cell-wrap"><div class="slds-truncate">{!item.host_id}</div></td>
+                                                        </c:auraIfContains>
+                                                        <c:auraIfContains items="{!v.selectedcolumns}"  element="last_certificate_no">   
+                                                            <td  class="slds-cell-wrap"><div class="slds-truncate">{!item.last_certificate_no}</div></td>
+                                                        </c:auraIfContains>
+                                                        
+                                                        <c:auraIfContains items="{!v.selectedcolumns}"  element="SiteName">                                    
+                                                            <td  class="slds-cell-wrap"><div class="slds-truncate">{!item.SiteName}</div></td>
+                                                        </c:auraIfContains>
+                                                        <c:auraIfContains items="{!v.selectedcolumns}"  element="sales_order_no">
+                                                            
+                                                            <td  class="slds-cell-wrap"><div class="slds-truncate">{!item.sales_order_no}</div></td>
+                                                        </c:auraIfContains>
+                                                        
+                                                        <c:auraIfContains items="{!v.selectedcolumns}"  element="manuf_model_no">
+                                                            
+                                                            <td  class="slds-cell-wrap"><div class="slds-truncate">{!item.manuf_model_no}</div></td>
+                                                        </c:auraIfContains>
+                                                        <c:auraIfContains items="{!v.selectedcolumns}"  element="purchase_order_no">
+                                                            
+                                                            <td  class="slds-cell-wrap"><div class="slds-truncate">{!item.purchase_order_no}</div></td>
+                                                        </c:auraIfContains>
+                                                        <c:auraIfContains items="{!v.selectedcolumns}"  element="serial_no">
+                                                            
+                                                            <td  class="slds-cell-wrap"><div class="slds-truncate">{!item.serial_no}</div></td>
+                                                        </c:auraIfContains>
+                                                         <c:auraIfContains items="{!v.selectedcolumns}"  element="keysight_care_eligible">
+                                                            
+                                                            <td  class="slds-cell-wrap"><div class="slds-truncate">{!item.keysight_care_eligible}</div></td>
+                                                        </c:auraIfContains>
+                                                        <c:auraIfContains items="{!v.selectedcolumns}"  element="keysight_care_coverage">
+                                                            
+                                                            <td  class="slds-cell-wrap"><div class="slds-truncate">{!item.keysight_care_coverage}</div></td>
+                                                        </c:auraIfContains>
+                                                        <c:auraIfContains items="{!v.selectedcolumns}"  element="cal_due_date">
+                                                            
+                                                            <td  class="slds-cell-wrap"><div class="slds-truncate">{!item.cal_due_date}</div></td>
+                                                        </c:auraIfContains>
+                                                        
+                                                        <c:auraIfContains items="{!v.selectedcolumns}"  element="last_cal_date">
+                                                            
+                                                            <td  class="slds-cell-wrap"><div class="slds-truncate">{!item.last_cal_date}</div></td>
+                                                        </c:auraIfContains>
+                                                        <c:auraIfContains items="{!v.selectedcolumns}"  element="last_cal_type">
+                                                            
+                                                            <td  class="slds-cell-wrap"><div class="slds-truncate">{!item.last_cal_type}</div></td>
+                                                        </c:auraIfContains>
+                                                        <c:auraIfContains items="{!v.selectedcolumns}"  element="last_cal_result">
+                                                            
+                                                            <td  class="slds-cell-wrap"><div class="slds-truncate">{!item.last_cal_result}</div></td>
+                                                        </c:auraIfContains>
+                                                        <c:auraIfContains items="{!v.selectedcolumns}"  element="eos_date">
+                                                            
+                                                            <td  class="slds-cell-wrap"><div class="slds-truncate">{!item.eos_date}</div></td>
+                                                        </c:auraIfContains>
+                                                        
+                                                        <c:auraIfContains items="{!v.selectedcolumns}"  element="extended_service_period">
+                                                            
+                                                            <td  class="slds-cell-wrap"><div class="slds-truncate">{!item.extended_service_period}</div></td>
+                                                        </c:auraIfContains>
+                                                        <c:auraIfContains items="{!v.selectedcolumns}"  element="id">                                    
+                                                            <td  class="slds-cell-wrap"><div class="slds-truncate">{!item.id}</div></td>
+                                                        </c:auraIfContains>
+                                                        <c:auraIfContains items="{!v.selectedcolumns}"  element="row_id">
+                                                            
+                                                            <td  class="slds-cell-wrap"><div class="slds-truncate">{!item.row_id}</div></td>
+                                                        </c:auraIfContains>        
+                                                        
+                                                    </tr>
+                                                </aura:iteration>
+                                            </tbody>
+                                        </table>
+                                        
+                                    </div>
+                                </div>
+                                <div  style="width:3%;">
+                                   <div style="float:right;">
+                                       <div class="slds-box demo-only" style="width:3rem;float:right;font-size:18px;text-align: center;cursor:pointer;height: 100%;">
+                                           <nav class="slds-nav-vertical" aria-label="Sub page">
+                                               <div class="slds-nav-vertical__section" style="height: 100%;">
+                                                   
+                                                   <ul aria-describedby="entity-header">
+                                                       
+                                                       <li >
+                                                           <div class="customboxicon">
+                                                               <aura:if isTrue = "{!v.openRightNav}">
+                                                                   <lightning:buttonIcon class="buttonicon" iconName="utility:chevronright" 
+                                                                                         variant="bare"   
+                                                                                         onclick="{! c.closeNavRight }" title="Close Asset Actions" />
+                                                                   <aura:set attribute="else">
+                                                                       <lightning:buttonIcon class="buttonicon" iconName="utility:chevronleft" 
+                                                                                             variant="bare"  
+                                                                                             onclick="{! c.openNavRight }" title="Open Asset Actions" />
+                                                                   </aura:set>
+                                                               </aura:if>
+                                                           </div>
+                                                       </li>
+                                                       <li >
+                                                           <div class="slds-p-bottom_small slds-p-top_large">
+                                                           <lightning:buttonIcon class="buttonicon" iconName="utility:settings" 
+                                                                                 variant="bare"  
+                                                                                  title="Settings" />
+                                                           </div>
+                                                           
+                                                       </li>
+                                                       <li>
+                                                           <div class="slds-p-bottom_small paddingnav">
+                                                           <lightning:buttonIcon class="buttonicon" iconName="utility:preview" 
+                                                                                 variant="bare"  
+                                                                                  title="preview" />
+                                                           </div>
+                                                           
+                                                       </li>
+                                                       <li >
+                                                           <div class="slds-p-bottom_small paddingnav">
+                                                           <lightning:buttonIcon class="buttonicon" iconName="utility:text_color" 
+                                                                                 variant="bare"  
+                                                                                  title="text_color" />
+                                                           </div>
+                                                       </li>                                                       
+                                                       <li >
+                                                           <div class="slds-p-bottom_small paddingnav">
+                                                           <lightning:buttonIcon class="buttonicon" iconName="utility:attach" 
+                                                                                 variant="bare"  
+                                                                                  title="Attachment" />
+                                                           </div>
+                                                       </li>
+                                                       <li >
+                                                           <div class="slds-p-bottom_small paddingnav">
+                                                           <lightning:buttonIcon class="buttonicon" iconName="utility:answer" 
+                                                                                 variant="bare"  
+                                                                                  title="Answer" />
+                                                           </div>
+                                                       </li>
+                                                       <li >
+                                                           <div class="slds-p-bottom_small paddingnav">
+                                                           <lightning:buttonIcon class="buttonicon" iconName="utility:clock" 
+                                                                                 variant="bare"  
+                                                                                  title="clock" />
+                                                           </div>
+                                                       </li>
+                                                       <li >
+                                                           <div class="slds-p-bottom_small paddingnav">
+                                                           <lightning:buttonIcon class="buttonicon" iconName="utility:success" 
+                                                                                 variant="bare"  
+                                                                                  title="success" />
+                                                           </div>
+                                                           
+                                                       </li>
+                                                       
+                                                       <li >
+                                                           <div class="slds-p-bottom_small paddingnav">
+                                                           <lightning:buttonIcon class="buttonicon" iconName="utility:open_folder" 
+                                                                                 variant="bare"  
+                                                                                  title="open_folder" />
+                                                           </div>
+                                                           </li>
+
+                                                       
+                                                       <li >
+                                                           <div class=" paddingnav">
+                                                           <lightning:buttonIcon class="buttonicon" iconName="utility:chart" 
+                                                                                 variant="bare"  
+                                                                                 title="add" />
+                                                           </div>
+                                                       </li>
+                                                   </ul>
+                                               </div>
+                                               
+                                           </nav>
+                                       </div>
+                                    
+                                       <div id="mySidenavRight" class="navrightcustombox sidenavRight mySidenav displaynone">
+                                           <aura:if isTrue="{!v.isDisable}">
+                                               <div class="slds-m-around_x-small" id="dcalc" style="pointer-events: none;opacity: 0.7;">
+                                                   <div class="customboxunlock" align="center">
+                                                       <lightning:buttonIcon class="buttonicon" iconName="utility:lock" 
+                                                                             variant="bare" size="large"
+                                                                             onclick="{! c.openNavRight }" title="Close Asset Actions" />
+                                                       
+                                                       <div>Select asset to Unlock</div>
+                                                   </div>
+                                                   <lightning:verticalNavigation selectedItem="AssetActions">
+                                                       
+                                                       <lightning:verticalNavigationSection label="">
+                                                           <lightning:verticalNavigationItem
+                                                                                             label="Create Support Case"
+                                                                                             name="Create_Support_Case"/>
+                                                           <lightning:verticalNavigationItem
+                                                                                             label="Request a Service"
+                                                                                             name="Request_a_Service"/>
+                                                           <lightning:verticalNavigationItem
+                                                                                             label="View/Edit Asset"
+                                                                                             name="ViewEdit_Asset"/>
+                                                           <lightning:verticalNavigationItem
+                                                                                                 label="Manage Licenses"
+                                                                                                 name="Manage_Licenses" />
+                                                              
+                                                           <lightning:verticalNavigationItem
+                                                                                             label="Service/Support History"
+                                                                                             name="ServiceSupport_History"/>
+                                                           <lightning:verticalNavigationItem
+                                                                                             label="Download Certificate"
+                                                                                             name="Download_Cetificate"/>
+                                                           <lightning:verticalNavigationItem
+                                                                                             label="View Coverage"
+                                                                                             name="View_Coverage"/>
+                                                           <lightning:verticalNavigationItem
+                                                                                             label="View Documentation"
+                                                                                             name="View_Documentation"/>
+                                                           <lightning:verticalNavigationItem
+                                                                                             label="View Saved Articles"
+                                                                                             name="View_Saved_Articles"/>
+                                                           <lightning:verticalNavigationItem
+                                                                                             label="Add to My Assets"
+                                                                                             name="Add_to_my_Assets"/>
+                                                       </lightning:verticalNavigationSection>
+                                                   </lightning:verticalNavigation>
+                                                   
+                                               </div>
+                                               <aura:set attribute="else">
+                                                   <aura:if isTrue="{!v.bulkactions}">
+                                                       
+                                                       <div class="slds-m-around_x-small" id="dcalc">
+                                                           
+                                                           
+                                                           <div class="customboxunlock" style="font-size:16px; padding-left: 1rem; border:0;" ><div style="padding-top: 1rem; ">Bulk Actions ({!v.nobulkactions})</div></div>
+                                                           
+                                                           <lightning:verticalNavigation selectedItem="{!v.selecteditem}">
+                                                               
+                                                               <lightning:verticalNavigationSection label="">
+                                                                   <lightning:verticalNavigationItem
+                                                                                                     label="Bulk Edit Assets"
+                                                                                                     name="Bulk_Edit_Assets" onclick="{!c.handleClick}"/>
+                                                                   <lightning:verticalNavigationItem
+                                                                                                     label="Service &amp; Support"
+                                                                                                     
+                                                                                                     name="ServiceAndSupport" 
+                                                                                                     onclick="{!c.handleClick}"/>
+                                                                   
+                                                                   <lightning:verticalNavigationItem
+                                                                                                     label="Create Support Case"
+                                                                                                     name="Create_Support_Case" onclick="{!c.handleClick}"/>
+                                                                   <lightning:verticalNavigationItem aura:id="requestservice" id="requestserviceid"
+                                                                                                     label="Request a Service"
+                                                                                                     name="Request_a_Service" onclick="{!c.handleClick}"/>
+                                                                   
+                                                                   <lightning:verticalNavigationItem
+                                                                                                     label="Download Certificate"
+                                                                                                     name="Download_Cetificate" onclick="{!c.handleClick}"/>
+                                                                   <lightning:verticalNavigationItem
+                                                                                                     label="Create Filter"
+                                                                                                     name="Create_Filter" onclick="{!c.handleClick}"/>
+                                                                   
+                                                                   <lightning:verticalNavigationItem
+                                                                                                     label="Add to My Assets"
+                                                                                                     name="Add_to_my_Assets" onclick="{!c.handleClick}"/>
+                                                               </lightning:verticalNavigationSection>
+                                                           </lightning:verticalNavigation>
+                                                           
+                                                       </div>
+                                                       
+                                                       <aura:set attribute="else">
+                                                           <div class="slds-m-around_x-small" id="dcalc">
+                                                               
+                                                               
+                                                               <div class="customboxunlock" style="font-size:16px; padding-left: 1rem; border:0;" ><div style="padding-top: 1rem; ">Asset Actions</div></div>
+                                                               
+                                                               <lightning:verticalNavigation selectedItem="{!v.selecteditem}">
+                                                                   
+                                                                   <lightning:verticalNavigationSection label="">
+                                                                       <lightning:verticalNavigationItem
+                                                                                                         label="Create Support Case"
+                                                                                                         name="Create_Support_Case" onclick="{!c.handleClick}"/>
+                                                                       <lightning:verticalNavigationItem id="requestservice"
+                                                                                                         label="Request a Service"
+                                                                                                         name="Request_a_Service" onclick="{!c.handleClick}"/>
+                                                                       <lightning:verticalNavigationItem
+                                                                                                         label="View/Edit Asset"
+                                                                                                         name="ViewEdit_Asset" onclick="{!c.handleClick}"/>
+                                                                       <lightning:verticalNavigationItem
+                                                                                                         label="Manage Licenses"
+                                                                                                         name="Manage_Licenses" onclick="{!c.handleClick}"/>
+                                                                       <lightning:verticalNavigationItem
+                                                                                                         label="Service/Support History"
+                                                                                                         name="ServiceSupport_History" onclick="{!c.handleClick}"/>
+                                                                       <lightning:verticalNavigationItem
+                                                                                                         label="Download Certificate"
+                                                                                                         name="Download_Cetificate" onclick="{!c.handleClick}"/>
+                                                                       <lightning:verticalNavigationItem
+                                                                                                         label="View Coverage"
+                                                                                                         name="View_Coverage" onclick="{!c.handleClick}"/>
+                                                                       <lightning:verticalNavigationItem
+                                                                                                         label="View Documentation"
+                                                                                                         name="View_Documentation" onclick="{!c.handleClick}"/>
+                                                                       <lightning:verticalNavigationItem
+                                                                                                         label="View Saved Articles" 
+                                                                                                         name="View_Saved_Articles"  onclick="{!c.handleClick}"/>
+                                                                       <lightning:verticalNavigationItem
+                                                                                                         label="Add to My Assets"
+                                                                                                         name="Add_to_my_Assets" onclick="{!c.handleClick}"/>
+                                                                   </lightning:verticalNavigationSection>
+                                                               </lightning:verticalNavigation>
+                                                               
+                                                           </div>
+                                                       </aura:set>
+                                                   </aura:if>
+                                               </aura:set>
+                                           </aura:if>
+                                           
+                                           
+                                       </div>
+                                       <div id="viewassetnavRight" class="navrightcustombox viewassetsidenavRight mySidenav displaynone">
+                                           <div style="height: 530px; ">
+                                               <c:AssetActionsModel   parent="{! this }" selecteditem="{!v.selecteditem}" closeViewAssetsection="{!v.closeViewAssetsection}" ResponseList = "{!v.ResponseList}"></c:AssetActionsModel>
+                                           </div>
+                                       </div>
+                                       <div id="viewManageLicensenavRight" class="navrightcustombox viewassetsidenavRight mySidenav displaynone">
+                                           <div style="height: 530px; ">
+                                               <c:ManageLicenseActionsModel parent="{! this }" selecteditem="{!v.selecteditem}" closeBuilkAssetsection="{!v.closeBuilkAssetsection}" ResponseList = "{!v.ResponseList}"></c:ManageLicenseActionsModel>
+                                           </div>
+                                       </div>
+                                </div>
+                                </div>
+                            </div>
+                            
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                    
+                </lightning:layoutItem>
+                
+            </lightning:layout>
+        </div>
+    </div>
+    
+     <aura:if isTrue="{!v.showAddAssets}">
+            <c:AddAssetsModal parent="{! this }" />
+     </aura:if>
+    <aura:if isTrue="{!v.showEditAssets}">
+            <c:AddAssetsModal parent="{! this }" />
+     </aura:if>
+    <aura:if isTrue="{!v.showCreateAsset}">
+        <c:CreateSupportCase parent="{! this }"/>
+     </aura:if>
+</aura:component>
