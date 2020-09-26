@@ -1,0 +1,25 @@
+<template>
+    <div class="slds-m-around_medium">
+        <table>
+            <tr>
+              <th class="case-table" style="width:30%;">CaseNumber</th>
+              <th class="case-table" style="width:30%;">Reason</th>
+              <th class="case-table" style="width:30%;">Priority</th>
+              <th class="case-table" style="width:30%;">Action</th>
+            </tr>
+            <template for:each={cases} for:item="caseObj">
+            <tr key={caseObj.Id}>
+                <td class="case-table">{caseObj.CaseNumber}</td>
+                <td class="case-table">{caseObj.Reason}</td>
+                <td class="case-table">{caseObj.Priority}</td>
+                <td class="case-table">
+                    <lightning-button-menu alternative-text="Show menu"  onselect={handleOnselect}>
+                    <lightning-menu-item value={caseObj.Id} label="Clone" icon-size="small"></lightning-menu-item>
+                    </lightning-button-menu>
+                </td>
+            </tr>
+            </template>
+
+        </table>
+    </div>
+</template>
