@@ -3,6 +3,7 @@
 <types>
     <members>OpportunityTriggerHelper</members>
     <members>OpportunityTriggerHandler</members>
+    <members>OpportunityTriggerHandler_Test</members>
     <name>ApexClass</name>
 </types>
 <types>

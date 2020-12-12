@@ -6,18 +6,18 @@ trigger OpportunityTrigger on Opportunity (after insert,after update,before inse
      
     if(Trigger.IsAfter && (Trigger.IsInsert || Trigger.IsUpdate)){
         OpportunityTriggerHelper.createFollowUpcases();
-        if(Trigger.IsInsert){
-           OpportunityTriggerHandler.createDualOpportunities(Trigger.New); 
-        }
-         
     }
     if(Trigger.IsBefore && (Trigger.IsInsert || Trigger.IsUpdate)){
         OpportunityTriggerHelper.validateOpportunityUpdation();
+        if(Trigger.IsUpdate){
+           OpportunityTriggerHandler.createDualOpportunities(Trigger.New);  
+        }
     }
     
     if(Trigger.IsBefore && Trigger.IsInsert){
         //OpportunityTriggerHelper.populateSDRFromAccount();
         OpportunityTriggerHandler.populateSDRFromCloseWonOpp(Trigger.New);
+         OpportunityTriggerHandler.createDualOpportunities(Trigger.New);  
         
     }    
 }
