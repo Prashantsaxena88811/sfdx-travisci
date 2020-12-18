@@ -12,13 +12,14 @@ public class OpportunityTriggerHelper {
     public static Map<Id, Opportunity> opportunityOldMap = new Map<Id, Opportunity>();
     
     
-    Public static List<String> recordTypeNameList = new List<String>{'Accounting','Client Success','Deal Desk','Opportunity Follow-up'};
+    Public static List<String> recordTypeNameList = new List<String>{'Accounting','Client Success','Deal Desk','Opportunity Follow-up','Existing Business CS Case'};
     Public static List<String> recordTypeToCreateWhenCaseIsCLosed = new List<String>{'Client Success'};
         //Public static List<String> recordTypeToCreateWhenCaseIsCLosedCompleted = new List<String>{'Accounting'};
         Public static Map<String,String> RecordTypeToStatusMap = new Map<String,String>{
                                                             'Accounting' => 'Open',
                                                             'Client Success' => 'Open',
                                                             'Deal Desk' => 'Save to Drive',
+                                                            'Existing Business CS Case' => 'Save to Drive',
                                                             'Opportunity Follow-up' => 'Send CSM Introduction'
                                                                 };
         
@@ -36,21 +37,34 @@ public class OpportunityTriggerHelper {
             }
             
             List<user> userRecList = [Select Id from user where name =: Label.Client_Success ];
-            
+            String recordName;
+            String ownerId ;
             List<Case> caseRecToInsert = new List<Case>();
             for(Opportunity oppRec : opportunityNewList){
                 if((oppRec.StageName == 'Closed Won' &&  opportunityOldMap == null)||
                    (oppRec.StageName == 'Closed Won' && oppRec.StageName !=  opportunityOldMap.get(oppRec.id).StageName)){
-                    for(String recordName  : recordTypeToCreateWhenCaseIsCLosed){
-                        String ownerId = OppRec.OwnerId;
+                       if(oppRec.Type =='' && oppRec.Type ==null ){
+                           //return;
+                       }
+                     //for(String recordName  : recordTypeToCreateWhenCaseIsCLosed){
+                        ownerId = OppRec.OwnerId;
                         /*if(recordName == 'Accounting' && queueNameToIdMap.get(recordName) != null){
                             ownerId = queueNameToIdMap.get(recordName);
                         } else */
-                        if(recordName == 'Client Success' && userRecList.size() > 0){
+                        /*if(recordName == 'Client Success' && userRecList.size() > 0){
                             ownerId = userRecList[0].Id;
-                        }
+                        }*/
+                       
+                       if(oppRec.Type == 'New Logo'){
+                           if(!userRecList.isEmpty()){
+                               ownerId = userRecList[0].Id; 
+                           }
+                           recordName = 'Client Success';
+                       }else if(oppRec.Type == 'Opp within 12 months' || oppRec.Type == 'Opp after 12 months'){
+                           recordName = 'Existing Business CS Case';
+                       }
                         caseRecToInsert.add(createCaseRecord(NameToRecordIdMap.get(recordName),OppRec.Name + ' - '+ recordName, RecordTypeToStatusMap.get(recordName),ownerId, oppRec.Id,oppRec.accountId ));
-                    }
+                    //}
                 } /*else if((oppRec.StageName == 'Closed Complete' &&  opportunityOldMap == null)||
                    (oppRec.StageName == 'Closed Complete' && oppRec.StageName !=  opportunityOldMap.get(oppRec.id).StageName)){
                     for(String recordName  : recordTypeToCreateWhenCaseIsCLosedCompleted){
@@ -113,7 +127,7 @@ public class OpportunityTriggerHelper {
     }
     
     
-    public static void populateSDRFromAccount(){
+    /*public static void populateSDRFromAccount(){
         Set<Id> accountIds = new Set<Id>();
 		for(opportunity oppRec : opportunityNewList){
             if(oppRec.AccountId != null){
@@ -135,7 +149,7 @@ public class OpportunityTriggerHelper {
                 }
             }
         }
-    }
+    }*/
     
     
 }

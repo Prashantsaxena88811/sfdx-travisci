@@ -4,6 +4,7 @@
     <members>OpportunityTriggerHelper</members>
     <members>OpportunityTriggerHandler</members>
     <members>OpportunityTriggerHandler_Test</members>
+    <members>OpportunityTriggerHelperTest</members>
     <name>ApexClass</name>
 </types>
 <types>

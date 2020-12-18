@@ -3,24 +3,21 @@ trigger OpportunityTrigger on Opportunity (after insert,after update,before inse
     OpportunityTriggerHelper.opportunityOldList = Trigger.old;
     OpportunityTriggerHelper.opportunityNewMap = Trigger.newMap;
     OpportunityTriggerHelper.opportunityOldMap = Trigger.oldMap;
-     
+    
     if(Trigger.IsAfter && (Trigger.IsInsert || Trigger.IsUpdate)){
-        OpportunityTriggerHelper.createFollowUpcases(); 
-        if(Trigger.IsUpdate){
-           OpportunityTriggerHandler.createDualOpportunities(Trigger.New , Trigger.OldMap);  
-        }
+        OpportunityTriggerHelper.createFollowUpcases();
     }
     if(Trigger.IsBefore && (Trigger.IsInsert || Trigger.IsUpdate)){
         OpportunityTriggerHelper.validateOpportunityUpdation();
-       /* if(Trigger.IsUpdate){
-           OpportunityTriggerHandler.createDualOpportunities(Trigger.New);  
-        }*/
+        if(Trigger.IsUpdate){
+            OpportunityTriggerHandler.createDualOpportunities(Trigger.New,Trigger.OldMap);  
+        }
+        if(Trigger.IsInsert){
+            OpportunityTriggerHandler.populateSDRFromCloseWonOpp(Trigger.New);
+            OpportunityTriggerHandler.createDualOpportunities(Trigger.New,Trigger.OldMap);  
+            
+        } 
+        
     }
     
-    if(Trigger.IsBefore && Trigger.IsInsert){
-        //OpportunityTriggerHelper.populateSDRFromAccount();
-        OpportunityTriggerHandler.populateSDRFromCloseWonOpp(Trigger.New);
-         OpportunityTriggerHandler.createDualOpportunities(Trigger.New,Trigger.OldMap);  
-        
-    }    
 }
