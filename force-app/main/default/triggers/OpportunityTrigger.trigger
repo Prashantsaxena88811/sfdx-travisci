@@ -5,9 +5,9 @@ trigger OpportunityTrigger on Opportunity (after insert,after update,before inse
     OpportunityTriggerHelper.opportunityOldMap = Trigger.oldMap;
      
     if(Trigger.IsAfter && (Trigger.IsInsert || Trigger.IsUpdate)){
-        OpportunityTriggerHelper.createFollowUpcases();
+        OpportunityTriggerHelper.createFollowUpcases(); 
         if(Trigger.IsUpdate){
-           OpportunityTriggerHandler.createDualOpportunitiesBeforeUpdate(Trigger.New , Trigger.OldMap);  
+           OpportunityTriggerHandler.createDualOpportunities(Trigger.New , Trigger.OldMap);  
         }
     }
     if(Trigger.IsBefore && (Trigger.IsInsert || Trigger.IsUpdate)){
@@ -20,7 +20,7 @@ trigger OpportunityTrigger on Opportunity (after insert,after update,before inse
     if(Trigger.IsBefore && Trigger.IsInsert){
         //OpportunityTriggerHelper.populateSDRFromAccount();
         OpportunityTriggerHandler.populateSDRFromCloseWonOpp(Trigger.New);
-         OpportunityTriggerHandler.createDualOpportunitiesBeforeInsert(Trigger.New);  
+         OpportunityTriggerHandler.createDualOpportunities(Trigger.New,Trigger.OldMap);  
         
     }    
 }

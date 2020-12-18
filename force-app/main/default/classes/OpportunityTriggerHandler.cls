@@ -19,7 +19,7 @@ public class OpportunityTriggerHandler {
         }
     }
     
-    public static void createDualOpportunitiesbeforeInsert(List<Opportunity> opportunityNewList){
+    public static void createDualOpportunities(List<Opportunity> opportunityNewList , Map<Id, Opportunity> OpportunityOldMap){
         try{
             RecordType recordType = new RecordType();
             recordType = [select id from recordtype where DeveloperName = 'Existing_Business' and SobjectType = 'Opportunity'];
@@ -28,24 +28,27 @@ public class OpportunityTriggerHandler {
             String deserialzeSerialze;
             Set<Id> oppIds = new Set<Id>();
             for(opportunity oppRec : opportunityNewList){
-                if(oppRec.Future_Opp__c){
-                    Opportunity opp = new Opportunity();
-                    opp.Is_Future_Opp__c = true;
-                    deserialzeSerialze =  (JSON.serializePretty(oppRec));
-                    opp = (Opportunity)JSON.deserialize(deserialzeSerialze, Opportunity.Class);
-                    opp.Name = oppRec.Name+' Future Opp';
-                    opp.Id =  null;
-                    opp.RecordTypeId = recordType.Id;
-                    opp.Future_Opp__c = false;
-                    opp.Is_Future_Opp__c = true;
-                    opp.Type = 'Opp within 12 months';
-                    opp.Stated_Annual_Need__c = oppRec.Future_Stated_Annual_Need__c;
-                    opp.Future_Stated_Annual_Need__c = '';
-                    cloneOpportunityList.add(opp);  
-                    System.debug('oppRec------>'+oppRec);
-                    oppIds.add(oppRec.Id);
-                }
-                count = count +1;
+                if( (oppRec.Future_Opp__c && OpportunityOldMap == NUll) || (oppRec.Future_Opp__c && (!OpportunityOldMap.isEmpty()) && ( !OpportunityOldMap.get(oppRec.Id).Future_Opp__c )) ){
+                    if(oppRec.Future_Opp__c){
+                        Opportunity opp = new Opportunity();
+                        opp.Is_Future_Opp__c = true;
+                        deserialzeSerialze =  (JSON.serializePretty(oppRec));
+                        opp = (Opportunity)JSON.deserialize(deserialzeSerialze, Opportunity.Class);
+                        opp.Name = oppRec.Name+' Future Opp';
+                        opp.Id =  null;
+                        opp.RecordTypeId = recordType.Id;
+                        opp.Future_Opp__c = false;
+                        opp.Is_Future_Opp__c = true;
+                        opp.Type = 'Opp within 12 months';
+                        opp.Stated_Annual_Need__c = oppRec.Future_Stated_Annual_Need__c;
+                        opp.Future_Stated_Annual_Need__c = '';
+                        cloneOpportunityList.add(opp);  
+                        System.debug('oppRec------>'+oppRec);
+                        oppIds.add(oppRec.Id);
+                    }
+                    count = count +1;  
+                }    
+                
                 
             }
             if(!cloneOpportunityList.isEmpty()){
@@ -55,12 +58,13 @@ public class OpportunityTriggerHandler {
                 System.debug('oppIds----->'+oppIds);
                 count =0;
                 for(opportunity oppRec : opportunityNewList){
-                    if(oppRec.Future_Opp__c){
-                        System.debug('add future Opportunity');
-                        oppRec.Future_Opportunity__c = cloneOpportunityList[count].Id;
-                        count = count + 1;
+                    if( (oppRec.Future_Opp__c && OpportunityOldMap == NUll) || (oppRec.Future_Opp__c && (!OpportunityOldMap.isEmpty()) && ( !OpportunityOldMap.get(oppRec.Id).Future_Opp__c )) ){
+                        if(oppRec.Future_Opp__c){
+                            System.debug('add future Opportunity');
+                            oppRec.Future_Opportunity__c = cloneOpportunityList[count].Id;
+                            count = count + 1;
+                        }  
                     }
-                    
                 }
                 System.debug('opportunityNewList--'+opportunityNewList);
                 system.debug('detials-->'+opportunityNewList[0].Future_Opp__c);
@@ -73,7 +77,7 @@ public class OpportunityTriggerHandler {
         
     }
     
-    public static void createDualOpportunitiesBeforeUpdate(List<Opportunity> opportunityNewList , Map<Id, Opportunity> OpportunityOldMap ){
+   /* public static void createDualOpportunitiesBeforeUpdate(List<Opportunity> opportunityNewList , Map<Id, Opportunity> OpportunityOldMap ){
         RecordType recordType = new RecordType();
         recordType = [select id from recordtype where DeveloperName = 'Existing_Business' and SobjectType = 'Opportunity'];
         List<opportunity> cloneOpportunityList =  new List<opportunity>();
@@ -159,7 +163,7 @@ public class OpportunityTriggerHandler {
         return 'SELECT ' + selects + ' FROM ' + objectName ;
        // return 'SELECT ' + selects + ' FROM ' + objectName + ' WHERE ' + whereClause;
          
-    }
+    }*/
     
     
 }
