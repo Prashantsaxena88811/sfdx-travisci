@@ -5,10 +5,12 @@
     <members>OpportunityTriggerHandler</members>
     <members>OpportunityTriggerHandler_Test</members>
     <members>OpportunityTriggerHelperTest</members>
+     <members>LeadTriggerHandler</members>
     <name>ApexClass</name>
 </types>
 <types>
     <members>OpportunityTrigger</members>
+     <members>LeadTrigger</members>
     <name>ApexTrigger</name>
 </types>
 <version>50.0</version>
