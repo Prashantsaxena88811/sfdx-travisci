@@ -11,16 +11,22 @@ public class LeadTriggerHandler {
             Integer count = 0;
             for(Lead leadObj : newLeadList){
                 System.debug(leadObj.ownerId+'--leadObj.ownerId-->'+userObj.Id);
-                if(leadObj.ownerId == userObj.Id){
-                    
-                    leadObj.ownerId = userList[count].SetupOwnerId;
-                    userList[count].date__c = Datetime.now();
-                    count =count +1;
-                    if( count == userList.size() ){
-                        System.debug('before reseeting the value---->'+count);
-                        count =0;
-                    }
-                }
+                if( ( leadObj.ownerId == userObj.Id && oldLeadMap == null && leadObj.Status=='Round Robin')
+                   || ( oldLeadMap != null && leadObj.Status=='Round Robin' && leadObj.ownerId == userObj.Id   && 
+                         (leadObj.Status != oldLeadMap.get(leadObj.Id).Status  || leadObj.ownerId != oldLeadMap.get(leadObj.Id).ownerId )  )  ){
+                       if(true){
+                           System.debug('ROUNDROBIN RUN');
+                           leadObj.ownerId = userList[count].SetupOwnerId;
+                           userList[count].date__c = Datetime.now();
+                           count =count +1;
+                           if( count == userList.size() ){
+                               System.debug('before reseeting the value---->'+count);
+                               count =0;
+                           }
+                       }
+                   }
+                
+                
             }
             
             update userList;

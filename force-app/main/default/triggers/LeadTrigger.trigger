@@ -1,4 +1,4 @@
-trigger LeadTrigger on Lead (after insert, after update,before insert) {
+trigger LeadTrigger on Lead (after insert, after update,before insert , before update) {
     LeadTriggerHelper.leadNewList = Trigger.new;
     LeadTriggerHelper.leadOldList = Trigger.old;
     LeadTriggerHelper.leadNewMap = Trigger.newMap;
