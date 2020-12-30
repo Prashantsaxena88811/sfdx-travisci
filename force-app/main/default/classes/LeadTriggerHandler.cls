@@ -57,7 +57,7 @@ public class LeadTriggerHandler {
                 // create a map of username to user Id
                 Map<String,String> userNameToId = new Map<String,String>();
                 for( User userObj1 : userListAE){
-                    userNameToId.put(userObj1.username , userObj1.Id ); 
+                    userNameToId.put(userObj1.username.toLowerCase() , userObj1.Id ); 
                 }
                 
                 Integer Count_MidMarket = 0;
@@ -66,7 +66,7 @@ public class LeadTriggerHandler {
                    ( oldLeadMap == null || ( oldLeadMap != null && (leadObj.User__c!=oldLeadMap.get(leadObj.Id).User__c || leadObj.Segment__c!=oldLeadMap.get(leadObj.Id).Segment__c) ) ) ){
                        
                        if( leadObj.Segment__c == 'Mid-Market' && (!lead_AE_OwnerList_Mid_Market.isEmpty()) ){
-                           leadObj.User__c = userNameToId.get(lead_AE_OwnerList_Mid_Market[Count_MidMarket].UserName__c);
+                           leadObj.User__c = userNameToId.get(lead_AE_OwnerList_Mid_Market[Count_MidMarket].UserName__c.toLowerCase());
                            lead_AE_OwnerList_Mid_Market[Count_MidMarket].Lead_Assigned_DateTime__c = Datetime.now();
                            Count_MidMarket = Count_MidMarket +1;
                            if( Count_MidMarket == lead_AE_OwnerList_Mid_Market.size() ){
@@ -75,7 +75,7 @@ public class LeadTriggerHandler {
                            }
                        }
                        else if( leadObj.Segment__c == 'Enterprise' && (!lead_AE_OwnerList_Enterprise.isEmpty()) ){
-                           leadObj.User__c = userNameToId.get(lead_AE_OwnerList_Enterprise[Count_Enterprise].UserName__c);
+                           leadObj.User__c = userNameToId.get(lead_AE_OwnerList_Enterprise[Count_Enterprise].UserName__c.toLowerCase());
                            lead_AE_OwnerList_Enterprise[Count_Enterprise].Lead_Assigned_DateTime__c = Datetime.now();
                            Count_Enterprise = Count_Enterprise +1;
                            if( Count_Enterprise == lead_AE_OwnerList_Enterprise.size() ){
