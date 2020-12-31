@@ -62,14 +62,14 @@ public class LeadTriggerHandler {
             System.debug('userList-->'+userList);
             // Map GeoGraphy=>username for Lead Owner
             Map<String,String> GeographyToUserNamesLeadOwner = new Map<String,String>();
-            if(cs.Lead_Owner_Round_Robin_Geography__c){
+            //if(cs.Lead_Owner_Round_Robin_Geography__c){
                 for(Lead_Owner_Round_Robin__c userObj1 : userList){
                     if( userObj1.Geography__c != null && userObj1.Geography__c != ''){
                         GeographyToUserNamesLeadOwner.put( userObj1.Geography__c.toLowerCase(), userObj1.UserName__c );
                         usernames.add(userObj1.UserName__c.trim());
                     }
                 } 
-            }
+            
             
             //get the users and create a Map
             List<User> userListAE = new List<User>();
@@ -84,6 +84,7 @@ public class LeadTriggerHandler {
                 userNameToId.put(userObj1.username.toLowerCase() , userObj1.Id ); 
             }
             
+            System.debug('userNameToId-->'+userNameToId);
             // sort the userIds based upon the date.
             //get the user name from custom label
             String username = Label.LeadRoundRobin; 
@@ -106,6 +107,8 @@ public class LeadTriggerHandler {
                            }
                            else{
                                System.debug('ROUNDROBIN RUN');
+                               System.debug('owner1-->'+userList[count].UserName__c.toLowerCase());
+                               System.debug('owner2-->'+userNameToId.get(userList[count].UserName__c.toLowerCase()));
                                leadObj.ownerId = userNameToId.get(userList[count].UserName__c.toLowerCase());
                                userList[count].date__c = Datetime.now();
                                count =count +1;
