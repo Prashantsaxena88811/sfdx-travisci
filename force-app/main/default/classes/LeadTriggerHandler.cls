@@ -3,8 +3,8 @@ public class LeadTriggerHandler {
     public Static void leadRoundRobin(List<Lead> newLeadList , Map<Id,Lead> oldLeadMap){
         try{
             
-            Lead_Round_Robin__c CS = Lead_Round_Robin__c.getOrgDefaults();
-            System.debug('cs-'+cs);
+            Lead_Round_Robin__c checkGeography = Lead_Round_Robin__c.getOrgDefaults();
+            System.debug('checkGeography-'+checkGeography);
             
             /*AE round robin start*/
             List<Lead_AE_Owner_Round_Robin__c> lead_AE_OwnerList = new List<Lead_AE_Owner_Round_Robin__c>();
@@ -29,7 +29,7 @@ public class LeadTriggerHandler {
             // Map GeoGraphy=>username for AE Owner
             Map<String,String> GeographyToUserNames = new Map<String,String>();
             
-            if(!cs.AE_Owner_Round_Robin_Geography__c){
+            if(!checkGeography.AE_Owner_Round_Robin_Geography__c){
                 for(AE_OwnerCustomsorting AE_Obj : AE_OwnerCustomsortingList){
                     System.debug('**AE_Obj.userRec==>'+AE_Obj.userRec);
                     if(!SegmentToListOfUsersMap.containsKey(AE_Obj.userRec.Segment__c.toLowerCase()) ){
@@ -100,7 +100,7 @@ public class LeadTriggerHandler {
                    || ( oldLeadMap != null && leadObj.Status=='Round Robin' && leadObj.ownerId == userObj.Id   && 
                        (leadObj.Status != oldLeadMap.get(leadObj.Id).Status  || leadObj.ownerId != oldLeadMap.get(leadObj.Id).ownerId )  )  ){
                            
-                           if(cs.Lead_Owner_Round_Robin_Geography__c){
+                           if(checkGeography.Lead_Owner_Round_Robin_Geography__c){
                                if(leadObj.Geography__c !=null && GeographyToUserNamesLeadOwner.containsKey(leadObj.Geography__c.toLowerCase()) ){
                                    leadObj.ownerId = userNameToId.get( GeographyToUserNamesLeadOwner.get(leadObj.Geography__c.toLowerCase()).toLowerCase() );
                                }
@@ -132,7 +132,7 @@ count =0;
                 if( leadObj.User__c==null && ( leadObj.Segment__c != '' && leadObj.Segment__c!= null ) &&
                    ( oldLeadMap == null || ( oldLeadMap != null && (leadObj.User__c!=oldLeadMap.get(leadObj.Id).User__c || leadObj.Segment__c!=oldLeadMap.get(leadObj.Id).Segment__c) )  ) ){
                        
-                       if(cs.AE_Owner_Round_Robin_Geography__c){// checkfor GeoGraphy
+                       if(checkGeography.AE_Owner_Round_Robin_Geography__c){// checkfor GeoGraphy
                            System.debug('Round Robin Based on Geography'); //GeographyToUserNames
                            if( leadObj.Geography__c !=null && GeographyToUserNames.containsKey(leadObj.Geography__c.toLowerCase()) ){
                                leadObj.User__c = userNameToId.get( GeographyToUserNames.get(leadObj.Geography__c.toLowerCase()).toLowerCase() );
