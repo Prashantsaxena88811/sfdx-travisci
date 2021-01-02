@@ -5,7 +5,8 @@
     <members>OpportunityTriggerHandler</members>
     <members>OpportunityTriggerHandler_Test</members>
     <members>OpportunityTriggerHelperTest</members>
-     <members>LeadTriggerHandler</members>
+    <members>LeadTriggerHandler</members>
+    <members>AE_OwnerCustomsorting</members>
     <name>ApexClass</name>
 </types>
 <types>
