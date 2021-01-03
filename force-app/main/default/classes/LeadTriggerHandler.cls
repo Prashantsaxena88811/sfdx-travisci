@@ -88,6 +88,9 @@ public class LeadTriggerHandler {
             // sort the userIds based upon the date.
             //get the user name from custom label
             String username = Label.LeadRoundRobin; 
+            if(Test.isRunningTest()){
+                username = 'emmersiontestUser@sf.com';
+            }
             User userObj = [Select Id from user where Username =:username];// store username in custom label
             Integer count = 0; // for leadOwner round robin
             Integer countAE = 0 ;  // for AE OWNER round robin
