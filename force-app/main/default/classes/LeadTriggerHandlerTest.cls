@@ -49,9 +49,9 @@ public class LeadTriggerHandlerTest {
         userlist.add(u2);
         insert userlist;
         System.debug('userlist-->'+userlist);
-        System.debug('userlistID-->'+userlist[0].Id);
-        System.debug('userlistID1-->'+userlist[1].Id);
-        System.debug('userlistID2-->'+userlist[2].Id);
+        System.debug(userlist[0].username+'--userlistID-->'+userlist[0].Id);
+        System.debug(userlist[1].username+'--userlistID1-->'+userlist[1].Id);
+        System.debug(userlist[2].username+'--userlistID2-->'+userlist[2].Id);
     }
     @isTest
     public static void testMethod1(){
@@ -59,7 +59,7 @@ public class LeadTriggerHandlerTest {
         Test.startTest();
         
         Lead_Round_Robin__c checkGeography = new Lead_Round_Robin__c();
-        checkGeography.AE_Owner_Round_Robin_Geography__c = true;
+        //checkGeography.AE_Owner_Round_Robin_Geography__c = true;
         checkGeography.Lead_Owner_Round_Robin_Geography__c = true;
         insert checkGeography;
         
@@ -88,6 +88,9 @@ public class LeadTriggerHandlerTest {
         System.debug('leadObj1-->'+leadObj1);
         System.debug('leadObj1-->'+leadObj1.User__c);
         System.debug('leadObj1-->'+leadObj1.OwnerId);
+        Lead l1 = new Lead();
+        l1 = [select id , ownerId , user__c from lead where Id=:leadObj1.Id];
+        System.debug('l1-->'+l1);
         
        
         
@@ -101,7 +104,7 @@ public class LeadTriggerHandlerTest {
         Test.startTest();
         
         Lead_Round_Robin__c checkGeography = new Lead_Round_Robin__c();
-        checkGeography.AE_Owner_Round_Robin_Geography__c = false;
+        //checkGeography.AE_Owner_Round_Robin_Geography__c = false;
         checkGeography.Lead_Owner_Round_Robin_Geography__c = false;
         insert checkGeography;
         

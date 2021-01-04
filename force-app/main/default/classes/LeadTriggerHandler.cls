@@ -29,7 +29,7 @@ public class LeadTriggerHandler {
             // Map GeoGraphy=>username for AE Owner
             Map<String,String> GeographyToUserNames = new Map<String,String>();
             
-            if(!checkGeography.AE_Owner_Round_Robin_Geography__c){
+            if(true){//!checkGeography.AE_Owner_Round_Robin_Geography__c
                 for(AE_OwnerCustomsorting AE_Obj : AE_OwnerCustomsortingList){
                     System.debug('**AE_Obj.userRec==>'+AE_Obj.userRec);
                     if(!SegmentToListOfUsersMap.containsKey(AE_Obj.userRec.Segment__c.toLowerCase()) ){
@@ -61,15 +61,7 @@ public class LeadTriggerHandler {
             userList = [SELECT Id,UserName__c , date__c,Geography__c FROM Lead_Owner_Round_Robin__c order by date__c asc];
             System.debug('userList-->'+userList);
             // Map GeoGraphy=>username for Lead Owner
-            Map<String,String> GeographyToUserNamesLeadOwner = new Map<String,String>();
-            //if(cs.Lead_Owner_Round_Robin_Geography__c){
-                for(Lead_Owner_Round_Robin__c userObj1 : userList){
-                    if( userObj1.Geography__c != null && userObj1.Geography__c != ''){
-                        GeographyToUserNamesLeadOwner.put( userObj1.Geography__c.toLowerCase(), userObj1.UserName__c );
-                        usernames.add(userObj1.UserName__c.trim());
-                    }
-                } 
-            
+         
             
             //get the users and create a Map
             List<User> userListAE = new List<User>();
@@ -103,30 +95,18 @@ public class LeadTriggerHandler {
                    || ( oldLeadMap != null && leadObj.Status=='Round Robin' && leadObj.ownerId == userObj.Id   && 
                        (leadObj.Status != oldLeadMap.get(leadObj.Id).Status  || leadObj.ownerId != oldLeadMap.get(leadObj.Id).ownerId )  )  ){
                            
-                           if(checkGeography.Lead_Owner_Round_Robin_Geography__c){
-                               if(leadObj.Geography__c !=null && GeographyToUserNamesLeadOwner.containsKey(leadObj.Geography__c.toLowerCase()) ){
-                                   leadObj.ownerId = userNameToId.get( GeographyToUserNamesLeadOwner.get(leadObj.Geography__c.toLowerCase()).toLowerCase() );
-                               }
+                           System.debug('ROUNDROBIN RUN');
+                           System.debug('owner1-->'+userList[count].UserName__c.toLowerCase());
+                           System.debug('owner2-->'+userNameToId.get(userList[count].UserName__c.toLowerCase()));
+                           leadObj.ownerId = userNameToId.get(userList[count].UserName__c.toLowerCase());
+                           userList[count].date__c = Datetime.now();
+                           count =count +1;
+                           if( count == userList.size() ){
+                               System.debug('before reseeting the value---->'+count);
+                               count =0;
                            }
-                           else{
-                               System.debug('ROUNDROBIN RUN');
-                               System.debug('owner1-->'+userList[count].UserName__c.toLowerCase());
-                               System.debug('owner2-->'+userNameToId.get(userList[count].UserName__c.toLowerCase()));
-                               leadObj.ownerId = userNameToId.get(userList[count].UserName__c.toLowerCase());
-                               userList[count].date__c = Datetime.now();
-                               count =count +1;
-                               if( count == userList.size() ){
-                                   System.debug('before reseeting the value---->'+count);
-                                   count =0;
-                               }
-                               /*leadObj.ownerId = userList[count].SetupOwnerId;
-userList[count].date__c = Datetime.now();
-count =count +1;
-if( count == userList.size() ){
-System.debug('before reseeting the value---->'+count);
-count =0;
-} */
-                           }
+                           
+                           
                        }
                 /* Lead Owner Round Robin Ends */
                 
@@ -135,7 +115,7 @@ count =0;
                 if( leadObj.User__c==null && ( leadObj.Segment__c != '' && leadObj.Segment__c!= null ) &&
                    ( oldLeadMap == null || ( oldLeadMap != null && (leadObj.User__c!=oldLeadMap.get(leadObj.Id).User__c || leadObj.Segment__c!=oldLeadMap.get(leadObj.Id).Segment__c) )  ) ){
                        
-                       if(checkGeography.AE_Owner_Round_Robin_Geography__c){// checkfor GeoGraphy
+                       if(true){// checkfor GeoGraphy//checkGeography.AE_Owner_Round_Robin_Geography__c
                            System.debug('Round Robin Based on Geography'); //GeographyToUserNames
                            if( leadObj.Geography__c !=null && GeographyToUserNames.containsKey(leadObj.Geography__c.toLowerCase()) ){
                                leadObj.User__c = userNameToId.get( GeographyToUserNames.get(leadObj.Geography__c.toLowerCase()).toLowerCase() );

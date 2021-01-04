@@ -8,6 +8,7 @@
     <members>LeadTriggerHandler</members>
     <members>AE_OwnerCustomsorting</members>
     <members>LeadTriggerHandlerTest</members>
+    <members>LeadTriggerHandlerRoundRobin</members>
     <name>ApexClass</name>
 </types>
 <types>

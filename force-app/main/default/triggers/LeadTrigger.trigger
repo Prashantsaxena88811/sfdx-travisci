@@ -14,6 +14,6 @@ trigger LeadTrigger on Lead (after insert, after update,before insert , before u
     System.debug(trigger.IsBefore+'*********************************'+trigger.IsInsert+'--'+trigger.IsUpdate);
     if( trigger.IsBefore &&  (trigger.IsInsert ||trigger.IsUpdate ) ){
         System.debug('*********************************');
-       LeadTriggerHandler.leadRoundRobin(Trigger.new, Trigger.OldMap);
+       LeadTriggerHandlerRoundRobin.leadRoundRobin(Trigger.new, Trigger.OldMap);
     }    
 }
