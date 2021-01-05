@@ -59,7 +59,7 @@ public class LeadTriggerHandlerTest {
         Test.startTest();
         
         Lead_Round_Robin__c checkGeography = new Lead_Round_Robin__c();
-        //checkGeography.AE_Owner_Round_Robin_Geography__c = true;
+        checkGeography.AE_Owner_Round_Robin_Geography__c = true;
         checkGeography.Lead_Owner_Round_Robin_Geography__c = true;
         insert checkGeography;
         
@@ -104,7 +104,7 @@ public class LeadTriggerHandlerTest {
         Test.startTest();
         
         Lead_Round_Robin__c checkGeography = new Lead_Round_Robin__c();
-        //checkGeography.AE_Owner_Round_Robin_Geography__c = false;
+        checkGeography.AE_Owner_Round_Robin_Geography__c = false;
         checkGeography.Lead_Owner_Round_Robin_Geography__c = false;
         insert checkGeography;
         

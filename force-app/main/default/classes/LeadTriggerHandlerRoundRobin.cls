@@ -11,15 +11,15 @@ public class LeadTriggerHandlerRoundRobin {
             lead_AE_OwnerList = [Select Geography__c,UserName__c,Lead_Assigned_DateTime__c,Segment__c from Lead_AE_Owner_Round_Robin__c order by Lead_Assigned_DateTime__c asc];
             System.debug('lead_AE_OwnerList-->'+lead_AE_OwnerList);
             
-            List<AE_OwnerCustomsorting>  AE_OwnerCustomsortingList = new List<AE_OwnerCustomsorting>();
+            //List<AE_OwnerCustomsorting>  AE_OwnerCustomsortingList = new List<AE_OwnerCustomsorting>();
             Set<String> usernames = New Set<String>();
             for( Lead_AE_Owner_Round_Robin__c userObj1 : lead_AE_OwnerList){
-                AE_OwnerCustomsortingList.add(new AE_OwnerCustomsorting( userObj1 ));
+                //AE_OwnerCustomsortingList.add(new AE_OwnerCustomsorting( userObj1 ));
                 usernames.add(userObj1.UserName__c.trim());
             }
-            System.debug('AE_OwnerCustomsortingList-->'+AE_OwnerCustomsortingList);
-            AE_OwnerCustomsortingList.sort();
-            System.debug('AFTER Sorting AE_OwnerCustomsortingList-->'+AE_OwnerCustomsortingList);
+            //System.debug('AE_OwnerCustomsortingList-->'+AE_OwnerCustomsortingList);
+           // AE_OwnerCustomsortingList.sort();
+            //System.debug('AFTER Sorting AE_OwnerCustomsortingList-->'+AE_OwnerCustomsortingList);
             
             // create map of String[segment-Geography] , List<Sorted-Lead_AE_ROUND_ROBIN>
             Map<String , List<Lead_AE_Owner_Round_Robin__c> > SegmentGeoToListOfUsersMapAE = new Map<String , List<Lead_AE_Owner_Round_Robin__c> >();
@@ -27,29 +27,29 @@ public class LeadTriggerHandlerRoundRobin {
             Map<String,Integer> CounterMap = new Map<String,Integer>();//for AE owner
             String mapKey;
             if( checkGeography.AE_Owner_Round_Robin_Segment__c  ||  checkGeography.AE_Owner_Round_Robin_Geography__c){
-                for(AE_OwnerCustomsorting AE_Obj : AE_OwnerCustomsortingList){
+                for( Lead_AE_Owner_Round_Robin__c AE_Obj : lead_AE_OwnerList){
                     mapKey = '';
                     if(checkGeography.AE_Owner_Round_Robin_Segment__c){
-                        if( AE_Obj.userRec.Segment__c != null && AE_Obj.userRec.Segment__c != '' ){
-                            mapKey = AE_Obj.userRec.Segment__c;
+                        if( AE_Obj.Segment__c != null && AE_Obj.Segment__c != '' ){
+                            mapKey = AE_Obj.Segment__c;
                         } 
                     }
                     
                     if(checkGeography.AE_Owner_Round_Robin_Geography__c){
-                        if( AE_Obj.userRec.Geography__c != null && AE_Obj.userRec.Geography__c != '' ){
-                            mapKey = mapKey + AE_Obj.userRec.Geography__c;
+                        if( AE_Obj.Geography__c != null && AE_Obj.Geography__c != '' ){
+                            mapKey = mapKey + AE_Obj.Geography__c;
                         }  
                     }
                     
                     mapKey.toLowerCase();
-                    System.debug('**AE_Obj.userRec==>'+AE_Obj.userRec);
+                    System.debug('**AE_Obj.userRec==>'+AE_Obj);
                     if(!SegmentGeoToListOfUsersMapAE.containsKey(mapKey.toLowerCase()) ){
                         SegmentGeoToListOfUsersMapAE.put(mapKey.toLowerCase() , new List<Lead_AE_Owner_Round_Robin__c>());
                     }
                     if( !CounterMap.containsKey( mapKey.toLowerCase() ) ){
                         CounterMap.put( mapKey.toLowerCase() , 0 );
                     }
-                    SegmentGeoToListOfUsersMapAE.get( mapKey.toLowerCase() ).add(AE_Obj.userRec);
+                    SegmentGeoToListOfUsersMapAE.get( mapKey.toLowerCase() ).add(AE_Obj);
                     //usernames.add(AE_Obj.userRec.UserName__c.trim());
                 } 
             }
@@ -63,43 +63,43 @@ public class LeadTriggerHandlerRoundRobin {
             lead_Owner_OwnerList = [Select Geography__c,UserName__c,Date__c,Segment__c from Lead_Owner_Round_Robin__c order by date__c asc];
             System.debug('lead_Owner_OwnerList-->'+lead_Owner_OwnerList);
             
-            List<Lead_OwnerCustomsorting>  lead_Owner_OwnerListSorted = new List<Lead_OwnerCustomsorting>();
+            //List<Lead_OwnerCustomsorting>  lead_Owner_OwnerListSorted = new List<Lead_OwnerCustomsorting>();
             //Set<String> usernames = New Set<String>();
             for( Lead_Owner_Round_Robin__c userObj1 : lead_Owner_OwnerList){
-                lead_Owner_OwnerListSorted.add(new Lead_OwnerCustomsorting( userObj1 ));
+                //lead_Owner_OwnerListSorted.add(new Lead_OwnerCustomsorting( userObj1 ));
                 usernames.add(userObj1.UserName__c.trim());
             }
-            System.debug('lead_Owner_OwnerListSorted-->'+lead_Owner_OwnerListSorted);
-            lead_Owner_OwnerListSorted.sort();
-            System.debug('AFTER Sorting lead_Owner_OwnerListSorted-->'+lead_Owner_OwnerListSorted);
+            //System.debug('lead_Owner_OwnerListSorted-->'+lead_Owner_OwnerListSorted);
+            //lead_Owner_OwnerListSorted.sort();
+            //System.debug('AFTER Sorting lead_Owner_OwnerListSorted-->'+lead_Owner_OwnerListSorted);
             
             // create map of String[segment-Geography] , List<Sorted-Lead_AE_ROUND_ROBIN>
             Map<String , List<Lead_Owner_Round_Robin__c> > SegmentGeoToListOfUsersMap_leadOwner = new Map<String , List<Lead_Owner_Round_Robin__c> >();
             // create map for Counter
             Map<String,Integer> CounterMap_leadOwner = new Map<String,Integer>();
             if(checkGeography.Lead_Owner_Round_Robin_Geography__c || checkGeography.Lead_Owner_Round_Robin_Segment__c){
-                for(Lead_OwnerCustomsorting AE_Obj : lead_Owner_OwnerListSorted){
+                for(Lead_Owner_Round_Robin__c AE_Obj : lead_Owner_OwnerList){
                     mapKey = '';
                     if(checkGeography.Lead_Owner_Round_Robin_Segment__c){
-                        if( AE_Obj.userRec.Segment__c != null && AE_Obj.userRec.Segment__c != '' ){
-                            mapKey = AE_Obj.userRec.Segment__c;
+                        if( AE_Obj.Segment__c != null && AE_Obj.Segment__c != '' ){
+                            mapKey = AE_Obj.Segment__c;
                         }  
                     }
                     if(checkGeography.Lead_Owner_Round_Robin_Geography__c){
-                        if( AE_Obj.userRec.Geography__c != null && AE_Obj.userRec.Geography__c != '' ){
-                            mapKey = mapKey + AE_Obj.userRec.Geography__c;
+                        if( AE_Obj.Geography__c != null && AE_Obj.Geography__c != '' ){
+                            mapKey = mapKey + AE_Obj.Geography__c;
                         }  
                     }
                     
                     mapKey.toLowerCase();
-                    System.debug('**Lead_user_Obj.userRec==>'+AE_Obj.userRec);
+                    //System.debug('**Lead_user_Obj.userRec==>'+AE_Obj.userRec);
                     if(!SegmentGeoToListOfUsersMap_leadOwner.containsKey(mapKey.toLowerCase()) ){
                         SegmentGeoToListOfUsersMap_leadOwner.put(mapKey.toLowerCase() , new List<Lead_Owner_Round_Robin__c>());
                     }
                     if( !CounterMap_leadOwner.containsKey(mapKey.toLowerCase() ) ){
                         CounterMap_leadOwner.put( mapKey.toLowerCase() , 0 );
                     }
-                    SegmentGeoToListOfUsersMap_leadOwner.get( mapKey.toLowerCase() ).add(AE_Obj.userRec);
+                    SegmentGeoToListOfUsersMap_leadOwner.get( mapKey.toLowerCase() ).add(AE_Obj);
                     //usernames.add(AE_Obj.userRec.UserName__c.trim());
                 }  
             }
@@ -173,6 +173,7 @@ public class LeadTriggerHandlerRoundRobin {
                                        count = 0;
                                        CounterMap_leadOwner.put( mapKey.toLowerCase() , count );
                                    } 
+                                   CounterMap_leadOwner.put( mapKey.toLowerCase() , count );
                                }
                                
                            }
@@ -226,8 +227,9 @@ public class LeadTriggerHandlerRoundRobin {
                                if( countAE == SegmentGeoToListOfUsersMapAE.get(mapKey.toLowerCase()).size() ){
                                    System.debug('lead owner before Mid-Market reseeting the value---->'+countAE);
                                    countAE = 0;
-                                   CounterMap.put( mapKey.toLowerCase() , countAE );
-                               }  
+                                   //CounterMap.put( mapKey.toLowerCase() , countAE );
+                               } 
+                               CounterMap.put( mapKey.toLowerCase() , countAE );
                            }
                        }else{
                            leadObj.User__c = userNameToId.get(lead_AE_OwnerList[countAE].UserName__c.toLowerCase());
@@ -254,8 +256,8 @@ public class LeadTriggerHandlerRoundRobin {
                     update lead_AE_OwnerListUpdate;
                 }  
             }else{
-                if(!lead_Owner_OwnerList.isEmpty()){
-                    update lead_Owner_OwnerList;
+                if(!lead_AE_OwnerList.isEmpty()){
+                    update lead_AE_OwnerList;
                 }  
             }
            
