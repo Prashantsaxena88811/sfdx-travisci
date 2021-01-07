@@ -141,7 +141,7 @@ public class LeadTriggerHandlerRoundRobin {
                 if( ( leadObj.ownerId == userObj.Id && oldLeadMap == null && leadObj.Status=='Round Robin')
                    || ( oldLeadMap != null && leadObj.Status=='Round Robin' && leadObj.ownerId == userObj.Id   && 
                        (leadObj.Status != oldLeadMap.get(leadObj.Id).Status  || leadObj.ownerId != oldLeadMap.get(leadObj.Id).ownerId )  )  ){
-                           
+                           System.debug('LEAD ROUND ROBIN');
                            if(checkGeography.Lead_Owner_Round_Robin_Geography__c || checkGeography.Lead_Owner_Round_Robin_Segment__c){
                                mapKey = '';
                                
