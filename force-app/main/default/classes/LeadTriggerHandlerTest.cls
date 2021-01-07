@@ -81,8 +81,10 @@ public class LeadTriggerHandlerTest {
         leadObj1.Status = 'Round Robin';
         leadObj1.LastName = 'tstLastName';
         leadObj1.Company = 'tstCompany';
+        leadObj1.Industry = 'Automotive';
         leadObj1.Geography__c ='APAC';
-        leadObj1.Segment__c ='Enterprise';
+        leadObj1.Segment__c ='Mid-Market';
+        leadObj1.Employee_Range__c = 'Fewer than 100';
         leadObj1.OwnerId = [Select Id from user where username ='emmersiontestUser@sf.com'].Id;
         insert leadObj1;
         System.debug('leadObj1-->'+leadObj1);
@@ -126,8 +128,10 @@ public class LeadTriggerHandlerTest {
         leadObj1.Status = 'Round Robin';
         leadObj1.LastName = 'tstLastName';
         leadObj1.Company = 'tstCompany';
+        leadObj1.Industry = 'Automotive';
         leadObj1.Geography__c ='APAC';
-        leadObj1.Segment__c ='Enterprise';
+        leadObj1.Employee_Range__c = 'Fewer than 100';
+        leadObj1.Segment__c ='Mid-Market';
         leadObj1.OwnerId = [Select Id from user where username ='emmersiontestUser@sf.com'].Id;
         insert leadObj1;
         System.debug('leadObj1-->'+leadObj1);
