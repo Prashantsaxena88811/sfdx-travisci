@@ -8,10 +8,7 @@ trigger LeadTrigger on Lead (after insert, after update,before insert , before u
         LeadTriggerHelper.createCampaignMember();
     }
     
-    if(trigger.IsAfter &&  trigger.IsUpdate){
-        LeadTriggerHelper.populateSDRonAccountonLeadConvert();
-    }
-    System.debug(trigger.IsBefore+'*********************************'+trigger.IsInsert+'--'+trigger.IsUpdate);
+    
     if( trigger.IsBefore &&  (trigger.IsInsert ||trigger.IsUpdate ) ){
         System.debug('*********************************');
        LeadTriggerHandlerRoundRobin.leadRoundRobin(Trigger.new, Trigger.OldMap);
