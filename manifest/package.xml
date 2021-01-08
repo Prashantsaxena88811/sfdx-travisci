@@ -11,6 +11,7 @@
     <members>Lead_OwnerCustomsorting</members>
     <members>LeadTriggerHandlerRoundRobin</members>
     <members>EventTriggerHandler</members>
+    <members>OpportunityTriggerHandlerSPIF</members>
     <name>ApexClass</name>
 </types>
 <types>
