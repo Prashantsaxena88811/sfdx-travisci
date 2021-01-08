@@ -13,9 +13,9 @@ public class EventTriggerHandler {
             System.debug(userRolelistSDR[0]+'----'+userRolelistAE[0]);
             
             //create role Id to role Name Map
-            Map<String,UserRole> roleIDtoNameMap = New Map<String,UserRole>();
-            roleIDtoNameMap.put(userRolelistSDR[0].Id , userRolelistSDR[0] );
-            roleIDtoNameMap.put(userRolelistAE[0].Id , userRolelistAE[0] );
+            //Map<String,UserRole> roleIDtoNameMap = New Map<String,UserRole>();
+            //roleIDtoNameMap.put(userRolelistSDR[0].Id , userRolelistSDR[0] );
+            //roleIDtoNameMap.put(userRolelistAE[0].Id , userRolelistAE[0] );
             
             // query the points records from custom setting
             List<SPIF_Activity_Records__c> spifActivityRecords = new List<SPIF_Activity_Records__c>();
