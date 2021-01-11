@@ -12,6 +12,7 @@
     <members>LeadTriggerHandlerRoundRobin</members>
     <members>EventTriggerHandler</members>
     <members>OpportunityTriggerHandlerSPIF</members>
+    <members>EventTriggerHandlerTest</members>
     <name>ApexClass</name>
 </types>
 <types>

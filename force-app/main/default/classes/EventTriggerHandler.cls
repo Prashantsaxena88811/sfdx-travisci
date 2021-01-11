@@ -25,7 +25,7 @@ public class EventTriggerHandler {
             for( SPIF_Activity_Records__c activityObj : spifActivityRecords){
                 roleToPointsMap.put(activityObj.Rep_Role__c,activityObj);
             }
-            
+            System.debug('roleToPointsMap==>'+roleToPointsMap);
             // Add all the user Ids
             Set<Id> userIds = new Set<Id>();
             for( Event eventObj : newEventList){
