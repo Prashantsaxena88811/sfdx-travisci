@@ -74,14 +74,22 @@
                 <tr style="width : 100%;border: 1px solid black;background-color: #e6ccd2;color: black;">
 
                     <!--td style="Width: 16% !important;border: 1px solid black;">DATE</td><td style="Width: 16% !important;border: 1px solid black;">ACTIVITY</td><td style="Width: 16% !important;border: 1px solid black;">DESCRIPTION </td><td style="Width: 16% !important;border: 1px solid black;">QTY</td><td style="Width: 16% !important;border: 1px solid black;">RATE</td><td style="Width: 16% !important;border: 1px solid black;">Amount</td-->
-                	<td style="Width: 20% !important;border: 1px solid black;">ACTIVITY</td><td style="Width: 20% !important;border: 1px solid black;">DESCRIPTION </td><td style="Width: 20% !important;border: 1px solid black;">QTY</td><td style="Width: 20% !important;border: 1px solid black;">RATE</td><td style="Width: 20% !important;border: 1px solid black;">Amount</td>
+                	<td style="Width: 20% !important;border: 1px solid black;">ACTIVITY</td>
+                    <td style="Width: 20% !important;border: 1px solid black;">DESCRIPTION </td>
+                    <td style="Width: 20% !important;border: 1px solid black;">QTY</td>
+                    <td style="Width: 20% !important;border: 1px solid black;">RATE</td>
+                    <td style="Width: 20% !important;border: 1px solid black;">Amount</td>
 				</tr>
                   <apex:repeat value="{!qliList}" var="value">
                              <!--tr style="border: 1px solid black;">
                                   <td style="Width: 16% !important;border: 1px solid black;"><apex:outputText value="{0,date,dd' 'MMMMM' 'yyyy}"><apex:param value="{!qliList[0].Quote.ExpirationDate}" /> </apex:outputText></td><td style="Width: 16% !important;border: 1px solid black;" >{!value.Product2.name} </td><td style="Width: 16% !important;border: 1px solid black;" >{!value.quote.Description}</td><td style="Width: 16% !important;border: 1px solid black;" >{!value.quantity}</td><td style="Width: 16% !important;border: 1px solid black;" >${!value.UnitPrice	}</td><td style="Width: 16% !important;border: 1px solid black;" >${!value.TotalPrice	}</td>
                              </tr-->
                       		 <tr style="border: 1px solid black;">
-                                  <td style="Width: 20% !important;border: 1px solid black;" >{!value.Product2.name} </td><td style="Width: 20% !important;border: 1px solid black;" >{!value.quote.Description}</td><td style="Width: 20% !important;border: 1px solid black;" >{!value.quantity}</td><td style="Width: 20% !important;border: 1px solid black;" >${!value.UnitPrice	}</td><td style="Width: 20% !important;border: 1px solid black;" >${!value.TotalPrice	}</td>
+                                  <td style="Width: 20% !important;border: 1px solid black;" >{!value.Product2.name} </td>
+                                 <td style="Width: 20% !important;border: 1px solid black;" >{!value.quote.Description}</td>
+                                 <td style="Width: 20% !important;border: 1px solid black;" >{!value.quantity}</td>
+                                 <td style="Width: 20% !important;border: 1px solid black;" >${!value.UnitPrice	}</td>
+                                 <td style="Width: 20% !important;border: 1px solid black;" >${!value.TotalPrice	}</td>
                              </tr>
                          </apex:repeat>
          
