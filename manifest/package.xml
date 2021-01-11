@@ -4,5 +4,9 @@
     <members>QuotePDFCmp</members>
     <name>AuraDefinitionBundle</name>
 </types>
+<types>
+        <members>QuotePDF_Page</members>
+        <name>ApexPage</name>
+    </types>
 <version>50.0</version>
 </Package>

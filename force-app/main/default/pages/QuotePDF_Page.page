@@ -1,0 +1,103 @@
+<apex:page standardController="Quote" extensions="QuotePDF_Ext" showHeader="false" sidebar="false" standardStylesheets="false" renderAs="pdf" applyBodyTag="false" applyHtmlTag="false">
+   <head>
+    <style type="text/css" media="print">
+        @page {
+            margin-bottom: 3cm;
+
+            @bottom-center {
+             content: element(footer);
+            }
+        }
+
+        div.footer {
+            display: block;
+            padding: 10px;
+            position: running(footer);
+        }
+
+    </style>
+       
+       <table style="font-weight: 100 !important;font-size: 15px;outline:none;">
+
+                            <tr style="Width: 100%;">
+
+                                <th style="Width: 10%;"><apex:image id="theImage" value="{!$Resource.LogoMcEvent}"  /></th>
+                                <!--https://mceventconsulting--suvadev--c.visualforce.com/resource/1588175832000/LogoMcEvent -->
+                                <th style="width: 10%;font-weight: 100 !important;color: grey;">
+                                    <b>MC Event Consulting LLC</b>
+                                    <br/>
+                                    177A E Main Street 
+                                    <br/>
+                                    Suite 344<br/>
+                                    New Rochelle, NY 10801<br/>
+                                    914-632-2042<br/>
+                                    info@mceventconsulting.com<br/>
+                                    mceventconsulting.com
+                                 </th>
+                                <br/>
+                                <th style="width: 10%;font-weight: 100 !important;color: grey;">
+                                    <h2>
+                                        Estimate
+                                    </h2>
+                                </th><br/>
+                                <th style="width: 59%;font-weight: 100 !important;color: grey;">
+                                    
+                                        ADDRESS<br/><br/>
+                                    <apex:outputLabel value="{!SUBSTITUTE(JSENCODE(bilAddress), '\\n', '<br/>')}" escape="false"/> 
+                                        
+                                    
+                                </th>
+                                <th style="font-weight:normal">
+                                <b>ESTIMATE #</b> {!qliList[0].Quote.QuoteNumber}<br/>
+                                    <b>DATE</b> &nbsp;<apex:outputText value="{0,date,dd' 'MMMMM' 'yyyy}"><apex:param value="{!qliList[0].quote.Created_Date__c}" /> </apex:outputText><br/>
+                                    <b>EXPIRATION DATE</b> &nbsp;<apex:outputText value="{0,date,dd' 'MMMMM' 'yyyy}"><apex:param value="{!qliList[0].Quote.ExpirationDate}" /> </apex:outputText>
+
+                                
+                                </th>
+                            </tr>
+
+                </table>
+       <hr style="width: 100%;"/>
+</head>
+<body>
+    <b>PROJECT NAME</b><br/>
+    {!qliList[0].Quote.opportunity.Name}
+    <!--<div class="footer" name="footer">
+        All late invoices will be charge a 1.25% late fee after the first late day per day until payment has been received.
+    </div>-->
+    
+   <br/><br/>
+            <table style="text-align: center;font-weight: 100 !important;font-size: 15px;outline:none;border: 1px solid black;border-spacing: 0px;" >
+
+                <apex:variable var="color" value="white"/>
+
+                <tr style="width : 100%;border: 1px solid black;background-color: #e6ccd2;color: black;">
+
+                    <!--td style="Width: 16% !important;border: 1px solid black;">DATE</td><td style="Width: 16% !important;border: 1px solid black;">ACTIVITY</td><td style="Width: 16% !important;border: 1px solid black;">DESCRIPTION </td><td style="Width: 16% !important;border: 1px solid black;">QTY</td><td style="Width: 16% !important;border: 1px solid black;">RATE</td><td style="Width: 16% !important;border: 1px solid black;">Amount</td-->
+                	<td style="Width: 20% !important;border: 1px solid black;">ACTIVITY</td><td style="Width: 20% !important;border: 1px solid black;">DESCRIPTION </td><td style="Width: 20% !important;border: 1px solid black;">QTY</td><td style="Width: 20% !important;border: 1px solid black;">RATE</td><td style="Width: 20% !important;border: 1px solid black;">Amount</td>
+				</tr>
+                  <apex:repeat value="{!qliList}" var="value">
+                             <!--tr style="border: 1px solid black;">
+                                  <td style="Width: 16% !important;border: 1px solid black;"><apex:outputText value="{0,date,dd' 'MMMMM' 'yyyy}"><apex:param value="{!qliList[0].Quote.ExpirationDate}" /> </apex:outputText></td><td style="Width: 16% !important;border: 1px solid black;" >{!value.Product2.name} </td><td style="Width: 16% !important;border: 1px solid black;" >{!value.quote.Description}</td><td style="Width: 16% !important;border: 1px solid black;" >{!value.quantity}</td><td style="Width: 16% !important;border: 1px solid black;" >${!value.UnitPrice	}</td><td style="Width: 16% !important;border: 1px solid black;" >${!value.TotalPrice	}</td>
+                             </tr-->
+                      		 <tr style="border: 1px solid black;">
+                                  <td style="Width: 20% !important;border: 1px solid black;" >{!value.Product2.name} </td><td style="Width: 20% !important;border: 1px solid black;" >{!value.quote.Description}</td><td style="Width: 20% !important;border: 1px solid black;" >{!value.quantity}</td><td style="Width: 20% !important;border: 1px solid black;" >${!value.UnitPrice	}</td><td style="Width: 20% !important;border: 1px solid black;" >${!value.TotalPrice	}</td>
+                             </tr>
+                         </apex:repeat>
+         
+                <tr><td colspan="3" ></td><td >TOTAL : </td><td>    <apex:outputText value="{0, Number, Currency}"><apex:param value="{!qliList[0].Quote.TotalPrice}" />  </apex:outputText></td></tr>
+
+                <br/>
+
+            </table>
+    <br/><br/>
+    	<table style="width:100%;">
+             <tr style="width:100%;">
+				<td style="width:25%;color: black;">Accepted By :</td>
+                <td style="width:25%;color: grey;">&nbsp;</td>
+                <td style="width:25%;color: black;">Accepted Date :</td>
+                <td style="width:25%;color: grey;">&nbsp;</td>   
+    		 </tr>           
+    	</table>   
+</body>
+</apex:page>
