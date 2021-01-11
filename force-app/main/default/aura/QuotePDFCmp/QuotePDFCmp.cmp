@@ -1,0 +1,101 @@
+<aura:component implements="force:lightningQuickActionWithoutHeader,flexipage:availableForRecordHome,force:hasRecordId" controller="QuotePDF_Ext">
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+	<aura:attribute name="cbaseURL" type="String"/>
+    <aura:attribute name="recordId" type="Id" />
+
+    <!--Custom Styles for Modal Header and Footer-->
+
+    <aura:html tag="style">
+
+        .cuf-content {
+
+        padding: 0 0rem !important;
+
+        }
+
+        .slds-p-around--medium {
+
+        padding: 0rem !important;
+
+        }      
+
+        .slds-modal__content{
+
+        width: 100%;
+
+        overflow-y:hidden !important;
+
+        height:unset !important;
+
+        max-height:unset !important;
+
+        }
+
+        .slds-modal__container{
+
+              margin: 0 auto;
+
+            width: 84% !important;
+
+              height: 90%;
+
+             max-width: 400rem;
+
+            min-width: 20rem;
+
+        }
+
+       
+
+       
+
+    </aura:html>
+
+    
+
+    <!--Modal Header--> 
+
+    <div class="modal-header slds-modal__header slds-size_1-of-1">
+
+        <h4 class="title slds-text-heading--medium">PDF Preview</h4>
+
+    </div>
+
+    <!--End Modal Header--> 
+
+     
+
+    <!--Modal Body-->  
+
+    <div class="slds-modal__content slds-p-around--x-small slds-align_absolute-center slds-size_1-of-1 slds-is-relative">
+
+        <form class="slds-form--stacked">
+
+           
+
+            <iframe src="{! v.cbaseURL +'/apex/QuotePDF_Page?id='+v.recordId}" width="1000PX;" height="350px;"/>
+
+        </form>
+
+    </div>
+
+    <!--End of Modal Body-->
+
+     
+
+    <!--Modal Footer-->
+
+    <div class="modal-footer slds-modal__footer slds-size_1-of-1">
+
+       
+
+        <lightning:button variant="Brand" class="slds-button" label="Save PDF" onclick="{!c.handleSave}"/>
+
+        <lightning:button variant="Neutral" class="slds-button" label="Cancel" onclick="{!c.handleClose}"/>
+
+    </div>
+
+    <!--End of Modal Footer-->
+
+</aura:component>
