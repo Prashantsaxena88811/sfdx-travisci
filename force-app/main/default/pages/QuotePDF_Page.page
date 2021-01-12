@@ -67,7 +67,7 @@
     </div>-->
     
    <br/><br/>
-            <table style="text-align: center;font-weight: 100 !important;font-size: 15px;outline:none;border: 1px solid black;border-spacing: 0px;" >
+            <table style="text-align: center;font-weight: 100 !important;font-size: 15px;outline:none;border: 1px solid black;border-spacing: 0px;margin-left: auto;margin-right: auto;" >
 
                 <apex:variable var="color" value="white"/>
 
@@ -86,7 +86,7 @@
                              </tr-->
                       		 <tr style="border: 1px solid black;">
                                   <td style="Width: 20% !important;border: 1px solid black;" >{!value.Product2.name} </td>
-                                 <td style="Width: 20% !important;border: 1px solid black;" >{!value.quote.Description}</td>
+                                 <td style="Width: 20% !important;border: 1px solid black;" >{!value.Description}</td>
                                  <td style="Width: 20% !important;border: 1px solid black;" >{!value.quantity}</td>
                                  <td style="Width: 20% !important;border: 1px solid black;" >${!value.UnitPrice	}</td>
                                  <td style="Width: 20% !important;border: 1px solid black;" >${!value.TotalPrice	}</td>

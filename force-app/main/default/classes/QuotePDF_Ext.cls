@@ -31,7 +31,7 @@ public class QuotePDF_Ext {
            bilAddress += '\n'+qt.BillingPostalCode;
         }
         
-        qliList = [Select Product2.name,Id,Quote.opportunity.Name,Quote.ExpirationDate,Quote.createddate,Quote.TotalPrice,Quote.Name,quote.QuoteNumber,quote.Created_Date__c,quote.Description,quantity,TotalPrice,UnitPrice from quotelineitem where quoteId=: qId];
+        qliList = [Select Description,Product2.name,Id,Quote.opportunity.Name,Quote.ExpirationDate,Quote.createddate,Quote.TotalPrice,Quote.Name,quote.QuoteNumber,quote.Created_Date__c,quote.Description,quantity,TotalPrice,UnitPrice from quotelineitem where quoteId=: qId];
         
     }
     
