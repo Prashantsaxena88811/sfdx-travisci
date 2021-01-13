@@ -174,6 +174,7 @@ public class LeadTriggerHandlerRoundRobin {
                                        CounterMap_leadOwner.put( mapKey.toLowerCase() , count );
                                    } 
                                    CounterMap_leadOwner.put( mapKey.toLowerCase() , count );
+                                   leadObj.Status = 'Assigned (SDR)';
                                }
                                
                            }
@@ -188,6 +189,7 @@ public class LeadTriggerHandlerRoundRobin {
                                    System.debug('before reseeting the value---->'+count);
                                    count =0;
                                }
+                               leadObj.Status = 'Assigned (SDR)';
                            }
                            
                            
