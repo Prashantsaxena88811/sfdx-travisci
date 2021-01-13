@@ -3,14 +3,14 @@ public class EventTriggerHandler {
     public static void createSPIFRecord(List<Event> newEventList){
         try{
             System.debug('*************EventTriggerHandler*************1');
-            List<UserRole> userRolelistSDR = new List<UserRole>();
+           /* List<UserRole> userRolelistSDR = new List<UserRole>();
             List<UserRole> userRolelistAE = new List<UserRole>();
             
             // get the role Id of SDR
             userRolelistSDR = [Select Id,Name from UserRole where DeveloperName=:'SDR' limit 1];
             // get the role Id of AE (Account_Executive)
             userRolelistAE = [Select Id,Name from UserRole where DeveloperName=:'Account_Executive' limit 1];
-            System.debug(userRolelistSDR[0]+'----'+userRolelistAE[0]);
+            System.debug(userRolelistSDR[0]+'----'+userRolelistAE[0]);*/
             
             //create role Id to role Name Map
             //Map<String,UserRole> roleIDtoNameMap = New Map<String,UserRole>();
@@ -19,108 +19,98 @@ public class EventTriggerHandler {
             
             // query the points records from custom setting
             List<SPIF_Activity_Records__c> spifActivityRecords = new List<SPIF_Activity_Records__c>();
-            spifActivityRecords = [Select Id,Points__c,Activity_Name__c,Rep_Role__c  from SPIF_Activity_Records__c where Activity_Name__c = 'Set a Meeting'];
+            spifActivityRecords = [Select Id,Points__c,Activity_Name__c,Rep_Role__c  from SPIF_Activity_Records__c where Activity_Name__c = 'Set a Meeting' and Points__c!=null];
             // Create rolename to points Map
             Map<String,SPIF_Activity_Records__c> roleToPointsMap = New Map<String,SPIF_Activity_Records__c>();
             for( SPIF_Activity_Records__c activityObj : spifActivityRecords){
                 roleToPointsMap.put(activityObj.Rep_Role__c,activityObj);
             }
             System.debug('roleToPointsMap==>'+roleToPointsMap);
+            
+            //fetch all the roles which are present in SPIF_Activity_Records__c custom Settings and Create a Map
+            Map<Id,UserRole> userRoleMap =  new Map<Id,UserRole>([Select Id,Name from UserRole where Name IN : roleToPointsMap.keySet()]);
+            System.debug('userRoleMap-->'+userRoleMap);
+            
             // Add all the user Ids
             Set<Id> userIds = new Set<Id>();
-            for( Event eventObj : newEventList){
-                if(eventObj.Meeting_Source__c != '' && eventObj.Meeting_Source__c != null ){
-                    userIds.add(eventObj.OwnerId);
-                }
-            }
-            
-            List<User> userList = new List<User>();
-            userList = [Select Id,Name,UserRoleId from User where Id IN : userIds];
-            System.debug('userList-->'+userList);
-            // Create Map to Map Id to user 
-            Map<Id,User> idToUserMap = new Map<Id,User>();
-            for(User userObj : userList ){
-                if( (userObj.UserRoleId != null || userObj.UserRoleId != '') &&
-                   (userObj.UserRoleId == userRolelistSDR[0].Id || userObj.UserRoleId == userRolelistAE[0].Id) ){
-                       idToUserMap.put(userObj.Id , userObj); 
-                   }
-                
-            }
-            System.debug('idToUserMap-->'+idToUserMap);
-            // check for same user in lead and event
-            Set<Id> leadIds = new set<Id>();
             List<Event> filteredEventList = new List<Event>();
-            
-            //Map<String , Map<String , String>> eventIdToeventownerToLeadId = new Map<String , Map<String , String>>();//eventId => eventAssignedToLeadTop25
-            Map<String , String> eventoIdToLeadId = new Map<String , String>();
+            Set<Id> leadIds = new set<Id>();
+            Set<Id> contactIds = new set<Id>();
             for( Event eventObj : newEventList){
-                if( idToUserMap.containsKey(eventObj.OwnerId)  && eventObj.whoId!=null && eventObj.whoId.getsobjecttype() == Lead.sObjectType){
-                    leadIds.add(eventObj.whoId);
-                    filteredEventList.add(eventObj);
-                    eventoIdToLeadId.put(eventObj.Id , eventObj.whoId);
-                    // eventIdToeventownerToLeadId.put(eventObj.Id ,eventownerToLeadId );
-                    //eventownerToLeadId =  new Map<String , String>();
-                }
-                
+                if(eventObj.Meeting_Source__c != '' && eventObj.Meeting_Source__c != null && eventObj.Event_Type__c !=null &&  eventObj.Event_Type__c !=''
+                   && eventObj.Subject !=null && eventObj.Subject !=''){
+                       
+                       if(eventObj.whoId.getsobjecttype() == Lead.sObjectType){
+                           userIds.add(eventObj.OwnerId);
+                           leadIds.add(eventObj.whoId);
+                           filteredEventList.add(eventObj);
+                       }else if(eventObj.whoId.getsobjecttype() == Contact.sObjectType){
+                           userIds.add(eventObj.OwnerId);
+                           contactIds.add(eventObj.whoId);
+                           filteredEventList.add(eventObj);
+                       }
+                   }
             }
-            System.debug('eventoIdToLeadId-->'+eventoIdToLeadId);
-            List<Lead> leadList = new List<Lead>();
-            Map<String , String > leadIdToTop25Map = new Map<String , String >();
+            System.debug('filteredEventList-========>'+filteredEventList);
+            System.debug('contactIds-->'+contactIds);
+            System.debug('leadIds-->'+leadIds);
+            //List<User> userList = new List<User>();
+            //userList = [Select Id,Name,UserRoleId from User where Id IN : userIds];
+            //System.debug('userList-->'+userList);
+            // Create Map to Map Id to user 
+            Map<Id,User> idToUserMap = new Map<Id,User>([Select Id,Name,UserRoleId from User where  ID IN :userIds AND UserRoleId IN :userRoleMap.keySet()]);
+           
+            System.debug('idToUserMap-->'+idToUserMap);
+            
+            //System.debug('eventoIdToLeadId-->'+eventoIdToLeadId);
+            //List<Lead> leadList = new List<Lead>();
+            Map<Id , Lead > leadIdToTop25Map = new Map<Id , Lead >();
             if(!leadIds.isEmpty()){
-                leadList = [Select Id,Top_25_Account__c from lead where Id IN:leadIds and Top_25_Account__c!=null];
-                system.debug('leadList-->'+leadList);
+                leadIdToTop25Map = new Map<Id , Lead >([Select Id,Top_25_Account__c from lead where Id IN:leadIds and Top_25_Account__c!=null and  Top_25_Account__c IN :idToUserMap.keySet()]);
+                system.debug('leadIdToTop25Map-->'+leadIdToTop25Map);
                 
             }
-            if(!leadList.isEmpty()){
-                for(Lead leadObj : leadList){
-                    leadIdToTop25Map.put(leadObj.Id , leadObj.Top_25_Account__c);   
-                }
+            Map<Id , Contact > contactIdToTop25Map = new Map<Id , Contact >();
+            if(!contactIds.isEmpty()){
+                contactIdToTop25Map = new Map<Id , Contact >([Select Id,Top_25_Account__c from Contact where Id IN:contactIds and Top_25_Account__c!=null and Top_25_Account__c IN :idToUserMap.keySet()]);
+                system.debug('contactIdToTop25Map-->'+contactIdToTop25Map);
                 
             }
+            
             
             List<SPIF__c> spifList =  new List<SPIF__c>();
             String description = '';
             Integer points = 0;
             
             EventTriggerHandler eventTriggerHandlerObj = new EventTriggerHandler();
-            if(!leadList.isEmpty()){
+            System.debug('filteredEventList----<>'+filteredEventList);
+            if( (contactIdToTop25Map != null && !contactIdToTop25Map.isEmpty()) || (leadIdToTop25Map != null && !leadIdToTop25Map.isEmpty()) ){
+                String roleName = '';
                 for( Event eventObj : filteredEventList){
+                    system.debug('eventObj-->'+eventObj);
                     SPIF__c spifObj = new SPIF__c();
-                    if(eventObj.Meeting_Source__c != '' && eventObj.Meeting_Source__c != null && (eventObj.OwnerId == leadIdToTop25Map.get(eventObj.whoId) ) ){
-                        description = eventObj.description == null ? '' : eventObj.description ;
-                        
-                        
-                        if( userRolelistSDR != NULL && (!userRolelistSDR.isEmpty()) && idToUserMap.containsKey(eventObj.OwnerId) && 
-                           idToUserMap.get(eventObj.OwnerId).UserRoleId == userRolelistSDR[0].Id)
-                        {
-                            if( roleToPointsMap!=null && roleToPointsMap.containsKey('SDR')){
-                                points = roleToPointsMap.get('SDR').Points__c==null ? 0 :Integer.valueOf(roleToPointsMap.get('SDR').Points__c);
-                                spifObj = eventTriggerHandlerObj.returnSPIFRecord( String.valueOf(eventObj.OwnerId) ,points ,
-                                                                                  eventObj.Subject +' | '+idToUserMap.get(eventObj.OwnerId).Name,
-                                                                                  description ,URL.getSalesforceBaseUrl().toExternalForm() +'/' + eventObj.Id ,
-                                                                                  eventObj.StartDateTime , true ,'' ,true );
+                    if( idToUserMap !=null && idToUserMap.containsKey(eventObj.OwnerId) 
+                       && ((leadIdToTop25Map !=null && !leadIdToTop25Map.isEmpty() && leadIdToTop25Map.containsKey(eventObj.whoId) 
+                            && eventObj.OwnerId == leadIdToTop25Map.get(eventObj.whoId).Top_25_Account__c) || 
+                           (contactIdToTop25Map !=null && !contactIdToTop25Map.isEmpty() && contactIdToTop25Map.containsKey(eventObj.whoId) 
+                            && eventObj.OwnerId == contactIdToTop25Map.get(eventObj.whoId).Top_25_Account__c) ) ){
+                                description = eventObj.description == null ? '' : eventObj.description ;
                                 
+                                if( roleToPointsMap!=null && !roleToPointsMap.isEmpty() && 
+                                   roleToPointsMap.containsKey( userRoleMap.get(idToUserMap.get(eventObj.OwnerId).UserRoleId).Name )){
+                                       roleName = userRoleMap.get(idToUserMap.get(eventObj.OwnerId).UserRoleId).Name;
+                                    points = roleToPointsMap.get(roleName ).Points__c==null ? 0 :Integer.valueOf(roleToPointsMap.get(roleName ).Points__c);
+                                    spifObj = eventTriggerHandlerObj.returnSPIFRecord( String.valueOf(eventObj.OwnerId) ,points ,
+                                                                                      eventObj.Subject +' | '+idToUserMap.get(eventObj.OwnerId).Name,
+                                                                                      description ,URL.getSalesforceBaseUrl().toExternalForm() +'/' + eventObj.Id ,
+                                                                                      eventObj.StartDateTime , true ,'' ,true );
+                                    
+                                }
+                                if( spifObj !=new SPIF__c() && spifObj !=null){
+                                    spifList.add(spifObj);   
+                                }
                                 
                             }
-                            
-                        }
-                        
-                       else if( userRolelistAE != NULL && (!userRolelistAE.isEmpty()) && idToUserMap.containsKey(eventObj.OwnerId)  &&
-                              idToUserMap.get(eventObj.OwnerId).UserRoleId == userRolelistAE[0].Id)
-                        {
-                            if( roleToPointsMap!=null && roleToPointsMap.containsKey('Account Executive')){
-                                points = roleToPointsMap.get('Account Executive').Points__c==null ? 0 :Integer.valueOf(roleToPointsMap.get('Account Executive').Points__c);
-                                spifObj = eventTriggerHandlerObj.returnSPIFRecord( String.valueOf(eventObj.OwnerId) ,points ,
-                                                                                  eventObj.Subject +' | '+idToUserMap.get(eventObj.OwnerId).Name,
-                                                                                  description ,URL.getSalesforceBaseUrl().toExternalForm() +'/' + eventObj.Id ,
-                                                                                  eventObj.StartDateTime , true ,'', true );
-                            }
-                        }
-                        if( spifObj !=new SPIF__c() && spifObj !=null){
-                            spifList.add(spifObj);   
-                        }
-                        
-                    }
                 }
                 
                 if( !spifList.isEmpty() ){
@@ -138,7 +128,7 @@ public class EventTriggerHandler {
         
     }
     
-    public  SPIF__c returnSPIFRecord(String ownerId , Integer points , String recName , String description , String eventLink , DateTime dateOfActivity , Boolean Top25 ,String OppId , Boolean isEvent )
+    public   SPIF__c returnSPIFRecord(String ownerId , Integer points , String recName , String description , String eventLink , DateTime dateOfActivity , Boolean Top25 ,String OppId , Boolean isEvent )
     {
         try{
             SPIF__c spifObj = new SPIF__c();
