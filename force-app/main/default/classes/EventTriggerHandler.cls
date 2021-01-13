@@ -70,10 +70,16 @@ public class EventTriggerHandler {
                 system.debug('leadIdToTop25Map-->'+leadIdToTop25Map);
                 
             }
-            Map<Id , Contact > contactIdToTop25Map = new Map<Id , Contact >();
+            //Map<Id , Contact > contactIdToTop25Map = new Map<Id , Contact >();
+            Map<String , String> contactIdToTop25InfoMap = new Map<String , String>();
             if(!contactIds.isEmpty()){
-                contactIdToTop25Map = new Map<Id , Contact >([Select Id,Top_25_Account__c from Contact where Id IN:contactIds and Top_25_Account__c!=null and Top_25_Account__c IN :idToUserMap.keySet()]);
-                system.debug('contactIdToTop25Map-->'+contactIdToTop25Map);
+               // contactIdToTop25Map = new Map<Id , Contact >([Select Id,Top_25_Account__c from Contact where Id IN:contactIds and Top_25_Account__c!=null and Top_25_Account__c IN :idToUserMap.keySet()]);
+                //system.debug('contactIdToTop25Map-->'+contactIdToTop25Map);
+                List<Contact> contactList = new List<Contact>();
+                contactList =[Select id,AccountId,Account.Top_25_Account__c from Contact Where Id IN :contactIds and Account.Top_25_Account__c !=null and Account.Top_25_Account__c IN : idToUserMap.keySet()];
+                for(Contact conObj :contactList){
+                    contactIdToTop25InfoMap.put(conObj.Id ,conObj.Account.Top_25_Account__c);
+                }
                 
             }
             
@@ -84,16 +90,16 @@ public class EventTriggerHandler {
             
             EventTriggerHandler eventTriggerHandlerObj = new EventTriggerHandler();
             System.debug('filteredEventList----<>'+filteredEventList);
-            if( (contactIdToTop25Map != null && !contactIdToTop25Map.isEmpty()) || (leadIdToTop25Map != null && !leadIdToTop25Map.isEmpty()) ){
+            if( (contactIdToTop25InfoMap != null && !contactIdToTop25InfoMap.isEmpty()) || (leadIdToTop25Map != null && !leadIdToTop25Map.isEmpty()) ){
                 String roleName = '';
                 for( Event eventObj : filteredEventList){
                     system.debug('eventObj-->'+eventObj);
                     SPIF__c spifObj = new SPIF__c();
                     if( idToUserMap !=null && idToUserMap.containsKey(eventObj.OwnerId) 
-                       && ((leadIdToTop25Map !=null && !leadIdToTop25Map.isEmpty() && leadIdToTop25Map.containsKey(eventObj.whoId) 
+                       && (( leadIdToTop25Map.containsKey(eventObj.whoId) 
                             && eventObj.OwnerId == leadIdToTop25Map.get(eventObj.whoId).Top_25_Account__c) || 
-                           (contactIdToTop25Map !=null && !contactIdToTop25Map.isEmpty() && contactIdToTop25Map.containsKey(eventObj.whoId) 
-                            && eventObj.OwnerId == contactIdToTop25Map.get(eventObj.whoId).Top_25_Account__c) ) ){
+                           ( contactIdToTop25InfoMap.containsKey(eventObj.whoId) 
+                            && eventObj.OwnerId == contactIdToTop25InfoMap.get(eventObj.whoId)) ) ){
                                 description = eventObj.description == null ? '' : eventObj.description ;
                                 
                                 if( roleToPointsMap!=null && !roleToPointsMap.isEmpty() && 
