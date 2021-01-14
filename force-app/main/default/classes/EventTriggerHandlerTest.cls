@@ -127,11 +127,13 @@ public class EventTriggerHandlerTest {
         ev1.Meeting_source__c ='Email';
         ev1.startdatetime =datetime.now();
         ev1.Enddatetime =datetime.now();
+        ev1.Event_Type__c ='Disco';
         ev1.ownerId =[Select Id from user where username ='SDRUser1@sf.com'].Id;
         ev1.whoId = leadList[0].Id;
         
         Event ev2 = new Event();
         ev2.subject ='test2';
+        ev2.Event_Type__c ='Disco';
         ev2.Meeting_source__c ='Email';
         ev2.startdatetime =datetime.now();
         ev2.Enddatetime =datetime.now();
