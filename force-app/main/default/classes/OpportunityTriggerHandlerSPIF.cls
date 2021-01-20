@@ -87,7 +87,7 @@ public class OpportunityTriggerHandlerSPIF {
                        
                        if( spifObj !=new SPIF__c() && spifObj !=null){
                            if( accountMap.get(oppObj.AccountId).Top_25_Account__c != oppObj.CreatedById){
-                               spifObj.Top_25__c = false;
+                               //spifObj.Top_25__c = false;
                            }
                            spifList.add(spifObj);   
                        }
