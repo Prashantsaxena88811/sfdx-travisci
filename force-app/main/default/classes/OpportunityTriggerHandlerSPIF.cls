@@ -75,7 +75,7 @@ public class OpportunityTriggerHandlerSPIF {
                            spifObj = eventTriggerHandlerObj.returnSPIFRecord( String.valueOf(accountMap.get(oppObj.AccountId).Top_25_Account__c) ,points ,
                                                                              oppObj.Name +' | '+userMap.get(accountMap.get(oppObj.AccountId).Top_25_Account__c).Name,
                                                                              description ,'' ,
-                                                                             oppObj.CreatedDate , true ,oppObj.Id ,false );
+                                                                             oppObj.CreatedDate , true ,oppObj.Id ,false , 'New Opportunity');
                        } 
                       /* else if( userRolelistAE != NULL && (!userRolelistAE.isEmpty()) && userMap.get(oppObj.CreatedById).UserRoleId == userRolelistAE[0].Id ){
                            points = roleToPointsMap.get('Account Executive').Points__c==null ? 0 :Integer.valueOf(roleToPointsMap.get('Account Executive').Points__c);
