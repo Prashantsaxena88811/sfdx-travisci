@@ -53,7 +53,7 @@ public class LeadTriggerHandlerTest {
         System.debug(userlist[1].username+'--userlistID1-->'+userlist[1].Id);
         System.debug(userlist[2].username+'--userlistID2-->'+userlist[2].Id);
     }
-  /*  @isTest
+    @isTest
     public static void testMethod1(){
        
         Test.startTest();
@@ -98,9 +98,9 @@ public class LeadTriggerHandlerTest {
         
         
         Test.stopTest();
-    }*/
+    }
     
-  /*   @isTest
+     @isTest
     public static void testMethod2(){
        
         Test.startTest();
@@ -142,7 +142,7 @@ public class LeadTriggerHandlerTest {
         
         
         Test.stopTest();
-    }*/
+    }
       @isTest
     public static void testMethod4(){
         Test.startTest();
