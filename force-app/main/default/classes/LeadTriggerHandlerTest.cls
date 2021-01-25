@@ -53,7 +53,7 @@ public class LeadTriggerHandlerTest {
         System.debug(userlist[1].username+'--userlistID1-->'+userlist[1].Id);
         System.debug(userlist[2].username+'--userlistID2-->'+userlist[2].Id);
     }
-    @isTest
+  /*  @isTest
     public static void testMethod1(){
        
         Test.startTest();
@@ -98,9 +98,9 @@ public class LeadTriggerHandlerTest {
         
         
         Test.stopTest();
-    }
+    }*/
     
-     @isTest
+  /*   @isTest
     public static void testMethod2(){
        
         Test.startTest();
@@ -141,6 +141,60 @@ public class LeadTriggerHandlerTest {
        
         
         
+        Test.stopTest();
+    }*/
+      @isTest
+    public static void testMethod4(){
+        Test.startTest();
+        List<Global_List__c> globalList = new List<Global_List__c>();
+        Global_List__c rec1 = new Global_List__c();
+        rec1.Name ='Rec1';
+        rec1.Company__c = '3M';
+        Global_List__c rec2 = new Global_List__c();
+        rec2.Name ='Rec1';
+        rec2.Company__c = '3M';
+        
+        globalList.add(rec1);//globalList.add(rec2);
+        insert globalList;
+        
+        List<Global_Lead_Round_Robin__c> globalUsersList = new List<Global_Lead_Round_Robin__c>();
+       
+        Global_Lead_Round_Robin__c userRec1 = new Global_Lead_Round_Robin__c();
+         userRec1.Name = 'Rec1';
+        userRec1.Geography__c = 'LATAM';
+        userRec1.UserName__c = 'AEOwnerroundrobin@testuser.com';
+        
+        Global_Lead_Round_Robin__c userRec2 = new Global_Lead_Round_Robin__c();
+        userRec2.Name = 'Rec2';
+        userRec2.Geography__c = 'Unknown';
+        userRec2.UserName__c = 'leadroundrobin@testuser1.com';
+        globalUsersList.add(userRec1);globalUsersList.add(userRec2);
+        insert globalUsersList;
+            
+        Lead leadObj3 = new Lead();
+        leadObj3.Status = 'Round Robin';
+        leadObj3.LastName = 'tstLastName';
+        leadObj3.Company = '3M';
+        leadObj3.Industry = 'Automotive';
+        leadObj3.Geography__c ='LATAM';
+        leadObj3.Employee_Range__c = 'Fewer than 100';
+        leadObj3.Segment__c ='Mid-Market';
+        leadObj3.OwnerId = [Select Id from user where username ='emmersiontestUser@sf.com'].Id;
+        
+        Lead leadObj31 = new Lead();
+        leadObj31.Status = 'Round Robin';
+        leadObj31.LastName = 'tstLastName';
+        leadObj31.Company = '3M';
+        leadObj31.Industry = 'Automotive';
+        leadObj31.Geography__c ='Unknown';
+        leadObj31.Employee_Range__c = 'Fewer than 100';
+        leadObj31.Segment__c ='Mid-Market';
+        leadObj31.OwnerId = [Select Id from user where username ='emmersiontestUser@sf.com'].Id;
+        List<lead> leadList = new List<lead>();
+        //insert leadObj31;
+        leadList.add(leadObj3);
+        leadList.add(leadObj31); 
+        insert leadList;
         Test.stopTest();
     }
     

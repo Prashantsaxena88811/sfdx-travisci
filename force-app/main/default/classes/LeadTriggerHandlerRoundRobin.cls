@@ -155,7 +155,7 @@ public class LeadTriggerHandlerRoundRobin {
                    || ( oldLeadMap != null && leadObj.Status=='Round Robin' && leadObj.ownerId == userObj.Id   && 
                        (leadObj.Status != oldLeadMap.get(leadObj.Id).Status  || leadObj.ownerId != oldLeadMap.get(leadObj.Id).ownerId )  )  ){
                            if(leadObj.Company!=null && leadObj.Company!='' && globalCompanySet.contains(leadObj.Company.toLowerCase())){
-                               System.debug('---global--lead--obj--'+leadObj.name);
+                               System.debug('---global--lead--obj--'+leadObj);
                                globalLeadList.add(leadObj);
                            }
                            else{  
@@ -197,17 +197,20 @@ public class LeadTriggerHandlerRoundRobin {
                                    
                                }
                                else{
-                                   System.debug('ROUNDROBIN RUN');
-                                   System.debug('owner1-->'+lead_Owner_OwnerList[count].UserName__c.toLowerCase());
-                                   System.debug('owner2-->'+userNameToId.get(lead_Owner_OwnerList[count].UserName__c.toLowerCase()));
-                                   leadObj.ownerId = userNameToId.get(lead_Owner_OwnerList[count].UserName__c.toLowerCase());
-                                   lead_Owner_OwnerList[count].date__c = Datetime.now();
-                                   count =count +1;
-                                   if( count == lead_Owner_OwnerList.size() ){
-                                       System.debug('before reseeting the value---->'+count);
-                                       count =0;
+                                   if(lead_Owner_OwnerList!=null && lead_Owner_OwnerList.size() > 0){
+                                       System.debug('ROUNDROBIN RUN');
+                                       System.debug('owner1-->'+lead_Owner_OwnerList[count].UserName__c.toLowerCase());
+                                       System.debug('owner2-->'+userNameToId.get(lead_Owner_OwnerList[count].UserName__c.toLowerCase()));
+                                       leadObj.ownerId = userNameToId.get(lead_Owner_OwnerList[count].UserName__c.toLowerCase());
+                                       lead_Owner_OwnerList[count].date__c = Datetime.now();
+                                       count =count +1;
+                                       if( count == lead_Owner_OwnerList.size() ){
+                                           System.debug('before reseeting the value---->'+count);
+                                           count =0;
+                                       }
+                                       leadObj.Status = 'Assigned (SDR)';  
                                    }
-                                   leadObj.Status = 'Assigned (SDR)';
+                                   
                                }
                            } 
                        }
@@ -253,13 +256,17 @@ public class LeadTriggerHandlerRoundRobin {
                                CounterMap.put( mapKey.toLowerCase() , countAE );
                            }
                        }else{
-                           leadObj.User__c = userNameToId.get(lead_AE_OwnerList[countAE].UserName__c.toLowerCase());
-                           lead_AE_OwnerList[countAE].Lead_Assigned_DateTime__c = Datetime.now();
-                           countAE =countAE +1;
-                           if( countAE == lead_AE_OwnerList.size() ){
-                               System.debug('before reseeting the value---->'+countAE);
-                               countAE =0;
+                           if(lead_AE_OwnerList!=null && lead_AE_OwnerList.size() > 0){
+                               leadObj.User__c = userNameToId.get(lead_AE_OwnerList[countAE].UserName__c.toLowerCase());
+                               lead_AE_OwnerList[countAE].Lead_Assigned_DateTime__c = Datetime.now();
+                               countAE =countAE +1;
+                               if( countAE == lead_AE_OwnerList.size() ){
+                                   System.debug('before reseeting the value---->'+countAE);
+                                   countAE =0;
+                               }  
                            }
+                           
+                           
                        }
                    }
                 /* Lead AE Owner Round Robin Ends */
@@ -268,6 +275,7 @@ public class LeadTriggerHandlerRoundRobin {
             
             
             /*Send for global round robin*/
+            System.debug('globalLeadList-->'+globalLeadList);
             if(globalLeadList!=null && !globalLeadList.isEmpty()){
                 GlobalRoundRobinLogic.globalRoundRobin(globalLeadList);  
             }

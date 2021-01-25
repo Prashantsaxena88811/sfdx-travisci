@@ -22,7 +22,7 @@ public class GlobalRoundRobinLogic {
                 geoToGlobalMap.get( globalUserObj.Geography__c.toLowerCase() ).add(globalUserObj);
                 usernames.add(globalUserObj.UserName__c.trim());
             }
-            
+            System.debug('geoToGlobalMap-->'+geoToGlobalMap);
             List<User> userList = new List<User>();
             if(usernames != null && (!usernames.isEmpty()) ){
                 userList = [Select Id , username from User where username IN :usernames];
@@ -34,6 +34,7 @@ public class GlobalRoundRobinLogic {
             for( User userObj1 : userList){
                 userNameToId.put(userObj1.username.toLowerCase() , userObj1.Id ); 
             }
+            System.debug('userNameToId-->'+userNameToId);
             mapKey ='';
             Integer count = 0; 
             for(Lead leadObj : leadList){
@@ -46,6 +47,7 @@ public class GlobalRoundRobinLogic {
                     System.debug('ROUNDROBIN RUN');
                     count = CounterMap.get(mapKey.toLowerCase() );
                     leadObj.OwnerId = userNameToId.get( geoToGlobalMap.get(mapKey.toLowerCase())[count].UserName__c.toLowerCase() );
+                    system.debug('Id-->'+userNameToId.get( geoToGlobalMap.get(mapKey.toLowerCase())[count].UserName__c.toLowerCase() ));
                     //update time on user records
                     geoToGlobalMap.get(mapKey.toLowerCase())[count].Date__c = DateTime.now() ; 
                     count = count +1;
