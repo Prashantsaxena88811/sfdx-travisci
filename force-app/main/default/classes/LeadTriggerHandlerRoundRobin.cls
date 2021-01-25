@@ -3,6 +3,15 @@ public class LeadTriggerHandlerRoundRobin {
     public Static void leadRoundRobin(List<Lead> newLeadList , Map<Id,Lead> oldLeadMap){
         try{
             
+            /*Get global Account list Start*/
+            Set<String> globalCompanySet = new Set<String>();
+            List<Global_List__c> globalList = new List<Global_List__c>(); 
+            globalList = [Select Id , Company__c from Global_List__c];
+            for(Global_List__c compObj : globalList ){
+                globalCompanySet.add(compObj.Company__c.toLowerCase()); 
+            }
+            /*Get global Account list End*/
+            
             Lead_Round_Robin__c checkGeography = Lead_Round_Robin__c.getOrgDefaults();
             System.debug('checkGeography-'+checkGeography);
             
@@ -18,7 +27,7 @@ public class LeadTriggerHandlerRoundRobin {
                 usernames.add(userObj1.UserName__c.trim());
             }
             //System.debug('AE_OwnerCustomsortingList-->'+AE_OwnerCustomsortingList);
-           // AE_OwnerCustomsortingList.sort();
+            // AE_OwnerCustomsortingList.sort();
             //System.debug('AFTER Sorting AE_OwnerCustomsortingList-->'+AE_OwnerCustomsortingList);
             
             // create map of String[segment-Geography] , List<Sorted-Lead_AE_ROUND_ROBIN>
@@ -133,68 +142,78 @@ public class LeadTriggerHandlerRoundRobin {
             User userObj = [Select Id from user where Username =:username];// store username in custom label
             Integer count = 0; // for leadOwner round robin
             Integer countAE = 0 ;  // for AE OWNER round robin
+            
+            List<Lead> globalLeadList = new List<Lead>();
             // Iteration On leads
             for(Lead leadObj : newLeadList){
                 System.debug(leadObj.ownerId+'--leadObj.ownerId-->'+userObj.Id);
                 mapKey = '';
                 /* Lead Owner Round Robin Starts */
+                
+                
                 if( ( leadObj.ownerId == userObj.Id && oldLeadMap == null && leadObj.Status=='Round Robin')
                    || ( oldLeadMap != null && leadObj.Status=='Round Robin' && leadObj.ownerId == userObj.Id   && 
                        (leadObj.Status != oldLeadMap.get(leadObj.Id).Status  || leadObj.ownerId != oldLeadMap.get(leadObj.Id).ownerId )  )  ){
-                           System.debug('LEAD ROUND ROBIN');
-                           if(checkGeography.Lead_Owner_Round_Robin_Geography__c || checkGeography.Lead_Owner_Round_Robin_Segment__c){
-                               mapKey = '';
-                               
-                               if(checkGeography.Lead_Owner_Round_Robin_Segment__c){
-                                   if( leadObj.Segment__c != null && leadObj.Segment__c != '' ){
-                                       mapKey = leadObj.Segment__c;
-                                   }
-                               }
-                               
-                               if(checkGeography.Lead_Owner_Round_Robin_Geography__c){
-                                   if( leadObj.Geography__c != null && leadObj.Geography__c != '' ){
-                                       mapKey = mapKey + leadObj.Geography__c;
-                                   }  
-                               }
-                               
-                               
-                               
-                               if( CounterMap_leadOwner.containsKey(mapKey.toLowerCase()) ){
+                           if(leadObj.Company!=null && leadObj.Company!='' && globalCompanySet.contains(leadObj.Company.toLowerCase())){
+                               System.debug('---global--lead--obj--'+leadObj.name);
+                               globalLeadList.add(leadObj);
+                           }
+                           else{  
+                               System.debug('LEAD ROUND ROBIN');
+                               if(checkGeography.Lead_Owner_Round_Robin_Geography__c || checkGeography.Lead_Owner_Round_Robin_Segment__c){
+                                   mapKey = '';
                                    
-                                   mapKey.toLowerCase();
-                                   System.debug('ROUNDROBIN RUN');
-                                   count = CounterMap_leadOwner.get(mapKey.toLowerCase() );
-                                   leadObj.OwnerId = userNameToId.get( SegmentGeoToListOfUsersMap_leadOwner.get(mapKey.toLowerCase())[count].UserName__c.toLowerCase() );
-                                   //update time on user records
-                                   SegmentGeoToListOfUsersMap_leadOwner.get(mapKey.toLowerCase())[count].Date__c = DateTime.now() ; 
-                                   count = count +1;
-                                   if( count == SegmentGeoToListOfUsersMap_leadOwner.get(mapKey.toLowerCase()).size() ){
-                                       System.debug('lead owner before Mid-Market reseeting the value---->'+count);
-                                       count = 0;
+                                   if(checkGeography.Lead_Owner_Round_Robin_Segment__c){
+                                       if( leadObj.Segment__c != null && leadObj.Segment__c != '' ){
+                                           mapKey = leadObj.Segment__c;
+                                       }
+                                   }
+                                   
+                                   if(checkGeography.Lead_Owner_Round_Robin_Geography__c){
+                                       if( leadObj.Geography__c != null && leadObj.Geography__c != '' ){
+                                           mapKey = mapKey + leadObj.Geography__c;
+                                       }  
+                                   }
+                                   
+                                   
+                                   
+                                   if( CounterMap_leadOwner.containsKey(mapKey.toLowerCase()) ){
+                                       
+                                       mapKey.toLowerCase();
+                                       System.debug('ROUNDROBIN RUN');
+                                       count = CounterMap_leadOwner.get(mapKey.toLowerCase() );
+                                       leadObj.OwnerId = userNameToId.get( SegmentGeoToListOfUsersMap_leadOwner.get(mapKey.toLowerCase())[count].UserName__c.toLowerCase() );
+                                       //update time on user records
+                                       SegmentGeoToListOfUsersMap_leadOwner.get(mapKey.toLowerCase())[count].Date__c = DateTime.now() ; 
+                                       count = count +1;
+                                       if( count == SegmentGeoToListOfUsersMap_leadOwner.get(mapKey.toLowerCase()).size() ){
+                                           System.debug('lead owner before Mid-Market reseeting the value---->'+count);
+                                           count = 0;
+                                           CounterMap_leadOwner.put( mapKey.toLowerCase() , count );
+                                       } 
                                        CounterMap_leadOwner.put( mapKey.toLowerCase() , count );
-                                   } 
-                                   CounterMap_leadOwner.put( mapKey.toLowerCase() , count );
+                                       leadObj.Status = 'Assigned (SDR)';
+                                   }
+                                   
+                               }
+                               else{
+                                   System.debug('ROUNDROBIN RUN');
+                                   System.debug('owner1-->'+lead_Owner_OwnerList[count].UserName__c.toLowerCase());
+                                   System.debug('owner2-->'+userNameToId.get(lead_Owner_OwnerList[count].UserName__c.toLowerCase()));
+                                   leadObj.ownerId = userNameToId.get(lead_Owner_OwnerList[count].UserName__c.toLowerCase());
+                                   lead_Owner_OwnerList[count].date__c = Datetime.now();
+                                   count =count +1;
+                                   if( count == lead_Owner_OwnerList.size() ){
+                                       System.debug('before reseeting the value---->'+count);
+                                       count =0;
+                                   }
                                    leadObj.Status = 'Assigned (SDR)';
                                }
-                               
-                           }
-                           else{
-                               System.debug('ROUNDROBIN RUN');
-                               System.debug('owner1-->'+lead_Owner_OwnerList[count].UserName__c.toLowerCase());
-                               System.debug('owner2-->'+userNameToId.get(lead_Owner_OwnerList[count].UserName__c.toLowerCase()));
-                               leadObj.ownerId = userNameToId.get(lead_Owner_OwnerList[count].UserName__c.toLowerCase());
-                               lead_Owner_OwnerList[count].date__c = Datetime.now();
-                               count =count +1;
-                               if( count == lead_Owner_OwnerList.size() ){
-                                   System.debug('before reseeting the value---->'+count);
-                                   count =0;
-                               }
-                               leadObj.Status = 'Assigned (SDR)';
-                           }
-                           
-                           
-                           
+                           } 
                        }
+                
+                
+                
                 /* Lead Owner Round Robin Ends */
                 
                 /* Lead AE Owner Round Robin Starts */
@@ -248,6 +267,10 @@ public class LeadTriggerHandlerRoundRobin {
             }
             
             
+            /*Send for global round robin*/
+            if(globalLeadList!=null && !globalLeadList.isEmpty()){
+                GlobalRoundRobinLogic.globalRoundRobin(globalLeadList);  
+            }
             
             if(checkGeography.AE_Owner_Round_Robin_Geography__c  || checkGeography.AE_Owner_Round_Robin_Segment__c  ){
                 List<Lead_AE_Owner_Round_Robin__c> lead_AE_OwnerListUpdate = new List<Lead_AE_Owner_Round_Robin__c>();
@@ -262,7 +285,7 @@ public class LeadTriggerHandlerRoundRobin {
                     update lead_AE_OwnerList;
                 }  
             }
-           
+            
             
             if(checkGeography.Lead_Owner_Round_Robin_Geography__c || checkGeography.Lead_Owner_Round_Robin_Segment__c){
                 List<Lead_Owner_Round_Robin__c> lead_Owner_OwnerListUpdate = new List<Lead_Owner_Round_Robin__c>();
