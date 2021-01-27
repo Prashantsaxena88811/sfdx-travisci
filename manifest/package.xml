@@ -15,6 +15,7 @@
     <members>EventTriggerHandlerTest</members>
     <members>OpportunityTriggerHandlerSPIF_Test</members>
     <members>GlobalRoundRobinLogic</members>
+    <members>LeadRobinRecursiveCheck</members>
     <name>ApexClass</name>
 </types>
 <types>

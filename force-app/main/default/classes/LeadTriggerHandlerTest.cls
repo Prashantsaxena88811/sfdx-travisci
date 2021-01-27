@@ -195,6 +195,7 @@ public class LeadTriggerHandlerTest {
         leadList.add(leadObj3);
         leadList.add(leadObj31); 
         insert leadList;
+        System.debug(leadList.size()+'leadList--<><><><><><>'+leadList);
         Test.stopTest();
     }
     

@@ -7,7 +7,7 @@ public class GlobalRoundRobinLogic {
             /*Create Map geograpgy to user Map*/
             Map<String,List<Global_Lead_Round_Robin__c>> geoToGlobalMap =  new Map<String,List<Global_Lead_Round_Robin__c>>();
             List<Global_Lead_Round_Robin__c> globalUserList = new List<Global_Lead_Round_Robin__c>();
-            globalUserList = [Select Id,Geography__c,UserName__c  from Global_Lead_Round_Robin__c where Geography__c!=null and UserName__c!=null];
+            globalUserList = [Select Id,Geography__c,UserName__c  from Global_Lead_Round_Robin__c where Geography__c!=null and UserName__c!=null order by date__c asc];
             Map<String,Integer> CounterMap = new Map<String,Integer>();
             Set<String> usernames = New Set<String>();
             String mapKey;
@@ -39,7 +39,11 @@ public class GlobalRoundRobinLogic {
             Integer count = 0; 
             for(Lead leadObj : leadList){
                 System.debug('**GlobalRoundRobinLogic-leadObj-'+leadObj);
-                mapKey = leadObj.Geography__c; 
+                mapKey = ''; 
+                if(leadObj.Geography__c !=null){
+                    mapKey = leadObj.Geography__c;
+                }
+                System.debug('mapKey-GlobalRoundRobinLogic->'+mapKey);
                 //leadObj.Company = leadObj.Company+'Changed';
                 if( CounterMap.containsKey(mapKey.toLowerCase()) ){
                     
@@ -64,7 +68,7 @@ public class GlobalRoundRobinLogic {
                 update globalUserList;
             }
         }catch(Exception e){
-            System.debug('Exception on Line number-->'+e.getMessage()+'-error is line number-->'+e.getLineNumber());
+            System.debug('Exception on Line number--globalroundrobinlogic>'+e.getMessage()+'-error is line number-->'+e.getLineNumber());
         }
     }
     

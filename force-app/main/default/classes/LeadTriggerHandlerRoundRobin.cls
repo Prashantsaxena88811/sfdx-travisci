@@ -64,7 +64,7 @@ public class LeadTriggerHandlerRoundRobin {
             }
             
             System.debug('CounterMap-->'+CounterMap);
-            System.debug('SegmentGeoToListOfUsersMapAE-->'+SegmentGeoToListOfUsersMapAE);
+            System.debug(oldLeadMap+'--SegmentGeoToListOfUsersMapAE-->'+SegmentGeoToListOfUsersMapAE);
             /*AE round robin end*/
             
             /*Lead Owner round robin start*/
@@ -143,17 +143,49 @@ public class LeadTriggerHandlerRoundRobin {
             Integer count = 0; // for leadOwner round robin
             Integer countAE = 0 ;  // for AE OWNER round robin
             
+            //allow single time for udpate
+            Integer isExecute = 0;
+            if( newLeadList[0].Id == null && newLeadList[0].ownerId == userObj.Id){
+                isExecute = isExecute + 1;
+                LeadRobinRecursiveCheck.firstCall = isExecute;
+                System.debug('---------------isExecute1-'+isExecute);
+            }
+            if(newLeadList[0].Id !=null ){
+                LeadRobinRecursiveCheck.firstCall = LeadRobinRecursiveCheck.firstCall +1;
+                isExecute = LeadRobinRecursiveCheck.firstCall;
+                //LeadRobinRecursiveCheck.firstCall = true;
+                System.debug('---------------isExecute2-'+isExecute);
+            }
+            System.debug('isExecute-->'+isExecute);
             List<Lead> globalLeadList = new List<Lead>();
             // Iteration On leads
             for(Lead leadObj : newLeadList){
                 System.debug(leadObj.ownerId+'--leadObj.ownerId-->'+userObj.Id);
                 mapKey = '';
                 /* Lead Owner Round Robin Starts */
-                
-                
+                if( oldLeadMap != null && leadObj.Status=='Round Robin' && (isExecute == 2 || leadObj.ownerId == userObj.Id) ){
+                   System.debug('condition 1 is true'); 
+                    if(isExecute == 2){
+                         system.debug('***********11*********');  
+                    }
+                    if(leadObj.ownerId == userObj.Id){
+                         system.debug('***********12*********');  
+                    }
+                }
+                if( oldLeadMap != null && (isExecute == 2 || leadObj.Status != oldLeadMap.get(leadObj.Id).Status  || leadObj.ownerId != oldLeadMap.get(leadObj.Id).ownerId) ){
+                    if(leadObj.Status != oldLeadMap.get(leadObj.Id).Status){
+                      system.debug('***********21*********');  
+                    }
+                    if(leadObj.ownerId != oldLeadMap.get(leadObj.Id).ownerId){
+                        system.debug('***********22*********');  
+                    }
+                    System.debug('condition 2 is true'); 
+                }
+                System.debug('leadObj-->'+leadObj);
                 if( ( leadObj.ownerId == userObj.Id && oldLeadMap == null && leadObj.Status=='Round Robin')
-                   || ( oldLeadMap != null && leadObj.Status=='Round Robin' && leadObj.ownerId == userObj.Id   && 
-                       (leadObj.Status != oldLeadMap.get(leadObj.Id).Status  || leadObj.ownerId != oldLeadMap.get(leadObj.Id).ownerId )  )  ){
+                   || ( oldLeadMap != null && (isExecute == 2 || leadObj.Status=='Round Robin') && (isExecute == 2 || leadObj.ownerId == userObj.Id)   && 
+                       (  isExecute == 2  || (leadObj.Status != oldLeadMap.get(leadObj.Id).Status  || leadObj.ownerId != oldLeadMap.get(leadObj.Id).ownerId) )  )  ){
+                           System.debug('execute twice');
                            if(leadObj.Company!=null && leadObj.Company!='' && globalCompanySet.contains(leadObj.Company.toLowerCase())){
                                System.debug('---global--lead--obj--'+leadObj);
                                globalLeadList.add(leadObj);
