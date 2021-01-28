@@ -163,23 +163,9 @@ public class LeadTriggerHandlerRoundRobin {
                 System.debug(leadObj.ownerId+'--leadObj.ownerId-->'+userObj.Id);
                 mapKey = '';
                 /* Lead Owner Round Robin Starts */
-                if( oldLeadMap != null && leadObj.Status=='Round Robin' && (isExecute == 2 || leadObj.ownerId == userObj.Id) ){
-                   System.debug('condition 1 is true'); 
-                    if(isExecute == 2){
-                         system.debug('***********11*********');  
-                    }
-                    if(leadObj.ownerId == userObj.Id){
-                         system.debug('***********12*********');  
-                    }
-                }
-                if( oldLeadMap != null && (isExecute == 2 || leadObj.Status != oldLeadMap.get(leadObj.Id).Status  || leadObj.ownerId != oldLeadMap.get(leadObj.Id).ownerId) ){
-                    if(leadObj.Status != oldLeadMap.get(leadObj.Id).Status){
-                      system.debug('***********21*********');  
-                    }
-                    if(leadObj.ownerId != oldLeadMap.get(leadObj.Id).ownerId){
-                        system.debug('***********22*********');  
-                    }
-                    System.debug('condition 2 is true'); 
+                if(leadObj.Company!=null && leadObj.Company!='' && globalCompanySet.contains(leadObj.Company.toLowerCase())){
+                    System.debug('---global--lead--obj--'+leadObj);
+                    leadObj.Global_List_Lead__c = true;
                 }
                 System.debug('leadObj-->'+leadObj);
                 if( ( leadObj.ownerId == userObj.Id && oldLeadMap == null && leadObj.Status=='Round Robin')
@@ -253,7 +239,7 @@ public class LeadTriggerHandlerRoundRobin {
                 
                 /* Lead AE Owner Round Robin Starts */
                 
-                if( leadObj.User__c==null && ( leadObj.Segment__c != '' && leadObj.Segment__c!= null ) &&
+                if( leadObj.status!='Disqualified' && leadObj.User__c==null && ( leadObj.Segment__c != '' && leadObj.Segment__c!= null ) &&
                    ( oldLeadMap == null || ( oldLeadMap != null && (leadObj.User__c!=oldLeadMap.get(leadObj.Id).User__c || leadObj.Segment__c!=oldLeadMap.get(leadObj.Id).Segment__c) )  ) ){
                        mapKey = '';
                        
