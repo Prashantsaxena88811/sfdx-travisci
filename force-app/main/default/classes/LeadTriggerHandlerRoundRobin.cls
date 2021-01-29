@@ -145,7 +145,7 @@ public class LeadTriggerHandlerRoundRobin {
             
             //allow single time for udpate
             Integer isExecute = 0;
-            if( newLeadList[0].Id == null && newLeadList[0].ownerId == userObj.Id){
+            if( newLeadList[0].Id == null && newLeadList[0].ownerId == userObj.Id && newLeadList[0].Status=='Round Robin'){
                 isExecute = isExecute + 1;
                 LeadRobinRecursiveCheck.firstCall = isExecute;
                 System.debug('---------------isExecute1-'+isExecute);
