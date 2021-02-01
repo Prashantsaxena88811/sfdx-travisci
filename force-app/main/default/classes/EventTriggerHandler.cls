@@ -44,11 +44,11 @@ public class EventTriggerHandler {
                            userIds.add(eventObj.OwnerId);
                            leadIds.add(eventObj.whoId);
                            filteredEventList.add(eventObj);
-                       }else if(eventObj.whoId.getsobjecttype() == Contact.sObjectType){
+                       }/*else if(eventObj.whoId.getsobjecttype() == Contact.sObjectType){
                            userIds.add(eventObj.OwnerId);
                            contactIds.add(eventObj.whoId);
                            filteredEventList.add(eventObj);
-                       }
+                       }*/
                    }
             }
             System.debug('filteredEventList-========>'+filteredEventList);
@@ -66,7 +66,7 @@ public class EventTriggerHandler {
             //List<Lead> leadList = new List<Lead>();
             Map<Id , Lead > leadIdToTop25Map = new Map<Id , Lead >();
             if(!leadIds.isEmpty()){
-                leadIdToTop25Map = new Map<Id , Lead >([Select Id,Top_25_Account__c from lead where Id IN:leadIds and Top_25_Account__c!=null and  Top_25_Account__c IN :idToUserMap.keySet()]);
+                leadIdToTop25Map = new Map<Id , Lead >([Select Id,Top_25_Account__c from lead where isConverted = false and  Id IN:leadIds and Top_25_Account__c!=null and  Top_25_Account__c IN :idToUserMap.keySet()]);
                 system.debug('leadIdToTop25Map-->'+leadIdToTop25Map);
                 
             }
