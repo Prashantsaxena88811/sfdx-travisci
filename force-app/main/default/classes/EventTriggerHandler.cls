@@ -37,7 +37,7 @@ public class EventTriggerHandler {
             Set<Id> leadIds = new set<Id>();
             Set<Id> contactIds = new set<Id>();
             for( Event eventObj : newEventList){
-                if(eventObj.Meeting_Source__c != '' && eventObj.Meeting_Source__c != null && eventObj.Event_Type__c !=null &&  eventObj.Event_Type__c !=''
+                if(eventObj.whoId !=null && eventObj.Meeting_Source__c != '' && eventObj.Meeting_Source__c != null && eventObj.Event_Type__c !=null &&  eventObj.Event_Type__c !=''
                    && eventObj.Subject !=null && eventObj.Subject !=''){
                        
                        if(eventObj.whoId.getsobjecttype() == Lead.sObjectType){
@@ -95,7 +95,7 @@ public class EventTriggerHandler {
                 for( Event eventObj : filteredEventList){
                     system.debug('eventObj-->'+eventObj);
                     SPIF__c spifObj = new SPIF__c();
-                    if( idToUserMap !=null && idToUserMap.containsKey(eventObj.OwnerId) 
+                    if( eventObj.whoId !=null && idToUserMap !=null && idToUserMap.containsKey(eventObj.OwnerId) 
                        && (( leadIdToTop25Map.containsKey(eventObj.whoId) 
                             && eventObj.OwnerId == leadIdToTop25Map.get(eventObj.whoId).Top_25_Account__c) || 
                            ( contactIdToTop25InfoMap.containsKey(eventObj.whoId) 
@@ -109,7 +109,7 @@ public class EventTriggerHandler {
                                     spifObj = eventTriggerHandlerObj.returnSPIFRecord( String.valueOf(eventObj.OwnerId) ,points ,
                                                                                       eventObj.Subject +' | '+idToUserMap.get(eventObj.OwnerId).Name,
                                                                                       description ,URL.getSalesforceBaseUrl().toExternalForm() +'/' + eventObj.Id ,
-                                                                                      eventObj.StartDateTime , true ,'' ,true , 'Set a Meeting');
+                                                                                      eventObj.StartDateTime , true ,'' ,true , 'Set a Meeting',eventObj.whoId);
                                     
                                 }
                                 if( spifObj !=new SPIF__c() && spifObj !=null){
@@ -134,7 +134,7 @@ public class EventTriggerHandler {
         
     }
     
-    public   SPIF__c returnSPIFRecord(String ownerId , Integer points , String recName , String description , String eventLink , DateTime dateOfActivity , Boolean Top25 ,String OppId , Boolean isEvent , String SpifType )
+    public   SPIF__c returnSPIFRecord(String ownerId , Integer points , String recName , String description , String eventLink , DateTime dateOfActivity , Boolean Top25 ,String OppId , Boolean isEvent , String SpifType,Id leadId )
     {
         try{
             SPIF__c spifObj = new SPIF__c();
@@ -142,6 +142,8 @@ public class EventTriggerHandler {
             spifObj.Description__c = description;
             if(isEvent){
                 spifObj.Event__c = eventLink;  
+                System.debug('leadId-->'+leadId);
+                spifObj.Lead__c = leadId;
             }else{
                 spifObj.Opportunity__c = OppId; 
             }

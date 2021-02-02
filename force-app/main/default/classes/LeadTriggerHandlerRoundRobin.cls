@@ -4,12 +4,12 @@ public class LeadTriggerHandlerRoundRobin {
         try{
             
             /*Get global Account list Start*/
-            Set<String> globalCompanySet = new Set<String>();
+            //Set<String> globalCompanySet = new Set<String>();
             List<Global_List__c> globalList = new List<Global_List__c>(); 
-            globalList = [Select Id , Company__c from Global_List__c];
-            for(Global_List__c compObj : globalList ){
+            globalList = [Select Id , Company__c from Global_List__c where Company__c!=null];
+            /*for(Global_List__c compObj : globalList ){
                 globalCompanySet.add(compObj.Company__c.toLowerCase()); 
-            }
+            }*/
             /*Get global Account list End*/
             
             Lead_Round_Robin__c checkGeography = Lead_Round_Robin__c.getOrgDefaults();
@@ -159,20 +159,37 @@ public class LeadTriggerHandlerRoundRobin {
             System.debug('isExecute-->'+isExecute);
             List<Lead> globalLeadList = new List<Lead>();
             // Iteration On leads
+            Boolean isGlobalLead =  false;
             for(Lead leadObj : newLeadList){
+                isGlobalLead =  false;
                 System.debug(leadObj.ownerId+'--leadObj.ownerId-->'+userObj.Id);
                 mapKey = '';
                 /* Lead Owner Round Robin Starts */
-                if(leadObj.Company!=null && leadObj.Company!='' && globalCompanySet.contains(leadObj.Company.toLowerCase())){
+                if(leadObj.Company!=null && leadObj.Company!=''){
+                    // && globalCompanySet.contains(leadObj.Company.toLowerCase()
                     System.debug('---global--lead--obj--'+leadObj);
-                    leadObj.Global_List_Lead__c = true;
+                    if( leadObj.Company.toLowerCase() == 'bp' || leadObj.Company.toLowerCase() == 'abb' ){
+                        isGlobalLead =  true;
+                    }
+                    if(!isGlobalLead){
+                        for(Global_List__c globalLead : globalList ){
+                            if( !(globalLead.company__c.toLowerCase() == 'bp' || globalLead.company__c.toLowerCase() == 'abb') 
+                                && leadObj.Company.containsIgnoreCase(globalLead.company__c) ){
+                                 isGlobalLead =  true;
+                            }
+                        }  
+                    }
+                    if(isGlobalLead){
+                       leadObj.Global_List_Lead__c = true; 
+                    }
+                    
                 }
                 System.debug('leadObj-->'+leadObj);
                 if( ( leadObj.ownerId == userObj.Id && oldLeadMap == null && leadObj.Status=='Round Robin')
                    || ( oldLeadMap != null && (isExecute == 2 || leadObj.Status=='Round Robin') && (isExecute == 2 || leadObj.ownerId == userObj.Id)   && 
                        (  isExecute == 2  || (leadObj.Status != oldLeadMap.get(leadObj.Id).Status  || leadObj.ownerId != oldLeadMap.get(leadObj.Id).ownerId) )  )  ){
                            System.debug('execute twice');
-                           if(leadObj.Company!=null && leadObj.Company!='' && globalCompanySet.contains(leadObj.Company.toLowerCase())){
+                           if(leadObj.Company!=null && leadObj.Company!='' && isGlobalLead){
                                System.debug('---global--lead--obj--'+leadObj);
                                globalLeadList.add(leadObj);
                            }
