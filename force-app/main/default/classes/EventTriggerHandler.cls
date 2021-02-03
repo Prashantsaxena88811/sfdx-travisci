@@ -66,7 +66,7 @@ public class EventTriggerHandler {
             //List<Lead> leadList = new List<Lead>();
             Map<Id , Lead > leadIdToTop25Map = new Map<Id , Lead >();
             if(!leadIds.isEmpty()){
-                leadIdToTop25Map = new Map<Id , Lead >([Select Id,Top_25_Account__c from lead where isConverted = false and  Id IN:leadIds and Top_25_Account__c!=null and  Top_25_Account__c IN :idToUserMap.keySet()]);
+                leadIdToTop25Map = new Map<Id , Lead >([Select Id,Top_25_Account__c,Title from lead where isConverted = false and  Id IN:leadIds and Top_25_Account__c!=null and  Top_25_Account__c IN :idToUserMap.keySet()]);
                 system.debug('leadIdToTop25Map-->'+leadIdToTop25Map);
                 
             }
@@ -92,6 +92,7 @@ public class EventTriggerHandler {
             System.debug('filteredEventList----<>'+filteredEventList);
             if( (contactIdToTop25InfoMap != null && !contactIdToTop25InfoMap.isEmpty()) || (leadIdToTop25Map != null && !leadIdToTop25Map.isEmpty()) ){
                 String roleName = '';
+                String leadTitle = '';
                 for( Event eventObj : filteredEventList){
                     system.debug('eventObj-->'+eventObj);
                     SPIF__c spifObj = new SPIF__c();
@@ -101,7 +102,7 @@ public class EventTriggerHandler {
                            ( contactIdToTop25InfoMap.containsKey(eventObj.whoId) 
                             && eventObj.OwnerId == contactIdToTop25InfoMap.get(eventObj.whoId)) ) ){
                                 description = eventObj.description == null ? '' : eventObj.description ;
-                                
+                                leadTitle = leadIdToTop25Map.get(eventObj.whoId).Title == null ? '' : leadIdToTop25Map.get(eventObj.whoId).Title ;
                                 if( roleToPointsMap!=null && !roleToPointsMap.isEmpty() && 
                                    roleToPointsMap.containsKey( userRoleMap.get(idToUserMap.get(eventObj.OwnerId).UserRoleId).Name )){
                                        roleName = userRoleMap.get(idToUserMap.get(eventObj.OwnerId).UserRoleId).Name;
@@ -109,7 +110,7 @@ public class EventTriggerHandler {
                                     spifObj = eventTriggerHandlerObj.returnSPIFRecord( String.valueOf(eventObj.OwnerId) ,points ,
                                                                                       eventObj.Subject +' | '+idToUserMap.get(eventObj.OwnerId).Name,
                                                                                       description ,URL.getSalesforceBaseUrl().toExternalForm() +'/' + eventObj.Id ,
-                                                                                      eventObj.StartDateTime , true ,'' ,true , 'Set a Meeting',eventObj.whoId);
+                                                                                      eventObj.StartDateTime , true ,'' ,true , 'Set a Meeting',eventObj.whoId,leadTitle);
                                     
                                 }
                                 if( spifObj !=new SPIF__c() && spifObj !=null){
@@ -134,7 +135,7 @@ public class EventTriggerHandler {
         
     }
     
-    public   SPIF__c returnSPIFRecord(String ownerId , Integer points , String recName , String description , String eventLink , DateTime dateOfActivity , Boolean Top25 ,String OppId , Boolean isEvent , String SpifType,Id leadId )
+    public   SPIF__c returnSPIFRecord(String ownerId , Integer points , String recName , String description , String eventLink , DateTime dateOfActivity , Boolean Top25 ,String OppId , Boolean isEvent , String SpifType,Id leadId,String leadTitle )
     {
         try{
             SPIF__c spifObj = new SPIF__c();
@@ -144,6 +145,7 @@ public class EventTriggerHandler {
                 spifObj.Event__c = eventLink;  
                 System.debug('leadId-->'+leadId);
                 spifObj.Lead__c = leadId;
+                spifObj.Title__c = leadTitle;
             }else{
                 spifObj.Opportunity__c = OppId; 
             }

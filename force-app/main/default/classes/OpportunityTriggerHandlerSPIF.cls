@@ -9,7 +9,7 @@ public class OpportunityTriggerHandlerSPIF {
             userRolelistSDR = [Select Id,Name from UserRole where Name=:'SDR' limit 1];
             // get the role Id of AE (Account_Executive)
             userRolelistAE = [Select Id,Name from UserRole where  Name=:'Account Executive' limit 1];
-            System.debug(userRolelistSDR[0]+'----'+userRolelistAE[0]);*/
+            System.debug(userRolelistSDR[0]+'----'+userRolelistAE[0]);*/ 
             
             // query the points records from custom setting
             List<SPIF_Activity_Records__c> spifActivityRecords = new List<SPIF_Activity_Records__c>();
@@ -75,7 +75,7 @@ public class OpportunityTriggerHandlerSPIF {
                            spifObj = eventTriggerHandlerObj.returnSPIFRecord( String.valueOf(accountMap.get(oppObj.AccountId).Top_25_Account__c) ,points ,
                                                                              oppObj.Name +' | '+userMap.get(accountMap.get(oppObj.AccountId).Top_25_Account__c).Name,
                                                                              description ,'' ,
-                                                                             oppObj.CreatedDate , true ,oppObj.Id ,false , 'New Opportunity','');
+                                                                             oppObj.CreatedDate , true ,oppObj.Id ,false , 'New Opportunity','','');
                        } 
                       /* else if( userRolelistAE != NULL && (!userRolelistAE.isEmpty()) && userMap.get(oppObj.CreatedById).UserRoleId == userRolelistAE[0].Id ){
                            points = roleToPointsMap.get('Account Executive').Points__c==null ? 0 :Integer.valueOf(roleToPointsMap.get('Account Executive').Points__c);
