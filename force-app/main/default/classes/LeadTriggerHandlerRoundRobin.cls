@@ -144,19 +144,21 @@ public class LeadTriggerHandlerRoundRobin {
             Integer countAE = 0 ;  // for AE OWNER round robin
             
             //allow single time for udpate
-            Integer isExecute = 0;
+            /*Integer isExecute = 0;
             if( newLeadList[0].Id == null && newLeadList[0].ownerId == userObj.Id && newLeadList[0].Status=='Round Robin'){
                 isExecute = isExecute + 1;
                 LeadRobinRecursiveCheck.firstCall = isExecute;
                 System.debug('---------------isExecute1-'+isExecute);
             }
-            if(newLeadList[0].Id !=null ){
+            if(newLeadList[0].Id !=null && (LeadRobinRecursiveCheck.firstCall == 1) ){
                 LeadRobinRecursiveCheck.firstCall = LeadRobinRecursiveCheck.firstCall +1;
                 isExecute = LeadRobinRecursiveCheck.firstCall;
                 //LeadRobinRecursiveCheck.firstCall = true;
                 System.debug('---------------isExecute2-'+isExecute);
-            }
-            System.debug('isExecute-->'+isExecute);
+            }else{
+               isExecute =  3; 
+            }*/
+            //System.debug('isExecute-->'+isExecute);
             List<Lead> globalLeadList = new List<Lead>();
             // Iteration On leads
             Boolean isGlobalLead =  false;
@@ -186,8 +188,8 @@ public class LeadTriggerHandlerRoundRobin {
                 }
                 System.debug('leadObj-->'+leadObj);
                 if( ( leadObj.ownerId == userObj.Id && oldLeadMap == null && leadObj.Status=='Round Robin')
-                   || ( oldLeadMap != null && (isExecute == 2 || leadObj.Status=='Round Robin') && (isExecute == 2 || leadObj.ownerId == userObj.Id)   && 
-                       (  isExecute == 2  || (leadObj.Status != oldLeadMap.get(leadObj.Id).Status  || leadObj.ownerId != oldLeadMap.get(leadObj.Id).ownerId) )  )  ){
+                   || ( oldLeadMap != null && leadObj.Status=='Round Robin' && leadObj.ownerId == userObj.Id   && 
+                       (  (leadObj.Status != oldLeadMap.get(leadObj.Id).Status  || leadObj.ownerId != oldLeadMap.get(leadObj.Id).ownerId) )  )  ){
                            System.debug('execute twice');
                            if(leadObj.Company!=null && leadObj.Company!='' && isGlobalLead){
                                System.debug('---global--lead--obj--'+leadObj);
