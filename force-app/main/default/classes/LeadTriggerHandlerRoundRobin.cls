@@ -224,6 +224,9 @@ isExecute =  3;
                         else if(PJKANZ_cites.contains(leadObj.Country.toLowerCase())){
                             leadObj.Geography__c = 'PJKANZ'; 
                         }
+                        else{
+                            leadObj.Geography__c = 'Unknown'; 
+                        }
                        
                     }
                     /*Assign Geohraphy END*/
