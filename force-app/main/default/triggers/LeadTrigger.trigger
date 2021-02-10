@@ -10,7 +10,7 @@ trigger LeadTrigger on Lead (after insert, after update,before insert , before u
     
     
     if( trigger.IsBefore &&  (trigger.IsInsert ||trigger.IsUpdate ) ){
-        System.debug(trigger.IsInsert+'*********************************'+trigger.IsUpdate);
+        System.debug('*********************************');
        LeadTriggerHandlerRoundRobin.leadRoundRobin(Trigger.new, Trigger.OldMap);
     }    
 }
