@@ -149,7 +149,7 @@ globalCompanySet.add(compObj.Company__c.toLowerCase());
             /*Industry,Segment,Geography USERS SETUP START*/
             List<Lead_Owner_Round_Robin__c> lead_Owner_OwnerList = new List<Lead_Owner_Round_Robin__c>();
             lead_Owner_OwnerList = [Select Geography__c,UserName__c,Date__c,Segment__c,Industry__c from Lead_Owner_Round_Robin__c where 
-                                    Geography__c !=null AND Segment__c !=null AND Industry__c !=null AND Catch_All__c =FALSE order by date__c asc];
+                                    Catch_All__c =FALSE order by date__c asc];
             System.debug('lead_Owner_OwnerList-->'+lead_Owner_OwnerList);
             
             // create map of String[segment-Geography] , List<Sorted-Lead_AE_ROUND_ROBIN>
@@ -160,7 +160,16 @@ globalCompanySet.add(compObj.Company__c.toLowerCase());
             for(Lead_Owner_Round_Robin__c AE_Obj : lead_Owner_OwnerList){
                 usernames.add(AE_Obj.UserName__c.trim());
                 mapKey = '';
-                mapKey = AE_Obj.Segment__c+ AE_Obj.Geography__c+AE_Obj.Industry__c;
+                if(AE_Obj.Segment__c!=null && AE_Obj.Segment__c!=''){
+                    mapKey = AE_Obj.Segment__c;
+                }
+                if(AE_Obj.Geography__c!=null && AE_Obj.Geography__c!=''){
+                    mapKey = mapKey+AE_Obj.Geography__c;
+                }
+                if(AE_Obj.Industry__c!=null && AE_Obj.Industry__c!=''){
+                    mapKey = mapKey+AE_Obj.Industry__c;
+                }
+                //mapKey = AE_Obj.Segment__c+ AE_Obj.Geography__c+AE_Obj.Industry__c;
                 //System.debug('**Lead_user_Obj.userRec==>'+AE_Obj.userRec);
                 if(!SegmentGeoToListOfUsersMap_leadOwner.containsKey(mapKey.toLowerCase()) && mapKey!=''){
                     SegmentGeoToListOfUsersMap_leadOwner.put(mapKey.toLowerCase() , new List<Lead_Owner_Round_Robin__c>());
@@ -196,6 +205,8 @@ globalCompanySet.add(compObj.Company__c.toLowerCase());
             }
             
             /*add values to the class level Start*/
+            System.debug('CounterMap_leadOwner-->'+CounterMap_leadOwner);
+            System.debug('SegmentGeoToListOfUsersMap_leadOwner-->'+SegmentGeoToListOfUsersMap_leadOwner);
             globalLeadCounterMap_Vals = globalLeadCounterMap;
             geoToGlobalMap_Vals = geoToGlobalMap;
             EDU_UsersList_Vals = EDU_UsersList;
@@ -339,6 +350,7 @@ globalCompanySet.add(compObj.Company__c.toLowerCase());
                            }
                            // CHECK FOR GEOGRAPHY TYPE
                            if( !isOwnerAssigned && leadObj.Geography__c!=null && leadObj.Geography__c!='' ){
+                               System.debug('NO geo block-->'+leadObj.Geography__c);
                                newLeadOwnerId =  assignOwnerToISGLead(leadObj.Geography__c);
                                if(String.isNotBlank(newLeadOwnerId)){
                                    system.debug(' new owner Id assignOwnerToISGLead-->'+newLeadOwnerId);
