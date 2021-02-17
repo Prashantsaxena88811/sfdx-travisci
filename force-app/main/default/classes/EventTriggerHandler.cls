@@ -107,10 +107,10 @@ public class EventTriggerHandler {
                                    roleToPointsMap.containsKey( userRoleMap.get(idToUserMap.get(eventObj.OwnerId).UserRoleId).Name )){
                                        roleName = userRoleMap.get(idToUserMap.get(eventObj.OwnerId).UserRoleId).Name;
                                     points = roleToPointsMap.get(roleName ).Points__c==null ? 0 :Integer.valueOf(roleToPointsMap.get(roleName ).Points__c);
-                                    spifObj = eventTriggerHandlerObj.returnSPIFRecord( String.valueOf(eventObj.OwnerId) ,points ,
+                                    spifObj = eventTriggerHandlerObj.returnSPIFRecord( eventObj.OwnerId ,points ,
                                                                                       eventObj.Subject +' | '+idToUserMap.get(eventObj.OwnerId).Name,
                                                                                       description ,URL.getSalesforceBaseUrl().toExternalForm() +'/' + eventObj.Id ,
-                                                                                      eventObj.StartDateTime , true ,'' ,true , 'Set a Meeting',eventObj.whoId,leadTitle);
+                                                                                      eventObj.StartDateTime , true ,'' ,true , 'Set a Meeting',String.valueOf(eventObj.whoId),leadTitle);
                                     
                                 }
                                 if( spifObj !=new SPIF__c() && spifObj !=null){
@@ -135,19 +135,21 @@ public class EventTriggerHandler {
         
     }
     
-    public   SPIF__c returnSPIFRecord(String ownerId , Integer points , String recName , String description , String eventLink , DateTime dateOfActivity , Boolean Top25 ,String OppId , Boolean isEvent , String SpifType,Id leadId,String leadTitle )
+    public   SPIF__c returnSPIFRecord(Id ownerId , Integer points , String recName , String description , String eventLink , DateTime dateOfActivity , Boolean Top25 ,String OppId , Boolean isEvent , String SpifType,String leadId,String leadTitle )
     {
         try{
+            
+            System.debug('****returnSPIFRecord1***********');
             SPIF__c spifObj = new SPIF__c();
             spifObj.Date_of_activity__c = dateOfActivity;
             spifObj.Description__c = description;
             if(isEvent){
                 spifObj.Event__c = eventLink;  
                 System.debug('leadId-->'+leadId);
-                spifObj.Lead__c = leadId;
+                spifObj.Lead__c = Id.valueOf(leadId);
                 spifObj.Title__c = leadTitle;
             }else{
-                spifObj.Opportunity__c = OppId; 
+                spifObj.Opportunity__c = Id.valueOf(OppId); 
             }
             spifObj.Name = recName;
             spifObj.Points__c = points;

@@ -34,7 +34,8 @@ public class OpportunityTriggerHandlerSPIF {
                 
             }
             
-            Map<Id, Account> accountMap = new Map<Id, Account>([Select id,Top_25_Account__c from Account where Id IN : accountIds and Top_25_Account__c !=null]);
+            Map<Id, Account> accountMap = new Map<Id, Account>([Select id,Top_25_Account__c,Is_SPIF_for_Opp_Created__c from Account where Id IN : accountIds 
+                                                                AND Top_25_Account__c !=null AND Is_SPIF_for_Opp_Created__c = false]);
             // Map<Id, User> userMap = new Map<Id, User>([Select id ,Name, UserRoleId from  User where Id IN : userIds AND  UserRoleId IN :userRoleMap.keySet() ]);
             System.debug('accountMap-->'+accountMap);
             userIds  = new Set<Id>();
@@ -55,12 +56,14 @@ public class OpportunityTriggerHandlerSPIF {
             Integer points = 0;
             String roleName ='';
             String roleId = '';
+            accountIds = new Set<Id>();
             for(Opportunity oppObj : opportunitynewList ){
                 System.debug('obj**-->'+oppObj);
                 if(oppObj.AccountId!=null && userMap!=null && accountMap.containsKey(oppObj.AccountId) &&  
                    accountMap.get(oppObj.AccountId).Top_25_Account__c!=null && userMap.containsKey(accountMap.get(oppObj.AccountId).Top_25_Account__c) &&
                    userMap.get( accountMap.get(oppObj.AccountId).Top_25_Account__c).UserRoleId!=null
                    &&  userRoleMap.containsKey( userMap.get( accountMap.get(oppObj.AccountId).Top_25_Account__c).UserRoleId ) ){
+                       System.debug('*******1*****');
                        SPIF__c spifObj = new SPIF__c();
                        //roleName = userRoleMap.get(userMap.get(oppObj.CreatedById).UserRoleId).Name;
                        roleName = userRoleMap.get( userMap.get(accountMap.get(oppObj.AccountId).Top_25_Account__c).UserRoleId ).Name;
@@ -72,10 +75,13 @@ public class OpportunityTriggerHandlerSPIF {
                            System.debug('>>>>>>>>>->'+userMap.get(accountMap.get(oppObj.AccountId).Top_25_Account__c));
                            
                            points = roleToPointsMap.get(roleName).Points__c==null ? 0 :Integer.valueOf(roleToPointsMap.get(roleName).Points__c);
-                           spifObj = eventTriggerHandlerObj.returnSPIFRecord( String.valueOf(accountMap.get(oppObj.AccountId).Top_25_Account__c) ,points ,
+                           System.debug('-1-> '+String.valueOf(accountMap.get(oppObj.AccountId).Top_25_Account__c));
+                           System.debug('-2-> '+oppObj.Id);
+                          accountIds.add(oppObj.AccountId);
+                          spifObj = eventTriggerHandlerObj.returnSPIFRecord( accountMap.get(oppObj.AccountId).Top_25_Account__c ,points ,
                                                                              oppObj.Name +' | '+userMap.get(accountMap.get(oppObj.AccountId).Top_25_Account__c).Name,
                                                                              description ,'' ,
-                                                                             oppObj.CreatedDate , true ,oppObj.Id ,false , 'New Opportunity','','');
+                                                                             oppObj.CreatedDate , true ,String.valueOf(oppObj.Id ),false , 'New Opportunity','','');
                        } 
                       /* else if( userRolelistAE != NULL && (!userRolelistAE.isEmpty()) && userMap.get(oppObj.CreatedById).UserRoleId == userRolelistAE[0].Id ){
                            points = roleToPointsMap.get('Account Executive').Points__c==null ? 0 :Integer.valueOf(roleToPointsMap.get('Account Executive').Points__c);
@@ -100,10 +106,21 @@ public class OpportunityTriggerHandlerSPIF {
             }
             
             
-            if( !spifList.isEmpty() ){
+            if( spifList!=null && !spifList.isEmpty() ){
                 System.debug('before insert spifList-->'+spifList);
                 insert spifList;
                 System.debug('spifList-->'+spifList);
+            }
+            if( accountIds!=null && !accountIds.isEmpty() ){
+                System.debug('Account Ids to be updated'+accountIds);
+                List<Account> accList = new List<Account>();
+                accList = [Select Id,Is_SPIF_for_Opp_Created__c from Account where Id IN :accountIds];
+                for(Account accountObj : accList){
+                    accountObj.Is_SPIF_for_Opp_Created__c = true;
+                }
+                if(accList!=null && !accList.isEmpty()){
+                    update accList;
+                }
             }
         }catch(Exception e){
             System.debug('get exception on line number-->'+e.getLineNumber() +' error is-->'+e.getMessage());
