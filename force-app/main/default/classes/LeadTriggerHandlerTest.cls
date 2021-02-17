@@ -17,7 +17,7 @@ public class LeadTriggerHandlerTest {
             LanguageLocaleKey = 'en_US',
             LocaleSidKey = 'en_US'
         );
-         User u1 = new User(
+        User u1 = new User(
             ProfileId = [SELECT Id FROM Profile WHERE name like '%Admin%' limit 1].Id,
             LastName = 'last',
             Email = 'puser000@amamama.com',
@@ -30,7 +30,7 @@ public class LeadTriggerHandlerTest {
             LanguageLocaleKey = 'en_US',
             LocaleSidKey = 'en_US'
         );
-         User u2 = new User(
+        User u2 = new User(
             ProfileId = [SELECT Id FROM Profile WHERE name like '%Admin%' limit 1].Id,
             LastName = 'last',
             Email = 'puser000@amamama.com',
@@ -55,7 +55,7 @@ public class LeadTriggerHandlerTest {
     }
     @isTest
     public static void testMethod1(){
-       
+        
         Test.startTest();
         
         Lead_Round_Robin__c checkGeography = new Lead_Round_Robin__c();
@@ -77,6 +77,13 @@ public class LeadTriggerHandlerTest {
         leadOwnerRoundRobinObj1.name = 'Rec2';
         insert leadOwnerRoundRobinObj1;
         
+        Lead_Owner_Round_Robin__c leadOwnerRoundRobinObj2 = new Lead_Owner_Round_Robin__c();
+        leadOwnerRoundRobinObj2.UserName__c = 'leadroundrobin@testuser1.com';
+        leadOwnerRoundRobinObj2.Geography__c = 'APAC';
+        leadOwnerRoundRobinObj2.name = 'Rec2';
+        leadOwnerRoundRobinObj2.Industry__c = 'Automotive';
+        insert leadOwnerRoundRobinObj2;
+        
         Lead leadObj1 = new Lead();
         leadObj1.Status = 'Round Robin';
         leadObj1.LastName = 'tstLastName';
@@ -94,15 +101,15 @@ public class LeadTriggerHandlerTest {
         l1 = [select id , ownerId , user__c from lead where Id=:leadObj1.Id];
         System.debug('l1-->'+l1);
         
-       
+        
         
         
         Test.stopTest();
     }
     
-     @isTest
+    @isTest
     public static void testMethod2(){
-       
+        
         Test.startTest();
         
         Lead_Round_Robin__c checkGeography = new Lead_Round_Robin__c();
@@ -138,12 +145,12 @@ public class LeadTriggerHandlerTest {
         System.debug('leadObj1-->'+leadObj1.User__c);
         System.debug('leadObj1-->'+leadObj1.OwnerId);
         
-       
+        
         
         
         Test.stopTest();
     }
-      @isTest
+    @isTest
     public static void testMethod4(){
         Test.startTest();
         List<Global_List__c> globalList = new List<Global_List__c>();
@@ -158,9 +165,9 @@ public class LeadTriggerHandlerTest {
         insert globalList;
         
         List<Global_Lead_Round_Robin__c> globalUsersList = new List<Global_Lead_Round_Robin__c>();
-       
+        
         Global_Lead_Round_Robin__c userRec1 = new Global_Lead_Round_Robin__c();
-         userRec1.Name = 'Rec1';
+        userRec1.Name = 'Rec1';
         userRec1.Geography__c = 'LATAM';
         userRec1.UserName__c = 'AEOwnerroundrobin@testuser.com';
         
@@ -170,7 +177,7 @@ public class LeadTriggerHandlerTest {
         userRec2.UserName__c = 'leadroundrobin@testuser1.com';
         globalUsersList.add(userRec1);globalUsersList.add(userRec2);
         insert globalUsersList;
-            
+        
         Lead leadObj3 = new Lead();
         leadObj3.Status = 'Round Robin';
         leadObj3.LastName = 'tstLastName';
@@ -196,6 +203,123 @@ public class LeadTriggerHandlerTest {
         leadList.add(leadObj31); 
         insert leadList;
         System.debug(leadList.size()+'leadList--<><><><><><>'+leadList);
+        Test.stopTest();
+    }
+    @isTest
+    public static void leadGeography1(){
+        Test.startTest();
+        Lead leadObj1 = new Lead();
+        leadObj1.Status = 'Round Robin';
+        leadObj1.LastName = 'tstLastName';
+        leadObj1.Company = '3M';
+        leadObj1.Industry = 'Automotive';
+        leadObj1.Geography__c ='Unknown';
+        leadObj1.Employee_Range__c = 'Fewer than 100';
+        leadObj1.Segment__c ='Mid-Market';
+        leadObj1.OwnerId = [Select Id from user where username ='emmersiontestUser@sf.com'].Id;
+        
+        Lead leadObj2 = new Lead();
+        leadObj2.Status = 'Round Robin';
+        leadObj2.LastName = 'tstLastName';
+        leadObj2.Company = '3M';
+        leadObj2.country = 'argentina';
+        leadObj2.Industry = 'Automotive';
+        leadObj2.Geography__c ='Unknown';
+        leadObj2.Employee_Range__c = 'Fewer than 100';
+        leadObj2.Segment__c ='Mid-Market';
+        leadObj2.OwnerId = [Select Id from user where username ='emmersiontestUser@sf.com'].Id;
+        
+        Lead leadObj3 = new Lead();
+        leadObj3.Status = 'Round Robin';
+        leadObj3.country = 'algeria';
+        leadObj3.LastName = 'tstLastName';
+        leadObj3.Company = '3M';
+        leadObj3.Industry = 'Automotive';
+        leadObj3.Geography__c ='Unknown';
+        leadObj3.Employee_Range__c = 'Fewer than 100';
+        leadObj3.Segment__c ='Mid-Market';
+        leadObj3.OwnerId = [Select Id from user where username ='emmersiontestUser@sf.com'].Id;
+        
+        Lead leadObj4 = new Lead();
+        leadObj4.Status = 'Round Robin';
+        leadObj4.country = 'albania';
+        leadObj4.LastName = 'tstLastName';
+        leadObj4.Company = '3M';
+        leadObj4.Industry = 'Automotive';
+        leadObj4.Geography__c ='Unknown';
+        leadObj4.Employee_Range__c = 'Fewer than 100';
+        leadObj4.Segment__c ='Mid-Market';
+        leadObj4.OwnerId = [Select Id from user where username ='emmersiontestUser@sf.com'].Id;
+        
+        Lead leadObj5 = new Lead();
+        leadObj5.Status = 'Round Robin';
+        leadObj5.country = 'afghanistan';
+        leadObj5.LastName = 'tstLastName';
+        leadObj5.Company = '3M';
+        leadObj5.Industry = 'Automotive';
+        leadObj5.Geography__c ='Unknown';
+        leadObj5.Employee_Range__c = 'Fewer than 100';
+        leadObj5.Segment__c ='Mid-Market';
+        leadObj5.OwnerId = [Select Id from user where username ='emmersiontestUser@sf.com'].Id;
+        
+        Lead leadObj6 = new Lead();
+        leadObj6.Status = 'Round Robin';
+        leadObj6.country = 'micronesia';
+        leadObj6.LastName = 'tstLastName';
+        leadObj6.Company = '3M';
+        leadObj6.Industry = 'Automotive';
+        leadObj6.Geography__c ='Unknown';
+        leadObj6.Employee_Range__c = 'Fewer than 100';
+        leadObj6.Segment__c ='Mid-Market';
+        leadObj6.OwnerId = [Select Id from user where username ='emmersiontestUser@sf.com'].Id;
+        
+        Lead leadObj7 = new Lead();
+        leadObj7.Status = 'Round Robin';
+        leadObj7.country = 'cyprus';
+        leadObj7.LastName = 'tstLastName';
+        leadObj7.Company = '3M';
+        leadObj7.Industry = 'Automotive';
+        leadObj7.Geography__c ='Unknown';
+        leadObj7.Employee_Range__c = 'Fewer than 100';
+        leadObj7.Segment__c ='Mid-Market';
+        leadObj7.OwnerId = [Select Id from user where username ='emmersiontestUser@sf.com'].Id;
+        
+        Lead leadObj8 = new Lead();
+        leadObj8.Status = 'Round Robin';
+        leadObj8.country = '3M';
+        leadObj8.LastName = 'tstLastName';
+        leadObj8.Company = '3M';
+        leadObj8.Industry = 'Automotive';
+        leadObj8.Geography__c ='Unknown';
+        leadObj8.Employee_Range__c = 'Fewer than 100';
+        leadObj8.Segment__c ='Mid-Market';
+        leadObj8.OwnerId = [Select Id from user where username ='emmersiontestUser@sf.com'].Id;
+        
+        Lead leadObj9 = new Lead();
+        leadObj9.Status = 'Round Robin';
+        leadObj9.country = 'philippines';
+        leadObj9.LastName = 'tstLastName';
+        leadObj9.Company = '3M';
+        leadObj9.Industry = 'Automotive';
+        leadObj9.Geography__c ='Unknown';
+        leadObj9.Employee_Range__c = 'Fewer than 100';
+        leadObj9.Segment__c ='Mid-Market';
+        leadObj9.OwnerId = [Select Id from user where username ='emmersiontestUser@sf.com'].Id;
+        
+        Lead leadObj10 = new Lead();
+        leadObj10.Status = 'Round Robin';
+        leadObj10.country = '3M';
+        leadObj10.LastName = 'tstLastName';
+        leadObj10.Company = '3M';
+        leadObj10.Industry = 'Automotive';
+        leadObj10.Geography__c ='Unknown';
+        leadObj10.Employee_Range__c = 'Fewer than 100';
+        leadObj10.Segment__c ='Mid-Market';
+        leadObj10.Industry = 'Automotive';
+        leadObj10.OwnerId = [Select Id from user where username ='emmersiontestUser@sf.com'].Id;
+        List<lead> leadList = new List<lead>{leadObj1,leadObj2,leadObj3,leadObj4,leadObj5,leadObj6,leadObj7,leadObj8,leadObj9,leadObj10};
+        //leadList.add(leadObj1); 
+        insert leadList;
         Test.stopTest();
     }
     

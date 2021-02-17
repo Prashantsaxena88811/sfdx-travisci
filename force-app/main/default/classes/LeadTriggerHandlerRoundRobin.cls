@@ -386,7 +386,8 @@ globalCompanySet.add(compObj.Company__c.toLowerCase());
                            // CHECK FOR EDU TYPE LEAD
                            if(!isOwnerAssigned &&
                               ( (leadObj.Email !=null && String.isNotBlank(leadObj.Email) && leadObj.Email.containsIgnoreCase('.edu')) || 
-                               (leadObj.Company!=null && String.isNotBlank(leadObj.Company) && eduLeads.contains(leadObj.Company.toLowerCase())) ) )
+                               ( leadObj.Company!=null && String.isNotBlank(leadObj.Company) && 
+                                (  leadObj.Company.containsIgnoreCase('college') || leadObj.Company.containsIgnoreCase('university') || leadObj.Company.containsIgnoreCase('School') ) ) ) )
                            {  
                                newLeadOwnerId = assignOwnerToEDULeads();
                                if(String.isNotBlank(newLeadOwnerId)){
@@ -434,6 +435,9 @@ globalCompanySet.add(compObj.Company__c.toLowerCase());
                                    leadObj.OwnerId = newLeadOwnerId;
                                    isOwnerAssigned =  true;
                                }
+                           }
+                           if(isOwnerAssigned){
+                               leadObj.status ='Assigned (SDR)';
                            }
                         
                        }
