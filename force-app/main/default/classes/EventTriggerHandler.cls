@@ -1,6 +1,6 @@
 public class EventTriggerHandler {
     
-    public static void createSPIFRecord(List<Event> newEventList){
+    public static void createSPIFRecord(List<Event> newEventList , Map<Id,Event> oldEventMap){
         try{
             System.debug('*************EventTriggerHandler*************1');
            /* List<UserRole> userRolelistSDR = new List<UserRole>();
@@ -36,20 +36,20 @@ public class EventTriggerHandler {
             List<Event> filteredEventList = new List<Event>();
             Set<Id> leadIds = new set<Id>();
             Set<Id> contactIds = new set<Id>();
+            Date recordDate = Date.newInstance(2021, 1, 1);
             for( Event eventObj : newEventList){
-                if(eventObj.whoId !=null && eventObj.Meeting_Source__c != '' && eventObj.Meeting_Source__c != null && eventObj.Event_Type__c !=null &&  eventObj.Event_Type__c !=''
-                   && eventObj.Subject !=null && eventObj.Subject !=''){
-                       
-                       if(eventObj.whoId.getsobjecttype() == Lead.sObjectType){
-                           userIds.add(eventObj.OwnerId);
-                           leadIds.add(eventObj.whoId);
-                           filteredEventList.add(eventObj);
-                       }/*else if(eventObj.whoId.getsobjecttype() == Contact.sObjectType){
-                           userIds.add(eventObj.OwnerId);
-                           contactIds.add(eventObj.whoId);
-                           filteredEventList.add(eventObj);
-                       }*/
-                   }
+                if( eventObj.Is_SPIF_Created__c==false && eventObj.CreatedDate > recordDate){
+                    if(eventObj.whoId !=null && eventObj.Meeting_Source__c != '' && eventObj.Meeting_Source__c != null && eventObj.Event_Type__c !=null &&  eventObj.Event_Type__c !=''
+                       && eventObj.Subject !=null && eventObj.Subject !=''){
+                           
+                           if(eventObj.whoId.getsobjecttype() == Lead.sObjectType){
+                               userIds.add(eventObj.OwnerId);
+                               leadIds.add(eventObj.whoId);
+                               filteredEventList.add(eventObj);
+                           }
+                       }
+                }
+                
             }
             System.debug('filteredEventList-========>'+filteredEventList);
             System.debug('contactIds-->'+contactIds);
@@ -90,6 +90,7 @@ public class EventTriggerHandler {
             
             EventTriggerHandler eventTriggerHandlerObj = new EventTriggerHandler();
             System.debug('filteredEventList----<>'+filteredEventList);
+            Set<Id> eventIdsTobeUpdated = new Set<Id>();
             if( (contactIdToTop25InfoMap != null && !contactIdToTop25InfoMap.isEmpty()) || (leadIdToTop25Map != null && !leadIdToTop25Map.isEmpty()) ){
                 String roleName = '';
                 String leadTitle = '';
@@ -101,6 +102,7 @@ public class EventTriggerHandler {
                             && eventObj.OwnerId == leadIdToTop25Map.get(eventObj.whoId).Top_25_Account__c) || 
                            ( contactIdToTop25InfoMap.containsKey(eventObj.whoId) 
                             && eventObj.OwnerId == contactIdToTop25InfoMap.get(eventObj.whoId)) ) ){
+                                eventIdsTobeUpdated.add(eventObj.Id);
                                 description = eventObj.description == null ? '' : eventObj.description ;
                                 leadTitle = leadIdToTop25Map.get(eventObj.whoId).Title == null ? '' : leadIdToTop25Map.get(eventObj.whoId).Title ;
                                 if( roleToPointsMap!=null && !roleToPointsMap.isEmpty() && 
@@ -120,10 +122,20 @@ public class EventTriggerHandler {
                             }
                 }
                 
-                if( !spifList.isEmpty() ){
+                if( spifList!=null && !spifList.isEmpty() ){
                     insert spifList;
                     System.debug('spifList-->'+spifList);
-                }  
+                } 
+                if( eventIdsTobeUpdated!=null && !eventIdsTobeUpdated.isEmpty() ){
+                    List<Event> eventListTobeUpdated = new List<Event>();
+                    eventListTobeUpdated = [Select Id,Is_SPIF_Created__c from Event where Id IN :eventIdsTobeUpdated];
+                    for(Event eventVar : eventListTobeUpdated){
+                        eventVar.Is_SPIF_Created__c = true;
+                    }
+                    if(eventListTobeUpdated!=null && !eventListTobeUpdated.isEmpty()){
+                        update eventListTobeUpdated;
+                    }
+                }
             }
             
         }catch(Exception e){

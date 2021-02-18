@@ -6,9 +6,9 @@ trigger OpportunityTrigger on Opportunity (after insert,after update,before inse
     
     if(Trigger.IsAfter && (Trigger.IsInsert || Trigger.IsUpdate)){
         OpportunityTriggerHelper.createFollowUpcases();
-        if(Trigger.IsInsert){
+        //if(Trigger.IsInsert){
             OpportunityTriggerHandlerSPIF.creatSPIFRecord(Trigger.new);
-        }
+        //}
     }
     if(Trigger.IsBefore && (Trigger.IsInsert || Trigger.IsUpdate)){
         OpportunityTriggerHelper.validateOpportunityUpdation();

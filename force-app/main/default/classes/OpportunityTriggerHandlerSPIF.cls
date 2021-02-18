@@ -57,9 +57,10 @@ public class OpportunityTriggerHandlerSPIF {
             String roleName ='';
             String roleId = '';
             accountIds = new Set<Id>();
+            Date recordDate = Date.newInstance(2021, 1, 1);
             for(Opportunity oppObj : opportunitynewList ){
                 System.debug('obj**-->'+oppObj);
-                if(oppObj.AccountId!=null && userMap!=null && accountMap.containsKey(oppObj.AccountId) &&  
+                if(oppObj.createdDate >recordDate && oppObj.AccountId!=null && !accountIds.contains(oppObj.AccountId) && userMap!=null && accountMap.containsKey(oppObj.AccountId) &&  
                    accountMap.get(oppObj.AccountId).Top_25_Account__c!=null && userMap.containsKey(accountMap.get(oppObj.AccountId).Top_25_Account__c) &&
                    userMap.get( accountMap.get(oppObj.AccountId).Top_25_Account__c).UserRoleId!=null
                    &&  userRoleMap.containsKey( userMap.get( accountMap.get(oppObj.AccountId).Top_25_Account__c).UserRoleId ) ){
@@ -77,7 +78,7 @@ public class OpportunityTriggerHandlerSPIF {
                            points = roleToPointsMap.get(roleName).Points__c==null ? 0 :Integer.valueOf(roleToPointsMap.get(roleName).Points__c);
                            System.debug('-1-> '+String.valueOf(accountMap.get(oppObj.AccountId).Top_25_Account__c));
                            System.debug('-2-> '+oppObj.Id);
-                          accountIds.add(oppObj.AccountId);
+                          
                           spifObj = eventTriggerHandlerObj.returnSPIFRecord( accountMap.get(oppObj.AccountId).Top_25_Account__c ,points ,
                                                                              oppObj.Name +' | '+userMap.get(accountMap.get(oppObj.AccountId).Top_25_Account__c).Name,
                                                                              description ,'' ,
@@ -95,6 +96,7 @@ public class OpportunityTriggerHandlerSPIF {
                            if( accountMap.get(oppObj.AccountId).Top_25_Account__c != oppObj.CreatedById){
                                //spifObj.Top_25__c = false;
                            }
+                           accountIds.add(oppObj.AccountId);
                            spifList.add(spifObj);   
                        }
                        
