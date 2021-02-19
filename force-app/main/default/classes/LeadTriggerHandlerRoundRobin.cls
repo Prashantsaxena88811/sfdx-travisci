@@ -99,6 +99,7 @@ globalCompanySet.add(compObj.Company__c.toLowerCase());
                     AE_catchAllUsersList.add(userObj_AE);
                 }
                 else{
+                    System.debug('userObj_AE-->'+userObj_AE);
                     if(userObj_AE.Industry__c !=null && userObj_AE.Industry__c !=''){
                         mapkey = userObj_AE.Industry__c.toLowerCase() ;
                         if(!AE_Industry_Map.containsKey(mapKey.toLowerCase()) ){
@@ -391,12 +392,12 @@ CounterMap_leadOwner.put( mapKey.toLowerCase() , 0 );
                     if(leadObj.Company!=null && leadObj.Company!=''){
                         // && globalCompanySet.contains(leadObj.Company.toLowerCase()
                         System.debug('---global--lead--obj--'+leadObj);
-                        if( leadObj.Company.toLowerCase() == 'bp' || leadObj.Company.toLowerCase() == 'abb' ){
-                            isGlobalLead =  true;
+                        if( leadObj.Company.toLowerCase() == 'bp' || leadObj.Company.toLowerCase() == 'abb' || leadObj.Company.toLowerCase() == 'Intel' ){
+                            isGlobalLead =  true; 
                         }
                         if(!isGlobalLead){
                             for(Global_List__c globalLead : globalList ){
-                                if( !(globalLead.company__c.toLowerCase() == 'bp' || globalLead.company__c.toLowerCase() == 'abb') 
+                                if( !(globalLead.company__c.toLowerCase() == 'bp' || globalLead.company__c.toLowerCase() == 'abb' || globalLead.company__c.toLowerCase() == 'Intel') 
                                    && leadObj.Company.containsIgnoreCase(globalLead.company__c) ){
                                        isGlobalLead =  true;
                                        if(isGlobalLead){

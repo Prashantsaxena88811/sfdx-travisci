@@ -322,5 +322,62 @@ public class LeadTriggerHandlerTest {
         insert leadList;
         Test.stopTest();
     }
+    @isTest
+    public static void roundRobin(){
+        
+        Test.startTest();
+        
+        Lead_Round_Robin__c checkGeography = new Lead_Round_Robin__c();
+        checkGeography.AE_Owner_Round_Robin_Geography__c = false;
+        checkGeography.Lead_Owner_Round_Robin_Geography__c = false;
+        insert checkGeography;
+        
+        List<Lead_AE_Owner_Round_Robin__c> leadAEOwnerRoundRobinList ;
+        Lead_AE_Owner_Round_Robin__c leadAEOwnerRoundRobinObj1 = new Lead_AE_Owner_Round_Robin__c();
+        leadAEOwnerRoundRobinObj1.Name = 'Rec1';
+        leadAEOwnerRoundRobinObj1.UserName__c = 'AEOwnerroundrobin@testuser.com';
+        leadAEOwnerRoundRobinObj1.Segment__c = 'Enterprise';
+
+		Lead_AE_Owner_Round_Robin__c leadAEOwnerRoundRobinObj2 = new Lead_AE_Owner_Round_Robin__c();
+        leadAEOwnerRoundRobinObj2.Name = 'Rec2';
+        leadAEOwnerRoundRobinObj2.Geography__c = 'APAC';
+        leadAEOwnerRoundRobinObj2.UserName__c = 'AEOwnerroundrobin@testuser.com';
+        leadAEOwnerRoundRobinObj2.Segment__c = 'Enterprise';
+        leadAEOwnerRoundRobinObj2.Industry__C= 'Automotive';
+        
+        Lead_AE_Owner_Round_Robin__c leadAEOwnerRoundRobinObj4 = new Lead_AE_Owner_Round_Robin__c();
+        leadAEOwnerRoundRobinObj4.Name = 'Rec4';
+        leadAEOwnerRoundRobinObj4.Geography__c = 'APAC';
+        leadAEOwnerRoundRobinObj4.UserName__c = 'AEOwnerroundrobin@testuser.com';
+        
+        Lead_AE_Owner_Round_Robin__c leadAEOwnerRoundRobinObj5 = new Lead_AE_Owner_Round_Robin__c();
+        leadAEOwnerRoundRobinObj5.Name = 'Rec5';
+        leadAEOwnerRoundRobinObj5.Catch_All__c = TRUE;
+        leadAEOwnerRoundRobinObj5.UserName__c = 'AEOwnerroundrobin@testuser.com';
+        
+        
+       
+        leadAEOwnerRoundRobinList = new List<Lead_AE_Owner_Round_Robin__c>{leadAEOwnerRoundRobinObj1,leadAEOwnerRoundRobinObj2,leadAEOwnerRoundRobinObj4,leadAEOwnerRoundRobinObj5};
+            insert leadAEOwnerRoundRobinList;
+        
+        Lead leadObj1 = new Lead();
+        leadObj1.Status = 'Round Robin';
+        leadObj1.LastName = 'tstLastName';
+        leadObj1.Company = 'tstCompany';
+        leadObj1.Industry = 'Automotive';
+        leadObj1.Geography__c ='APAC';
+        leadObj1.Employee_Range__c = 'Fewer than 100';
+        leadObj1.Segment__c ='Mid-Market';
+        leadObj1.OwnerId = [Select Id from user where username ='emmersiontestUser@sf.com'].Id;
+        insert leadObj1;
+        System.debug('leadObj1-->'+leadObj1);
+        System.debug('leadObj1-->'+leadObj1.User__c);
+        System.debug('leadObj1-->'+leadObj1.OwnerId);
+        
+        
+        
+        
+        Test.stopTest();
+    }
     
 }
