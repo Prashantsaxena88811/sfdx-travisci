@@ -6,32 +6,32 @@ public class LeadTriggerHandlerRoundRobin {
             'paraguay','peru','suriname','uruguay','venezuela','belize','costarica','elsalvador','guatemala','honduras','mexico','nicaragua','panama',
             'bahamas','barbados','caymanislands','cuba','dominicanrepublic','haiti','puertorico','portugal','spain','trinadadandtobago'}; 
                 
-      public static Set<String> AFRICA_cites = new Set<String>{'algeria','angola','benin','botswana','burundi','cabo verde','cameroon','congo',
-'cote d\'ivoire','dr congo','chad','ethiopia','gabon','gambia','ghana','guinea','kenya','liberia','madagascar','malawi','mali','morocco',
-'mozambique','namibia','niger','nigeria','rwanda','senegal','sierra leone','somalia','south africa','south sudan','sudan','tanzania','togo',
-'tunisia','uganda','zambia','zimbabwe'};
-
-    public static Set<String> EUROPE_cites = new Set<String>{'albania','andorra','austria','belgium','bosnia and herzegovina','bulgaria','croatia',
-    'czech republic','denmark','estonia','finland','france','germany','greece','holy see','hungary','iceland','ireland','italy','latvia',
-    'liechtenstien','lithuania','luxembourg','malta','moldova','monaco','montenegro','netherlands','north macedonia','norway','poland',
-    'romania','russia','san marino','serbia','slovakia','slovenia','sweden','switzerland','ukraine','england','scotland','wales'};
-    
-    public static Set<String> ASIA_APAC_cites = new Set<String>{'afghanistan','armenia','azerbaijan','bangladesh','bhutan','brunei','combodia',
-    'china','georgia','india','indonesia','kazakhstan','kyrgyzstan','laos','lebanon','malaysia','maldives','mongolia','myanmar','nepal',
-    'north korea','pakistan','singapore','sri lanka','tajikistan','thailand','timor-leste','turkmenistan','uzbekistan','vietnam',
-    'equatorial guinea'};
-    
-    public static Set<String> PACIFIC_APAC_cites = new Set<String>{'american samoa','micronesia','fiji','cook islands','french polynesia',
-    'guam','kiribati','nauru','new caledonia','papua new guinea','samoa','solomon islands','tokelau islands','tonga','tuvalu','vanuatu',
-    'wallis & futuna islands'};
-    
-    public static Set<String>  Middle_East_cites = new Set<String>{'cyprus','turkey','syria','lebanon','israel','jordan','iraq','iran',
-    'saudi arabia','yemen','oman','united arab emirates','qatar','bahrain','kuwait','egypt','libya'};
-    
-    public static Set<String> PJKANZ_cites = new Set<String>{'philippines','japan','south korea','australia','new zealand'};   
-
-
-    public  static Map<String,Integer> globalLeadCounterMap_Vals = new Map<String,Integer>();
+                public static Set<String> AFRICA_cites = new Set<String>{'algeria','angola','benin','botswana','burundi','cabo verde','cameroon','congo',
+                    'cote d\'ivoire','dr congo','chad','ethiopia','gabon','gambia','ghana','guinea','kenya','liberia','madagascar','malawi','mali','morocco',
+                    'mozambique','namibia','niger','nigeria','rwanda','senegal','sierra leone','somalia','south africa','south sudan','sudan','tanzania','togo',
+                    'tunisia','uganda','zambia','zimbabwe'};
+                        
+                        public static Set<String> EUROPE_cites = new Set<String>{'albania','andorra','austria','belgium','bosnia and herzegovina','bulgaria','croatia',
+                            'czech republic','denmark','estonia','finland','france','germany','greece','holy see','hungary','iceland','ireland','italy','latvia',
+                            'liechtenstien','lithuania','luxembourg','malta','moldova','monaco','montenegro','netherlands','north macedonia','norway','poland',
+                            'romania','russia','san marino','serbia','slovakia','slovenia','sweden','switzerland','ukraine','england','scotland','wales'};
+                                
+                                public static Set<String> ASIA_APAC_cites = new Set<String>{'afghanistan','armenia','azerbaijan','bangladesh','bhutan','brunei','combodia',
+                                    'china','georgia','india','indonesia','kazakhstan','kyrgyzstan','laos','lebanon','malaysia','maldives','mongolia','myanmar','nepal',
+                                    'north korea','pakistan','singapore','sri lanka','tajikistan','thailand','timor-leste','turkmenistan','uzbekistan','vietnam',
+                                    'equatorial guinea'};
+                                        
+                                        public static Set<String> PACIFIC_APAC_cites = new Set<String>{'american samoa','micronesia','fiji','cook islands','french polynesia',
+                                            'guam','kiribati','nauru','new caledonia','papua new guinea','samoa','solomon islands','tokelau islands','tonga','tuvalu','vanuatu',
+                                            'wallis & futuna islands'};
+                                                
+                                                public static Set<String>  Middle_East_cites = new Set<String>{'cyprus','turkey','syria','lebanon','israel','jordan','iraq','iran',
+                                                    'saudi arabia','yemen','oman','united arab emirates','qatar','bahrain','kuwait','egypt','libya'};
+                                                        
+                                                        public static Set<String> PJKANZ_cites = new Set<String>{'philippines','japan','south korea','australia','new zealand'};   
+                                                            
+                                                            
+                                                            public  static Map<String,Integer> globalLeadCounterMap_Vals = new Map<String,Integer>();
     public  static Map<String,List<Global_Lead_Round_Robin__c>> geoToGlobalMap_Vals =  new Map<String,List<Global_Lead_Round_Robin__c>>();
     
     public  static Map<String , List<Lead_Owner_Round_Robin__c> > industryToListOfUsersMap_leadOwner_Vals = new Map<String , List<Lead_Owner_Round_Robin__c> >();
@@ -44,14 +44,21 @@ public class LeadTriggerHandlerRoundRobin {
     public  static Map<String,Integer> CounterMap_leadOwner_Vals = new Map<String,Integer>();
     
     public  static Map<String , List<Lead_Owner_Round_Robin__c> > GeoToListOfUsersMap_leadOwner_Vals = new Map<String , List<Lead_Owner_Round_Robin__c> >();
-    public  static Map<String,Integer> CounterMap_Geo_leadOwner_Vals = new Map<String,Integer>();
-    
-    
+    public  static Map<String,Integer> CounterMap_Geo_leadOwner_Vals = new Map<String,Integer>();    
     
     public  static List<Lead_Owner_Round_Robin__c> catchAllUsersList_Vals = new List<Lead_Owner_Round_Robin__c>();
     public  static Integer CountCatchAll = 0;
     
     public  static Map<String,String> userNameToId_Vals = new Map<String,String>();
+    
+    // AE Users Map
+    public  static Map<String,Integer> AE_Industry_LeadCounterMap_Vals = new Map<String,Integer>();
+    public  static Map<String,List<Lead_AE_Owner_Round_Robin__c>> AE_Industry_Map_Vals =  new Map<String,List<Lead_AE_Owner_Round_Robin__c>>();            
+    
+    
+    // AE CatchALL Map
+    public  static List<Lead_AE_Owner_Round_Robin__c> AE_catchAllUsersList_Vals = new List<Lead_AE_Owner_Round_Robin__c>();
+    public  static Integer AE_CountCatchAll = 0;
     
     public static Map<String,Sobject> customSettingRecordToBeUpdated = New Map<String,Sobject>();
     
@@ -68,59 +75,86 @@ globalCompanySet.add(compObj.Company__c.toLowerCase());
 }*/
             /*Get global Account list End*/
             
-            Lead_Round_Robin__c checkGeography = Lead_Round_Robin__c.getOrgDefaults();
-            System.debug('checkGeography-'+checkGeography);
             
-            /*AE round robin start*/
-            List<Lead_AE_Owner_Round_Robin__c> lead_AE_OwnerList = new List<Lead_AE_Owner_Round_Robin__c>();
-            lead_AE_OwnerList = [Select Geography__c,UserName__c,Lead_Assigned_DateTime__c,Segment__c from Lead_AE_Owner_Round_Robin__c order by Lead_Assigned_DateTime__c asc];
-            System.debug('lead_AE_OwnerList-->'+lead_AE_OwnerList);
-            
-            //List<AE_OwnerCustomsorting>  AE_OwnerCustomsortingList = new List<AE_OwnerCustomsorting>();
-            Set<String> usernames = New Set<String>();
-            for( Lead_AE_Owner_Round_Robin__c userObj1 : lead_AE_OwnerList){
-                //AE_OwnerCustomsortingList.add(new AE_OwnerCustomsorting( userObj1 ));
-                usernames.add(userObj1.UserName__c.trim());
-            }
-            //System.debug('AE_OwnerCustomsortingList-->'+AE_OwnerCustomsortingList);
-            // AE_OwnerCustomsortingList.sort();
-            //System.debug('AFTER Sorting AE_OwnerCustomsortingList-->'+AE_OwnerCustomsortingList);
-            
-            // create map of String[segment-Geography] , List<Sorted-Lead_AE_ROUND_ROBIN>
-            Map<String , List<Lead_AE_Owner_Round_Robin__c> > SegmentGeoToListOfUsersMapAE = new Map<String , List<Lead_AE_Owner_Round_Robin__c> >();
-            // create map for Counter
-            Map<String,Integer> CounterMap = new Map<String,Integer>();//for AE owner
             String mapKey;
-            if( checkGeography.AE_Owner_Round_Robin_Segment__c  ||  checkGeography.AE_Owner_Round_Robin_Geography__c){
-                for( Lead_AE_Owner_Round_Robin__c AE_Obj : lead_AE_OwnerList){
-                    mapKey = '';
-                    if(checkGeography.AE_Owner_Round_Robin_Segment__c){
-                        if( AE_Obj.Segment__c != null && AE_Obj.Segment__c != '' ){
-                            mapKey = AE_Obj.Segment__c;
-                        } 
-                    }
-                    
-                    if(checkGeography.AE_Owner_Round_Robin_Geography__c){
-                        if( AE_Obj.Geography__c != null && AE_Obj.Geography__c != '' ){
-                            mapKey = mapKey + AE_Obj.Geography__c;
-                        }  
-                    }
-                    
-                    mapKey.toLowerCase();
-                    System.debug('**AE_Obj.userRec==>'+AE_Obj);
-                    if(!SegmentGeoToListOfUsersMapAE.containsKey(mapKey.toLowerCase()) ){
-                        SegmentGeoToListOfUsersMapAE.put(mapKey.toLowerCase() , new List<Lead_AE_Owner_Round_Robin__c>());
-                    }
-                    if( !CounterMap.containsKey( mapKey.toLowerCase() ) ){
-                        CounterMap.put( mapKey.toLowerCase() , 0 );
-                    }
-                    SegmentGeoToListOfUsersMapAE.get( mapKey.toLowerCase() ).add(AE_Obj);
-                    //usernames.add(AE_Obj.userRec.UserName__c.trim());
-                } 
-            }
+            /*AE round robin start*/
             
-            System.debug('CounterMap-->'+CounterMap);
-            System.debug(oldLeadMap+'--SegmentGeoToListOfUsersMapAE-->'+SegmentGeoToListOfUsersMapAE);
+            // AE Users Map
+            Map<String,Integer> AE_Industry_LeadCounterMap = new Map<String,Integer>();
+            Map<String,List<Lead_AE_Owner_Round_Robin__c>> AE_Industry_Map =  new Map<String,List<Lead_AE_Owner_Round_Robin__c>>();            
+                      
+            
+            // AE CatchALL Map
+            List<Lead_AE_Owner_Round_Robin__c> AE_catchAllUsersList = new List<Lead_AE_Owner_Round_Robin__c>();
+            //Integer AE_CountCatchAll = 0;
+            
+            List<Lead_AE_Owner_Round_Robin__c> lead_AE_OwnerList = new List<Lead_AE_Owner_Round_Robin__c>();
+            lead_AE_OwnerList = [Select Id,Catch_All__c,Geography__c,UserName__c,Lead_Assigned_DateTime__c,Segment__c,Industry__c from Lead_AE_Owner_Round_Robin__c where UserName__c!=null order by Lead_Assigned_DateTime__c asc];
+            System.debug('lead_AE_OwnerList-->'+lead_AE_OwnerList);
+            Set<String> usernames = New Set<String>();
+            for( Lead_AE_Owner_Round_Robin__c userObj_AE : lead_AE_OwnerList){
+                mapkey = '';
+                usernames.add(userObj_AE.UserName__c.trim());
+                if(userObj_AE.Catch_All__c){
+                    AE_catchAllUsersList.add(userObj_AE);
+                }
+                else{
+                    if(userObj_AE.Industry__c !=null && userObj_AE.Industry__c !=''){
+                        mapkey = userObj_AE.Industry__c.toLowerCase() ;
+                        if(!AE_Industry_Map.containsKey(mapKey.toLowerCase()) ){
+                            AE_Industry_Map.put(mapkey.toLowerCase() , new List<Lead_AE_Owner_Round_Robin__c>());
+                            AE_Industry_LeadCounterMap.put( mapkey.toLowerCase() , 0 );
+                        }
+                        
+                        AE_Industry_Map.get( mapkey.toLowerCase() ).add(userObj_AE);
+                    }
+                    if(userObj_AE.Geography__c !=null && userObj_AE.Geography__c !='' && userObj_AE.Segment__c !=null && userObj_AE.Segment__c !=''){
+                        mapkey = (userObj_AE.Geography__c+userObj_AE.Segment__c).toLowerCase() ;
+                        if(!AE_Industry_Map.containsKey(mapKey.toLowerCase()) ){
+                            AE_Industry_Map.put(mapkey.toLowerCase() , new List<Lead_AE_Owner_Round_Robin__c>());
+                            AE_Industry_LeadCounterMap.put( mapkey.toLowerCase() , 0 );
+                        }
+                        
+                        AE_Industry_Map.get( mapkey.toLowerCase() ).add(userObj_AE);
+                    }
+                    if( (userObj_AE.Industry__c ==null || userObj_AE.Industry__c =='') && (userObj_AE.Geography__c ==null || userObj_AE.Geography__c =='')){
+                        if(userObj_AE.Segment__c !=null && userObj_AE.Segment__c !=''){
+                            mapkey = (userObj_AE.Segment__c).toLowerCase() ;
+                            if(!AE_Industry_Map.containsKey(mapKey.toLowerCase()) ){
+                                AE_Industry_Map.put(mapkey.toLowerCase() , new List<Lead_AE_Owner_Round_Robin__c>());
+                                AE_Industry_LeadCounterMap.put( mapkey.toLowerCase() , 0 );
+                            }
+                            
+                            AE_Industry_Map.get( mapkey.toLowerCase() ).add(userObj_AE);
+                        }
+                    }
+                    if( (userObj_AE.Industry__c ==null || userObj_AE.Industry__c =='') && (userObj_AE.Segment__c ==null || userObj_AE.Segment__c =='')){
+                        if(userObj_AE.Geography__c !=null && userObj_AE.Geography__c !=''){
+                            if(!AE_Industry_Map.containsKey(mapKey.toLowerCase()) ){
+                                AE_Industry_Map.put(mapkey.toLowerCase() , new List<Lead_AE_Owner_Round_Robin__c>());
+                                AE_Industry_LeadCounterMap.put( mapkey.toLowerCase() , 0 );
+                            }
+                            
+                            AE_Industry_Map.get( mapkey.toLowerCase() ).add(userObj_AE);
+                        }
+                    }  
+                }
+                
+            }
+           
+            AE_Industry_LeadCounterMap_Vals = new Map<String,Integer>(AE_Industry_LeadCounterMap);
+            AE_Industry_Map_Vals  = new Map<String,List<Lead_AE_Owner_Round_Robin__c>>(AE_Industry_Map);
+            AE_catchAllUsersList_Vals = new List<Lead_AE_Owner_Round_Robin__c>(AE_catchAllUsersList);
+            System.debug(AE_Industry_LeadCounterMap+'before AE_Industry_Map_Vals-->'+AE_Industry_Map_Vals);
+            System.debug(AE_Industry_Map+'before AE_Industry_LeadCounterMap_Vals-->'+AE_Industry_LeadCounterMap_Vals);
+            AE_Industry_LeadCounterMap.clear();
+            AE_Industry_Map.clear();
+            AE_catchAllUsersList.clear();
+            System.debug(AE_Industry_LeadCounterMap+'AFTER AE_Industry_Map_Vals-->'+AE_Industry_Map_Vals);
+            System.debug(AE_Industry_Map+'AFTER AE_Industry_LeadCounterMap_Vals-->'+AE_Industry_LeadCounterMap_Vals);
+            
+            
+            
             /*AE round robin end*/
             
             /*Lead Owner round robin start*/
@@ -187,8 +221,8 @@ globalCompanySet.add(compObj.Company__c.toLowerCase());
                     industryToListOfUsersMap_leadOwner.get( mapKey.toLowerCase() ).add(AE_Obj); 
                 }
                 /*if( !CounterMap_IndustryleadOwner.containsKey(mapKey.toLowerCase() ) ){
-                    CounterMap_IndustryleadOwner.put( mapKey.toLowerCase() , 0 );
-                }*/
+CounterMap_IndustryleadOwner.put( mapKey.toLowerCase() , 0 );
+}*/
                 /*Industry map End*/
                 /*segemnt + geography [geography] Start*/
                 mapKey = '';
@@ -200,33 +234,33 @@ globalCompanySet.add(compObj.Company__c.toLowerCase());
                     mapKey = mapKey+AE_Obj.Geography__c;
                     if(!GeoToListOfUsersMap_leadOwner.containsKey(AE_Obj.Geography__c.toLowerCase())  ){
                         System.debug('*******22****');
-                           if(AE_Obj.Segment__c==null || AE_Obj.Segment__c==''){
-                               System.debug('*******33****');
-                               if(AE_Obj.Industry__c==null || AE_Obj.Industry__c==''){
-                                   System.debug('*******44****');
-                                   GeoToListOfUsersMap_leadOwner.put(AE_Obj.Geography__c.toLowerCase() , new List<Lead_Owner_Round_Robin__c>());
-                                   CounterMap_Geo_leadOwner.put( AE_Obj.Geography__c.toLowerCase() , 0 );
-                               } 
-                           }
-                           
-                       }
+                        if(AE_Obj.Segment__c==null || AE_Obj.Segment__c==''){
+                            System.debug('*******33****');
+                            if(AE_Obj.Industry__c==null || AE_Obj.Industry__c==''){
+                                System.debug('*******44****');
+                                GeoToListOfUsersMap_leadOwner.put(AE_Obj.Geography__c.toLowerCase() , new List<Lead_Owner_Round_Robin__c>());
+                                CounterMap_Geo_leadOwner.put( AE_Obj.Geography__c.toLowerCase() , 0 );
+                            } 
+                        }
+                        
+                    }
                     if(GeoToListOfUsersMap_leadOwner.containsKey(AE_Obj.Geography__c.toLowerCase())){
                         GeoToListOfUsersMap_leadOwner.get( AE_Obj.Geography__c.toLowerCase() ).add(AE_Obj);
                     }
                 }
-               
+                
                 //mapKey = AE_Obj.Segment__c+ AE_Obj.Geography__c+AE_Obj.Industry__c;
                 //System.debug('**Lead_user_Obj.userRec==>'+AE_Obj.userRec);
                 if(!SegmentGeoToListOfUsersMap_leadOwner.containsKey(mapKey.toLowerCase()) && mapKey!=''){
                     SegmentGeoToListOfUsersMap_leadOwner.put(mapKey.toLowerCase() , new List<Lead_Owner_Round_Robin__c>());
-                     CounterMap_leadOwner.put( mapKey.toLowerCase() , 0 );
+                    CounterMap_leadOwner.put( mapKey.toLowerCase() , 0 );
                 }
                 if(SegmentGeoToListOfUsersMap_leadOwner.containsKey(mapKey.toLowerCase())){
                     SegmentGeoToListOfUsersMap_leadOwner.get( mapKey.toLowerCase() ).add(AE_Obj); 
                 }
                 /*if( !CounterMap_leadOwner.containsKey(mapKey.toLowerCase() ) ){
-                    CounterMap_leadOwner.put( mapKey.toLowerCase() , 0 );
-                }*/
+CounterMap_leadOwner.put( mapKey.toLowerCase() , 0 );
+}*/
                 /*segemnt + geography [geography] Start*/
             }  
             
@@ -249,22 +283,34 @@ globalCompanySet.add(compObj.Company__c.toLowerCase());
             //get the users and create a Map
             List<User> userListAE = new List<User>();
             if(usernames != null && (!usernames.isEmpty()) ){
+                System.debug('usernames--->'+usernames);
                 userListAE = [Select Id , username from User where username IN :usernames];
             }
             
             /*add values to the class level Start*/
             System.debug('CounterMap_leadOwner-->'+CounterMap_leadOwner);
             System.debug('SegmentGeoToListOfUsersMap_leadOwner-->'+SegmentGeoToListOfUsersMap_leadOwner);
-            globalLeadCounterMap_Vals = globalLeadCounterMap;
-            geoToGlobalMap_Vals = geoToGlobalMap;
-            EDU_UsersList_Vals = EDU_UsersList;
-            SegmentGeoToListOfUsersMap_leadOwner_Vals = SegmentGeoToListOfUsersMap_leadOwner;
-            CounterMap_leadOwner_Vals = CounterMap_leadOwner;
-            catchAllUsersList_Vals = catchAllUsersList;
-            industryToListOfUsersMap_leadOwner_Vals =industryToListOfUsersMap_leadOwner;
-            CounterMap_IndustryleadOwner_Vals =CounterMap_IndustryleadOwner;
-            GeoToListOfUsersMap_leadOwner_Vals = GeoToListOfUsersMap_leadOwner;
-            CounterMap_Geo_leadOwner_Vals =CounterMap_Geo_leadOwner;
+            globalLeadCounterMap_Vals = new Map<String,Integer>(globalLeadCounterMap);
+            geoToGlobalMap_Vals = new Map<String,List<Global_Lead_Round_Robin__c>>(geoToGlobalMap);
+            EDU_UsersList_Vals = new List<EDU_Round_Robin__c>(EDU_UsersList);
+            SegmentGeoToListOfUsersMap_leadOwner_Vals = new Map<String , List<Lead_Owner_Round_Robin__c> >(SegmentGeoToListOfUsersMap_leadOwner);
+            CounterMap_leadOwner_Vals = new Map<String,Integer>(CounterMap_leadOwner);
+            catchAllUsersList_Vals = new List<Lead_Owner_Round_Robin__c>(catchAllUsersList);
+            industryToListOfUsersMap_leadOwner_Vals =new Map<String , List<Lead_Owner_Round_Robin__c> >(industryToListOfUsersMap_leadOwner);
+            CounterMap_IndustryleadOwner_Vals =new Map<String,Integer>(CounterMap_IndustryleadOwner);
+            GeoToListOfUsersMap_leadOwner_Vals = new Map<String , List<Lead_Owner_Round_Robin__c> >(GeoToListOfUsersMap_leadOwner);
+            CounterMap_Geo_leadOwner_Vals =new Map<String,Integer>(CounterMap_Geo_leadOwner);
+            globalLeadCounterMap.clear();
+            geoToGlobalMap.clear();
+            EDU_UsersList.clear();
+            SegmentGeoToListOfUsersMap_leadOwner.clear();
+            CounterMap_leadOwner.clear();
+            catchAllUsersList.clear();
+            industryToListOfUsersMap_leadOwner.clear();
+            CounterMap_IndustryleadOwner.clear();
+            GeoToListOfUsersMap_leadOwner.clear();
+            CounterMap_Geo_leadOwner.clear();
+            
             System.debug('CounterMap_IndustryleadOwner_Vals-->'+CounterMap_IndustryleadOwner_Vals);
             System.debug('industryToListOfUsersMap_leadOwner_Vals-->'+industryToListOfUsersMap_leadOwner_Vals);
             System.debug('SegmentGeoToListOfUsersMap_leadOwner_Vals-->'+SegmentGeoToListOfUsersMap_leadOwner_Vals);
@@ -286,241 +332,235 @@ globalCompanySet.add(compObj.Company__c.toLowerCase());
             }
             User userObj = [Select Id from user where Username =:username];// store username in custom label
             
-            Integer countAE = 0 ;  // for AE OWNER round robin
-            
-            
             //List<Lead> globalLeadList = new List<Lead>();
             // Iteration On leads
             Boolean isGlobalLead =  false;
             Boolean isOwnerAssigned =  false;
             String newLeadOwnerId ='';
+            Boolean isAEOwnerAssigned =  false;
+            String newAELeadOwnerId ='';
             Set<String> eduLeads = new Set<String>{'school','university','college'};
-            for(Lead leadObj : newLeadList){
-                
-                /*Assign Geohraphy START*/
-                if( oldLeadMap== null || (oldLeadMap!=null && leadObj.Country != oldLeadMap.get(leadObj.Id).Country) ){
-                    System.debug(oldLeadMap+'**SET the geography**'+leadObj.Country);
-                    if( leadObj.Country =='' || leadObj.Country ==null ){
-                        leadObj.Geography__c = 'Unknown'; 
-                    }
-                    else if(US_CANADA_cites.contains(leadObj.Country.toLowerCase())){
-                        leadObj.Geography__c = 'US/Canada'; 
-                    }
-                    else if(LATAM_cites.contains(leadObj.Country.toLowerCase())){
-                        System.debug('GEOGRAPHY changed to LATAM-->');
-                        leadObj.Geography__c = 'LATAM'; 
-                    }
-                    else if(AFRICA_cites.contains(leadObj.Country.toLowerCase())){
-                        leadObj.Geography__c = 'Africa'; 
-                    }
-                    else if(EUROPE_cites.contains(leadObj.Country.toLowerCase())){
-                        leadObj.Geography__c = 'Europe'; 
-                    }
-                    else if(ASIA_APAC_cites.contains(leadObj.Country.toLowerCase())){
-                        leadObj.Geography__c = 'APAC'; 
-                    }
-                    else if(PACIFIC_APAC_cites.contains(leadObj.Country.toLowerCase())){
-                        leadObj.Geography__c = 'APAC'; 
-                    }
-                    else if(Middle_East_cites.contains(leadObj.Country.toLowerCase())){
-                        leadObj.Geography__c = 'Middle East'; 
-                    }
-                    else if(PJKANZ_cites.contains(leadObj.Country.toLowerCase())){
-                        leadObj.Geography__c = 'PJKANZ'; 
-                    }
-                    else{
-                        leadObj.Geography__c = 'Unknown'; 
-                    }
+                for(Lead leadObj : newLeadList){
                     
-                }
-                System.debug('leadObj--info>+'+leadObj);
-                /*Assign Geohraphy END*/
-                isGlobalLead =  false;
-                isOwnerAssigned =  false;
-                newLeadOwnerId ='';
-                System.debug(leadObj.ownerId+'--leadObj.ownerId-->'+userObj.Id);
-                mapKey = '';
-                /* Lead Owner Round Robin Starts */
-                if(leadObj.Company!=null && leadObj.Company!=''){
-                    // && globalCompanySet.contains(leadObj.Company.toLowerCase()
-                    System.debug('---global--lead--obj--'+leadObj);
-                    if( leadObj.Company.toLowerCase() == 'bp' || leadObj.Company.toLowerCase() == 'abb' ){
-                        isGlobalLead =  true;
+                    /*Assign Geohraphy START*/
+                    if( oldLeadMap== null || (oldLeadMap!=null && leadObj.Country != oldLeadMap.get(leadObj.Id).Country) ){
+                        System.debug(oldLeadMap+'**SET the geography**'+leadObj.Country);
+                        if( leadObj.Country =='' || leadObj.Country ==null ){
+                            leadObj.Geography__c = 'Unknown'; 
+                        }
+                        else if(US_CANADA_cites.contains(leadObj.Country.toLowerCase())){
+                            leadObj.Geography__c = 'US/Canada'; 
+                        }
+                        else if(LATAM_cites.contains(leadObj.Country.toLowerCase())){
+                            System.debug('GEOGRAPHY changed to LATAM-->');
+                            leadObj.Geography__c = 'LATAM'; 
+                        }
+                        else if(AFRICA_cites.contains(leadObj.Country.toLowerCase())){
+                            leadObj.Geography__c = 'Africa'; 
+                        }
+                        else if(EUROPE_cites.contains(leadObj.Country.toLowerCase())){
+                            leadObj.Geography__c = 'Europe'; 
+                        }
+                        else if(ASIA_APAC_cites.contains(leadObj.Country.toLowerCase())){
+                            leadObj.Geography__c = 'APAC'; 
+                        }
+                        else if(PACIFIC_APAC_cites.contains(leadObj.Country.toLowerCase())){
+                            leadObj.Geography__c = 'APAC'; 
+                        }
+                        else if(Middle_East_cites.contains(leadObj.Country.toLowerCase())){
+                            leadObj.Geography__c = 'Middle East'; 
+                        }
+                        else if(PJKANZ_cites.contains(leadObj.Country.toLowerCase())){
+                            leadObj.Geography__c = 'PJKANZ'; 
+                        }
+                        else{
+                            leadObj.Geography__c = 'Unknown'; 
+                        }
+                        
                     }
-                    if(!isGlobalLead){
-                        for(Global_List__c globalLead : globalList ){
-                            if( !(globalLead.company__c.toLowerCase() == 'bp' || globalLead.company__c.toLowerCase() == 'abb') 
-                               && leadObj.Company.containsIgnoreCase(globalLead.company__c) ){
-                                   isGlobalLead =  true;
-                                   if(isGlobalLead){
-                                       break;
+                    System.debug('leadObj--info>+'+leadObj);
+                    /*Assign Geohraphy END*/
+                    isGlobalLead =  false;
+                    isOwnerAssigned =  false;
+                    newLeadOwnerId ='';
+                    isAEOwnerAssigned =  false;
+                    newAELeadOwnerId ='';
+                    System.debug(leadObj.ownerId+'--leadObj.ownerId-->'+userObj.Id);
+                    mapKey = '';
+                    /* Lead Owner Round Robin Starts */
+                    if(leadObj.Company!=null && leadObj.Company!=''){
+                        // && globalCompanySet.contains(leadObj.Company.toLowerCase()
+                        System.debug('---global--lead--obj--'+leadObj);
+                        if( leadObj.Company.toLowerCase() == 'bp' || leadObj.Company.toLowerCase() == 'abb' ){
+                            isGlobalLead =  true;
+                        }
+                        if(!isGlobalLead){
+                            for(Global_List__c globalLead : globalList ){
+                                if( !(globalLead.company__c.toLowerCase() == 'bp' || globalLead.company__c.toLowerCase() == 'abb') 
+                                   && leadObj.Company.containsIgnoreCase(globalLead.company__c) ){
+                                       isGlobalLead =  true;
+                                       if(isGlobalLead){
+                                           break;
+                                       }
+                                   }
+                            }  
+                        }
+                        if(isGlobalLead){
+                            leadObj.Global_List_Lead__c = true; 
+                        }
+                        
+                    }
+                    System.debug('leadObj-->'+leadObj);
+                    if( ( leadObj.ownerId == userObj.Id && oldLeadMap == null && leadObj.Status=='Round Robin')
+                       || ( oldLeadMap != null && leadObj.Status=='Round Robin' && leadObj.ownerId == userObj.Id   && 
+                           (  (leadObj.Status != oldLeadMap.get(leadObj.Id).Status  || leadObj.ownerId != oldLeadMap.get(leadObj.Id).ownerId) )  )  ){
+                               System.debug('execute twice');
+                               
+                               // CHECK FOR GLOBAL TYPE LEAD
+                               if(leadObj.Company!=null && leadObj.Company!='' && isGlobalLead){
+                                   System.debug('---global--lead--obj--'+leadObj);
+                                   if(leadObj.Geography__c != NULL){
+                                       newLeadOwnerId = assignOwnerToGlobalLeads(leadObj.Geography__c.toLowerCase());
+                                       system.debug(' new owner Id assignOwnerToGlobalLeads-->'+newLeadOwnerId);
+                                       if(String.isNotBlank(newLeadOwnerId)){
+                                           leadObj.OwnerId = newLeadOwnerId;
+                                           isOwnerAssigned =  true;
+                                       }
                                    }
                                }
-                        }  
-                    }
-                    if(isGlobalLead){
-                        leadObj.Global_List_Lead__c = true; 
-                    }
-                    
-                }
-                System.debug('leadObj-->'+leadObj);
-                if( ( leadObj.ownerId == userObj.Id && oldLeadMap == null && leadObj.Status=='Round Robin')
-                   || ( oldLeadMap != null && leadObj.Status=='Round Robin' && leadObj.ownerId == userObj.Id   && 
-                       (  (leadObj.Status != oldLeadMap.get(leadObj.Id).Status  || leadObj.ownerId != oldLeadMap.get(leadObj.Id).ownerId) )  )  ){
-                           System.debug('execute twice');
-                           
-                           // CHECK FOR GLOBAL TYPE LEAD
-                           if(leadObj.Company!=null && leadObj.Company!='' && isGlobalLead){
-                               System.debug('---global--lead--obj--'+leadObj);
-                               if(leadObj.Geography__c != NULL){
-                                   newLeadOwnerId = assignOwnerToGlobalLeads(leadObj.Geography__c.toLowerCase());
-                                   system.debug(' new owner Id assignOwnerToGlobalLeads-->'+newLeadOwnerId);
+                               System.debug(leadObj+'------'+!isOwnerAssigned);
+                               
+                               // CHECK FOR EDU TYPE LEAD
+                               if(!isOwnerAssigned &&
+                                  ( (leadObj.Email !=null && String.isNotBlank(leadObj.Email) && leadObj.Email.containsIgnoreCase('.edu')) || 
+                                   ( leadObj.Company!=null && String.isNotBlank(leadObj.Company) && 
+                                    (  leadObj.Company.containsIgnoreCase('college') || leadObj.Company.containsIgnoreCase('university') || leadObj.Company.containsIgnoreCase('School') ) ) ) )
+                               {  
+                                   newLeadOwnerId = assignOwnerToEDULeads();
                                    if(String.isNotBlank(newLeadOwnerId)){
+                                       system.debug(' new owner Id assignOwnerToEDULeads-->'+newLeadOwnerId);
                                        leadObj.OwnerId = newLeadOwnerId;
                                        isOwnerAssigned =  true;
                                    }
                                }
-                           }
-                           System.debug(leadObj+'------'+!isOwnerAssigned);
-                           
-                           // CHECK FOR EDU TYPE LEAD
-                           if(!isOwnerAssigned &&
-                              ( (leadObj.Email !=null && String.isNotBlank(leadObj.Email) && leadObj.Email.containsIgnoreCase('.edu')) || 
-                               ( leadObj.Company!=null && String.isNotBlank(leadObj.Company) && 
-                                (  leadObj.Company.containsIgnoreCase('college') || leadObj.Company.containsIgnoreCase('university') || leadObj.Company.containsIgnoreCase('School') ) ) ) )
-                           {  
-                               newLeadOwnerId = assignOwnerToEDULeads();
-                               if(String.isNotBlank(newLeadOwnerId)){
-                                   system.debug(' new owner Id assignOwnerToEDULeads-->'+newLeadOwnerId);
-                                   leadObj.OwnerId = newLeadOwnerId;
-                                   isOwnerAssigned =  true;
-                               }
-                           }
-                            // CHECK FOR Industry TYPE LEAD
-                           if( !isOwnerAssigned  && leadObj.Industry!=null && String.isNotBlank(leadObj.Industry) ){
-                               newLeadOwnerId =  assignOwnerToIndustryLead(leadObj.Industry.toLowerCase());
-                               if(String.isNotBlank(newLeadOwnerId)){
-                                   system.debug(' new owner Id assignOwnerToIndustryLead-->'+newLeadOwnerId);
-                                   leadObj.OwnerId = newLeadOwnerId;
-                                   isOwnerAssigned =  true;
-                               }
-                               
-                           }
-                           // CHECK FOR Segment_GEO TYPE LEAD
-                           if( !isOwnerAssigned  && /**leadObj.Industry!=null && String.isNotBlank(leadObj.Industry) && **/leadObj.Segment__c!=null && 
-                               String.isNotBlank(leadObj.Segment__c) && leadObj.Geography__c!=NULL && String.isNotBlank(leadObj.Geography__c) ){
-                                   newLeadOwnerId =  assignOwnerToSegment_geo_Lead((leadObj.Segment__c +leadObj.Geography__c).toLowerCase());
-                                   System.debug('newLeadOwnerId-->'+newLeadOwnerId);
+                               // CHECK FOR Industry TYPE LEAD
+                               if( !isOwnerAssigned  && leadObj.Industry!=null && String.isNotBlank(leadObj.Industry) ){
+                                   newLeadOwnerId =  assignOwnerToIndustryLead(leadObj.Industry.toLowerCase());
                                    if(String.isNotBlank(newLeadOwnerId)){
-                                   system.debug(' new owner Id assignOwnerToSegment_GEOLead-->'+newLeadOwnerId);
-                                   leadObj.OwnerId = newLeadOwnerId;
-                                   isOwnerAssigned =  true;
+                                       system.debug(' new owner Id assignOwnerToIndustryLead-->'+newLeadOwnerId);
+                                       leadObj.OwnerId = newLeadOwnerId;
+                                       isOwnerAssigned =  true;
+                                   }
+                                   
+                               }
+                               // CHECK FOR Segment_GEO TYPE LEAD
+                               if( !isOwnerAssigned  && /**leadObj.Industry!=null && String.isNotBlank(leadObj.Industry) && **/leadObj.Segment__c!=null && 
+                                  String.isNotBlank(leadObj.Segment__c) && leadObj.Geography__c!=NULL && String.isNotBlank(leadObj.Geography__c) ){
+                                      newLeadOwnerId =  assignOwnerToSegment_geo_Lead((leadObj.Segment__c +leadObj.Geography__c).toLowerCase());
+                                      System.debug('newLeadOwnerId-->'+newLeadOwnerId);
+                                      if(String.isNotBlank(newLeadOwnerId)){
+                                          system.debug(' new owner Id assignOwnerToSegment_GEOLead-->'+newLeadOwnerId);
+                                          leadObj.OwnerId = newLeadOwnerId;
+                                          isOwnerAssigned =  true;
+                                      }
+                                      
+                                  }
+                               // CHECK FOR GEOGRAPHY TYPE
+                               if( !isOwnerAssigned && leadObj.Geography__c!=null && leadObj.Geography__c!='' ){
+                                   System.debug('NO geo block-->'+leadObj.Geography__c);
+                                   newLeadOwnerId =  assignOwnerToGeographyLead(leadObj.Geography__c.toLowerCase());
+                                   if(String.isNotBlank(newLeadOwnerId)){
+                                       system.debug(' new owner Id assignOwnerToISGLead-->'+newLeadOwnerId);
+                                       leadObj.OwnerId = newLeadOwnerId;
+                                       isOwnerAssigned =  true;
+                                   }
+                               }
+                               if(!isOwnerAssigned){
+                                   newLeadOwnerId = assignOwnerToNOGeographyLead();
+                                   if(String.isNotBlank(newLeadOwnerId)){
+                                       system.debug(' new owner Id assignOwnerToISGLead-->'+newLeadOwnerId);
+                                       leadObj.OwnerId = newLeadOwnerId;
+                                       isOwnerAssigned =  true;
+                                   }
+                               }
+                               if(isOwnerAssigned){
+                                   leadObj.status ='Assigned (SDR)';
                                }
                                
                            }
-                           // CHECK FOR GEOGRAPHY TYPE
-                           if( !isOwnerAssigned && leadObj.Geography__c!=null && leadObj.Geography__c!='' ){
-                               System.debug('NO geo block-->'+leadObj.Geography__c);
-                               newLeadOwnerId =  assignOwnerToGeographyLead(leadObj.Geography__c.toLowerCase());
-                               if(String.isNotBlank(newLeadOwnerId)){
-                                   system.debug(' new owner Id assignOwnerToISGLead-->'+newLeadOwnerId);
-                                   leadObj.OwnerId = newLeadOwnerId;
-                                   isOwnerAssigned =  true;
+                    
+                    
+                    
+                    /* Lead Owner Round Robin Ends */
+                    
+                    /* Lead AE Owner Round Robin Starts */
+                    
+                    if( leadObj.status!='Disqualified' && leadObj.User__c==null &&
+                       ( oldLeadMap == null || ( oldLeadMap != null && (leadObj.User__c!=oldLeadMap.get(leadObj.Id).User__c || leadObj.Segment__c!=oldLeadMap.get(leadObj.Id).Segment__c) )  ) ){
+                           mapKey = '';
+                           System.debug('ADD AE owner');
+                           if( !isAEOwnerAssigned  && leadObj.Industry!=null && String.isNotBlank(leadObj.Industry) ){
+                               newAELeadOwnerId =  assignAE_OwnerLead(leadObj.Industry.toLowerCase());
+                               if(String.isNotBlank(newAELeadOwnerId)){
+                                   system.debug('ONLY INDUSTRY new newAELeadOwnerId Id assignOwnerToIndustryLead-->'+newAELeadOwnerId);
+                                   leadObj.User__c = newAELeadOwnerId;
+                                   isAEOwnerAssigned =  true;
+                               }
+                               
+                           }
+                           if( !isAEOwnerAssigned  && leadObj.Geography__c!=null && String.isNotBlank(leadObj.Geography__c)  && 
+                               leadObj.Segment__c!=null && String.isNotBlank(leadObj.Segment__c) ){
+                               mapKey =  (leadObj.Geography__c + leadObj.Segment__c).toLowerCase();
+                               newAELeadOwnerId =  assignAE_OwnerLead(mapKey.toLowerCase());
+                               if(String.isNotBlank(newAELeadOwnerId)){
+                                   system.debug(' GEO+SEGMENTnew newAELeadOwnerId Id assignOwnerToIndustryLead-->'+newAELeadOwnerId);
+                                   leadObj.User__c = newAELeadOwnerId;
+                                   isAEOwnerAssigned =  true;
+                               }
+                               
+                           }
+                           if( !isAEOwnerAssigned  && leadObj.Segment__c!=null && String.isNotBlank(leadObj.Segment__c) ){
+                               mapKey =  (leadObj.Segment__c).toLowerCase();
+                               newAELeadOwnerId =  assignAE_OwnerLead(mapKey.toLowerCase());
+                               if(String.isNotBlank(newAELeadOwnerId)){
+                                   system.debug('JUST SEGMENT new newAELeadOwnerId Id assignOwnerToIndustryLead-->'+newAELeadOwnerId);
+                                   leadObj.User__c = newAELeadOwnerId;
+                                   isAEOwnerAssigned =  true;
+                               }
+                               
+                           }
+                           if( !isAEOwnerAssigned  && leadObj.Geography__c!=null && String.isNotBlank(leadObj.Geography__c) ){
+                               mapKey =  (leadObj.Geography__c).toLowerCase();
+                               newAELeadOwnerId =  assignAE_OwnerLead(mapKey.toLowerCase());
+                               if(String.isNotBlank(newAELeadOwnerId)){
+                                   system.debug('JUST GEO new newAELeadOwnerId Id assignOwnerToIndustryLead-->'+newAELeadOwnerId);
+                                   leadObj.User__c = newAELeadOwnerId;
+                                   isAEOwnerAssigned =  true;
+                               }
+                               
+                           }
+                           if( !isAEOwnerAssigned ){
+                               newAELeadOwnerId =  assignAE_OwnerToCatchALL_Lead();
+                               if(String.isNotBlank(newAELeadOwnerId)){
+                                   system.debug('CATCH-ALL new newAELeadOwnerId Id assignOwnerToIndustryLead-->'+newAELeadOwnerId);
+                                   leadObj.User__c = newAELeadOwnerId;
+                                   isAEOwnerAssigned =  true;
                                }
                            }
-                           if(!isOwnerAssigned){
-                               newLeadOwnerId = assignOwnerToNOGeographyLead();
-                               if(String.isNotBlank(newLeadOwnerId)){
-                                   system.debug(' new owner Id assignOwnerToISGLead-->'+newLeadOwnerId);
-                                   leadObj.OwnerId = newLeadOwnerId;
-                                   isOwnerAssigned =  true;
-                               }
-                           }
-                           if(isOwnerAssigned){
-                               leadObj.status ='Assigned (SDR)';
-                           }
-                        
-                       }
-                
-                
-                
-                /* Lead Owner Round Robin Ends */
-                
-                /* Lead AE Owner Round Robin Starts */
-                
-                if( leadObj.status!='Disqualified' && leadObj.User__c==null && ( leadObj.Segment__c != '' && leadObj.Segment__c!= null ) &&
-                   ( oldLeadMap == null || ( oldLeadMap != null && (leadObj.User__c!=oldLeadMap.get(leadObj.Id).User__c || leadObj.Segment__c!=oldLeadMap.get(leadObj.Id).Segment__c) )  ) ){
-                       mapKey = '';
-                       
-                       if(checkGeography.AE_Owner_Round_Robin_Geography__c || checkGeography.AE_Owner_Round_Robin_Segment__c){
-                           if(checkGeography.AE_Owner_Round_Robin_Segment__c){
-                               if( leadObj.Segment__c != null && leadObj.Segment__c != '' ){
-                                   mapKey = leadObj.Segment__c;
-                               }  
-                           }
-                           
-                           if(checkGeography.AE_Owner_Round_Robin_Geography__c){
-                               if( leadObj.Geography__c != null && leadObj.Geography__c != '' ){
-                                   mapKey = mapKey + leadObj.Geography__c;
-                               } 
-                           }
-                           
-                           if( CounterMap.containsKey(mapKey.toLowerCase()) ){
-                               mapKey.toLowerCase();
-                               System.debug('-->'+mapKey.toLowerCase()+'-ROUNDROBIN RUN--countAE--'+countAE+' -->'+CounterMap.get(mapKey.toLowerCase()));
-                               countAE = CounterMap.get(mapKey.toLowerCase() );
-                               System.debug('ROUNDROBIN RUN--countAE-->>'+countAE);
-                               System.debug('1-->>'+ SegmentGeoToListOfUsersMapAE.get(mapKey.toLowerCase())[countAE]);
-                               leadObj.User__c = userNameToId.get( SegmentGeoToListOfUsersMapAE.get(mapKey.toLowerCase())[countAE].UserName__c.toLowerCase() );
-                               //update time on user records
-                               SegmentGeoToListOfUsersMapAE.get(mapKey.toLowerCase())[countAE].Lead_Assigned_DateTime__c = DateTime.now() ; 
-                               countAE = countAE +1;
-                               if( countAE == SegmentGeoToListOfUsersMapAE.get(mapKey.toLowerCase()).size() ){
-                                   System.debug('lead owner before Mid-Market reseeting the value---->'+countAE);
-                                   countAE = 0;
-                                   //CounterMap.put( mapKey.toLowerCase() , countAE );
-                               } 
-                               CounterMap.put( mapKey.toLowerCase() , countAE );
-                           }
-                       }else{
-                           if(lead_AE_OwnerList!=null && lead_AE_OwnerList.size() > 0){
-                               leadObj.User__c = userNameToId.get(lead_AE_OwnerList[countAE].UserName__c.toLowerCase());
-                               lead_AE_OwnerList[countAE].Lead_Assigned_DateTime__c = Datetime.now();
-                               countAE =countAE +1;
-                               if( countAE == lead_AE_OwnerList.size() ){
-                                   System.debug('before reseeting the value---->'+countAE);
-                                   countAE =0;
-                               }  
-                           }
-                           
                            
                        }
-                   }
-                /* Lead AE Owner Round Robin Ends */
-                
-            }
+                    /* Lead AE Owner Round Robin Ends */
+                    
+                }
             
             
-            if(checkGeography.AE_Owner_Round_Robin_Geography__c  || checkGeography.AE_Owner_Round_Robin_Segment__c  ){
-                List<Lead_AE_Owner_Round_Robin__c> lead_AE_OwnerListUpdate = new List<Lead_AE_Owner_Round_Robin__c>();
-                for( String mapKeyVal : SegmentGeoToListOfUsersMapAE.keySet() ){
-                    lead_AE_OwnerListUpdate.addAll( SegmentGeoToListOfUsersMapAE.get(mapKeyVal) );
-                } 
-                if(!lead_AE_OwnerListUpdate.isEmpty()){
-                    update lead_AE_OwnerListUpdate;
-                }  
-            }else{
-                if(!lead_AE_OwnerList.isEmpty()){
-                    update lead_AE_OwnerList;
-                }  
-            }
             
             if(customSettingRecordToBeUpdated != null && !customSettingRecordToBeUpdated.isEmpty()){
                 System.debug('customSettingRecordToBeUpdated-->'+customSettingRecordToBeUpdated);
                 update customSettingRecordToBeUpdated.values();
             }
             
-           
+            
             
             
         }catch(Exception e){
@@ -528,6 +568,50 @@ globalCompanySet.add(compObj.Company__c.toLowerCase());
         }
         
         
+    }
+    public static String assignAE_OwnerToCatchALL_Lead(){ // catch-all lead
+        String AEOwnerId ='';
+        if(AE_catchAllUsersList_Vals!=null && !AE_catchAllUsersList_Vals.isEmpty()){
+            if( CountCatchAll >= AE_catchAllUsersList_Vals.size() ){
+                System.debug('assignOwnerToNOGeographyLead---->'+CountCatchAll);
+                CountCatchAll = 0;
+            } 
+            AEOwnerId = userNameToId_Vals.get( AE_catchAllUsersList_Vals[CountCatchAll].UserName__c.toLowerCase() );
+            AE_catchAllUsersList_Vals[CountCatchAll].Lead_Assigned_DateTime__c = DateTime.now() ;
+            //add user to the map to update the date time
+            customSettingRecordToBeUpdated.put(AE_catchAllUsersList_Vals[CountCatchAll].Id , AE_catchAllUsersList_Vals[CountCatchAll]);
+            CountCatchAll = CountCatchAll +1;
+        }
+        return AEOwnerId;
+    }
+    public static String assignAE_OwnerLead(String mapKey){ // AE OWNER
+        String AEOwnerId ='';
+        System.debug('assignOwnerToSegment_geo_Lead-->'+mapKey);
+        //String mapKey = '';
+        //mapKey = leadObj.Segment__c +leadObj.Geography__c+leadObj.Industry;
+        Integer count = 0 ;
+        if( AE_Industry_LeadCounterMap_Vals.containsKey(mapKey.toLowerCase()) ){
+            
+            mapKey.toLowerCase();
+            System.debug('assignAE_OwnerLead ROUNDROBIN RUN');
+            count = AE_Industry_LeadCounterMap_Vals.get(mapKey.toLowerCase() );
+            System.debug('AE_Industry_Map_Vals username-->'+AE_Industry_Map_Vals.get(mapKey.toLowerCase())[count].UserName__c.toLowerCase());
+            AEOwnerId = userNameToId_Vals.get( AE_Industry_Map_Vals.get(mapKey.toLowerCase())[count].UserName__c.toLowerCase() );
+            System.debug('AEOwnerId-->'+AEOwnerId);
+            //update time on user records
+            AE_Industry_Map_Vals.get(mapKey.toLowerCase())[count].Lead_Assigned_DateTime__c = DateTime.now() ; 
+            //add user to the map to update the date time
+            customSettingRecordToBeUpdated.put(AE_Industry_Map_Vals.get(mapKey.toLowerCase())[count].Id , AE_Industry_Map_Vals.get(mapKey.toLowerCase())[count]);
+            count = count +1;
+            if( count >= AE_Industry_Map_Vals.get(mapKey.toLowerCase()).size() ){
+                System.debug('lead owner before Mid-Market reseeting the value---->'+count);
+                count = 0;
+                //AE_Industry_LeadCounterMap_Vals.put( mapKey.toLowerCase() , count );
+            } 
+            AE_Industry_LeadCounterMap_Vals.put( mapKey.toLowerCase() , count );
+            
+        }
+        return AEOwnerId;
     }
     
     public static String assignOwnerToGlobalLeads(String mapKey){
@@ -631,24 +715,24 @@ globalCompanySet.add(compObj.Company__c.toLowerCase());
         Integer count = 0 ;
         if( CounterMap_Geo_leadOwner_Vals.containsKey(mapKey.toLowerCase()) && GeoToListOfUsersMap_leadOwner_Vals.get(mapKey.toLowerCase())!=null 
            && !GeoToListOfUsersMap_leadOwner_Vals.get(mapKey.toLowerCase()).isEmpty()){
-            
-            mapKey.toLowerCase();
-            System.debug('assignOwnerToIndustryLead ROUNDROBIN RUN');
-            count = CounterMap_Geo_leadOwner_Vals.get(mapKey.toLowerCase() );
-            OwnerId = userNameToId_Vals.get( GeoToListOfUsersMap_leadOwner_Vals.get(mapKey.toLowerCase())[count].UserName__c.toLowerCase() );
-            //update time on user records
-            GeoToListOfUsersMap_leadOwner_Vals.get(mapKey.toLowerCase())[count].Date__c = DateTime.now() ; 
-            //add user to the map to update the date time
-            customSettingRecordToBeUpdated.put(GeoToListOfUsersMap_leadOwner_Vals.get(mapKey.toLowerCase())[count].Id , GeoToListOfUsersMap_leadOwner_Vals.get(mapKey.toLowerCase())[count]);
-            count = count +1;
-            if( count >= GeoToListOfUsersMap_leadOwner_Vals.get(mapKey.toLowerCase()).size() ){
-                System.debug('industryToListOfUsersMap_leadOwner_Vals lead owner before Mid-Market reseeting the value---->'+count);
-                count = 0;
-                //CounterMap_IndustryleadOwner_Vals.put( mapKey.toLowerCase() , count );
-            } 
-            CounterMap_Geo_leadOwner_Vals.put( mapKey.toLowerCase() , count );
-            
-        }
+               
+               mapKey.toLowerCase();
+               System.debug('assignOwnerToIndustryLead ROUNDROBIN RUN');
+               count = CounterMap_Geo_leadOwner_Vals.get(mapKey.toLowerCase() );
+               OwnerId = userNameToId_Vals.get( GeoToListOfUsersMap_leadOwner_Vals.get(mapKey.toLowerCase())[count].UserName__c.toLowerCase() );
+               //update time on user records
+               GeoToListOfUsersMap_leadOwner_Vals.get(mapKey.toLowerCase())[count].Date__c = DateTime.now() ; 
+               //add user to the map to update the date time
+               customSettingRecordToBeUpdated.put(GeoToListOfUsersMap_leadOwner_Vals.get(mapKey.toLowerCase())[count].Id , GeoToListOfUsersMap_leadOwner_Vals.get(mapKey.toLowerCase())[count]);
+               count = count +1;
+               if( count >= GeoToListOfUsersMap_leadOwner_Vals.get(mapKey.toLowerCase()).size() ){
+                   System.debug('industryToListOfUsersMap_leadOwner_Vals lead owner before Mid-Market reseeting the value---->'+count);
+                   count = 0;
+                   //CounterMap_IndustryleadOwner_Vals.put( mapKey.toLowerCase() , count );
+               } 
+               CounterMap_Geo_leadOwner_Vals.put( mapKey.toLowerCase() , count );
+               
+           }
         return ownerId;
     }
     public static String assignOwnerToNOGeographyLead(){ // catch-all lead
