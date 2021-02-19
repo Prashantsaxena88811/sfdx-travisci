@@ -495,8 +495,7 @@ CounterMap_leadOwner.put( mapKey.toLowerCase() , 0 );
                     
                     /* Lead AE Owner Round Robin Starts */
                     
-                    if( leadObj.status!='Disqualified' && leadObj.User__c==null &&
-                       ( oldLeadMap == null || ( oldLeadMap != null && (leadObj.User__c!=oldLeadMap.get(leadObj.Id).User__c || leadObj.Segment__c!=oldLeadMap.get(leadObj.Id).Segment__c) )  ) ){
+                    if( leadObj.status!='Disqualified' && leadObj.User__c==null  ){
                            mapKey = '';
                            System.debug('ADD AE owner');
                            if( !isAEOwnerAssigned  && leadObj.Industry!=null && String.isNotBlank(leadObj.Industry) ){
