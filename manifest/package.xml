@@ -16,7 +16,14 @@
     <members>OpportunityTriggerHandlerSPIF_Test</members>
     <members>GlobalRoundRobinLogic</members>
     <members>LeadRobinRecursiveCheck</members>
+    <members>CalculatePriceForEmmersionProduct</members>
+    <members>CustomLookupController</members>
     <name>ApexClass</name>
+</types>
+<types>
+<members>Add_Emmersion_Product</members>
+<members>customLookup</members>
+<name>AuraDefinitionBundle</name>
 </types>
 <types>
     <members>OpportunityTrigger</members>

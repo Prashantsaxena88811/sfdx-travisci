@@ -47,18 +47,20 @@ public class OpportunityTriggerHelper {
                            //return;
                        }
                      //for(String recordName  : recordTypeToCreateWhenCaseIsCLosed){
-                        ownerId = OppRec.OwnerId;
+                        //ownerId = OppRec.OwnerId;
                         /*if(recordName == 'Accounting' && queueNameToIdMap.get(recordName) != null){
                             ownerId = queueNameToIdMap.get(recordName);
                         } else */
                         /*if(recordName == 'Client Success' && userRecList.size() > 0){
                             ownerId = userRecList[0].Id;
                         }*/
-                       
+                       if(!userRecList.isEmpty()){
+                           ownerId = userRecList[0].Id; 
+                       }
                        if(oppRec.Type == 'New Logo'){
-                           if(!userRecList.isEmpty()){
+                           /*if(!userRecList.isEmpty()){
                                ownerId = userRecList[0].Id; 
-                           }
+                           }*/
                            recordName = 'Client Success';
                        }else if(oppRec.Type == 'Opp within 12 months' || oppRec.Type == 'Opp after 12 months'){
                            recordName = 'Existing Business CS Case';
