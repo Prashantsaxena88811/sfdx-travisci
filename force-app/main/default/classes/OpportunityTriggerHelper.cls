@@ -43,8 +43,8 @@ public class OpportunityTriggerHelper {
             for(Opportunity oppRec : opportunityNewList){
                 if((oppRec.StageName == 'Closed Won' &&  opportunityOldMap == null)||
                    (oppRec.StageName == 'Closed Won' && oppRec.StageName !=  opportunityOldMap.get(oppRec.id).StageName)){
-                       if(oppRec.Type =='' && oppRec.Type ==null ){
-                           //return;
+                       if(oppRec.Type =='' || oppRec.Type ==null ){
+                           return;
                        }
                      //for(String recordName  : recordTypeToCreateWhenCaseIsCLosed){
                         //ownerId = OppRec.OwnerId;

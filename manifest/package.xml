@@ -18,6 +18,8 @@
     <members>LeadRobinRecursiveCheck</members>
     <members>CalculatePriceForEmmersionProduct</members>
     <members>CustomLookupController</members>
+    <members>CustomLookupControllerTest</members>
+    <members>CalculatePriceForEmmersionProduct_Test</members>
     <name>ApexClass</name>
 </types>
 <types>

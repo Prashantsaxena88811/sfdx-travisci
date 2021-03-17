@@ -5,7 +5,7 @@ public class CalculatePriceForEmmersionProduct {
             System.debug('selectedProIds-->'+selectedProIds);
             List<Emmersion_Pricing__c> emmersionPricingList = new List<Emmersion_Pricing__c>();
             emmersionPricingList = [Select Annual_Price_Per_Test__c,Monthly_Price_Per_Test__c,Product__c,Tier__c FROM Emmersion_Pricing__c
-                                    where Product__c IN : selectedProIds AND Product__r.Name!='test' order by Tier__c asc];
+                                    where Product__c IN : selectedProIds  order by Tier__c asc];
             Map<Id, List<Emmersion_Pricing__c>> productToEmmersionPricingMap =  new Map<Id, List<Emmersion_Pricing__c>>();
             for( Emmersion_Pricing__c tierPrice : emmersionPricingList){
                 if(!productToEmmersionPricingMap.containsKey(tierPrice.Product__c)){
@@ -17,7 +17,7 @@ public class CalculatePriceForEmmersionProduct {
             return productToEmmersionPricingMap;
         }catch(Exception e){
             System.debug('get exception on line number-->'+e.getLineNumber() +' error is-->'+e.getMessage() );
-            return null;
+            throw new AuraHandledException('Darn it! Something went wrong: ' + e.getMessage()); 
         }
         
         
@@ -91,6 +91,8 @@ public class CalculatePriceForEmmersionProduct {
             }
         }catch(Exception e){
             System.debug('get exception on line number-->'+e.getLineNumber() +' error is-->'+e.getMessage() );
+            throw new AuraHandledException('Darn it! Something went wrong: '
+            + e.getMessage()); 
             //return null;
         }
         

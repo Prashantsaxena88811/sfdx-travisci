@@ -3,7 +3,7 @@
     <aura:attribute name="emmersionProductList" type="List" default="[]"/>
     <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
     <aura:attribute name="recordId" type="String" />
-
+    
     
     <aura:html tag="style">
         .slds-modal__container{
@@ -12,39 +12,18 @@
         }
     </aura:html>
     
-    <lightning:button variant="brand" label="Brand" title="Brand action" onclick="{! c.handleClick }" />
-    <lightning:button variant="brand" label="addrow" title="Brand action" onclick="{! c.addRows }" />
-    <lightning:button variant="brand" label="CalCulatePrice" title="Brand action" onclick="{! c.calculatePrice }" />
-{!v.recordId}
-   <!-- <div class="c-container">
-        
-        <lightning:layout multipleRows="true">
-            <lightning:layoutItem size="3" padding="around-small">
-                <div class="custom-box">
-                    <c:customLookup selectedRecord="{!v.selectedRecord}" objectName="Account" fieldName="Name" label="Account Name" iconName="standard:account" placeholder="Enter Value" />
-                </div>
-            </lightning:layoutItem>
-            <lightning:layoutItem size="3" padding="around-small">
-                <div class="custom-box">
-                    <lightning:input type="number" name="input1" label="Enter Quantity" />
-                </div>
-            </lightning:layoutItem>
-            <lightning:layoutItem size="2" padding="around-small">
-                <div class="custom-box">
-                    <lightning:select name="select1" label="Billing Term">
-                        <option value="Monthly">Monthly</option>
-                        <option value="annually">annually</option>
-                    </lightning:select>
-                </div>
-            </lightning:layoutItem>
-            <lightning:layoutItem size="2" padding="around-small">
-                <div class="custom-box">
-                    <lightning:input type="number" name="input2" label="Price" />
-                </div>
-            </lightning:layoutItem>
-            
-        </lightning:layout>
-    </div>-->
+ <!-- <lightning:button variant="brand" label="Brand" title="Brand action" onclick="{! c.handleClick }" />
+    <lightning:button variant="brand" label="addrow" title="Brand action" onclick="{! c.showToastMessages }" />-->
+   
+    {!v.recordId}
+    <lightning:layout multipleRows="true">
+        <lightning:layoutItem size="12" padding="around-small">
+            <center>
+                <lightning:button variant="brand" label="CalCulate Price" title="Brand action" onclick="{! c.calculatePrice }" />
+                <lightning:button variant="brand" label="Save Products" title="Brand action" onclick="{! c.saveProducts }" />
+            </center>
+        </lightning:layoutItem>
+    </lightning:layout>
     <div>
         <aura:iteration items="{!v.emmersionProductList}" var="item" indexVar="index">
             <lightning:layout multipleRows="true">
@@ -70,6 +49,24 @@
                     <div class="custom-box">
                         <lightning:input type="number" disabled="true" name="input2" label="Price" value="{!item.Price}"/>
                     </div>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="1" padding="around-small">
+                    <div class="slds-p-top_large">
+                        <a onclick="{!c.addRows}">
+                            <lightning:icon iconName="utility:add" class="slds-icon slds-icon_small" size="small" alternativeText="add"/>
+                            <span class="slds-assistive-text">Add Icon</span>
+                        </a>
+                    </div>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="1" padding="around-small">
+                    <aura:if isTrue="{!index !=0}">
+                    <div class="slds-p-top_large">
+                        <a onclick="{!c.removeRow}" id="{!index}">
+                            <lightning:icon variant="error" iconName="utility:delete" class="slds-icon slds-icon_small" size="small" alternativeText="icon"/>
+                            <span class="slds-assistive-text">Delete Icon</span>
+                        </a>
+                    </div>
+                    </aura:if>
                 </lightning:layoutItem>
                 
             </lightning:layout>
