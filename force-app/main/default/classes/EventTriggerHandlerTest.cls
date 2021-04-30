@@ -80,9 +80,28 @@ public class EventTriggerHandlerTest {
         System.debug(userlist[0].username+'--userlistID-->'+userlist[0].Id);
         System.debug(userlist[1].username+'--userlistID1-->'+userlist[1].Id);
         System.debug(userlist[2].username+'--userlistID2-->'+userlist[2].Id);
+        
+        
     }
     
     @isTest static void myTest() {
+        List<Top_25_Accounts__c> top25Account_List =  new List<Top_25_Accounts__c>();
+        Top_25_Accounts__c top25Obj1 = new Top_25_Accounts__c();
+        top25Obj1.Name = 'top1';
+        top25Obj1.username__c = 'SDRUser1@sf.com';
+        top25Obj1.Company__c = 'testcompany1';
+        top25Obj1.Active_for_SPIF__c =  true;
+        
+        Top_25_Accounts__c top25Obj2 = new Top_25_Accounts__c();
+        top25Obj2.Name = 'top2';
+        top25Obj2.username__c = 'AEUser1@sf.com';
+        top25Obj2.Company__c = 'testcompany1';
+        top25Obj2.Active_for_SPIF__c =  true;
+        
+        top25Account_List.add(top25Obj1);
+        //top25Account_List.add(top25Obj2);
+        
+        insert top25Account_List;
         Test.startTest();
         
         SPIF_Activity_Records__c SPIF_ActivityObj1 = new SPIF_Activity_Records__c();

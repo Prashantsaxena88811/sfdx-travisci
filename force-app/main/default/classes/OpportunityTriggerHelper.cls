@@ -24,32 +24,6 @@ public class OpportunityTriggerHelper {
                                                                 };
         
         public static void createFollowUpcases(){
-            List<Case_Owner_Assignment__c> caseOwnerAssignmentList = new List<Case_Owner_Assignment__c>();
-            caseOwnerAssignmentList = [Select Catch_All__c,Geography__c,Opportunity_Owner_Role__c,Segment__c,UserName__c FROM Case_Owner_Assignment__c where
-                                      UserName__c != NULL AND Opportunity_Owner_Role__c!=NULL];
-            Map<String,String> keyToUsersMap = new  Map<String,String>();
-            Set<String> userNames = new Set<String>();
-            String mapKey;
-            for(Case_Owner_Assignment__c caseOwner :caseOwnerAssignmentList ){
-                userNames.add(caseOwner.UserName__c);
-                if(caseOwner.Catch_All__c){
-                    keyToUsersMap.put(caseOwner.Opportunity_Owner_Role__c ,caseOwner.UserName__c );
-                }else{
-                    if(caseOwner.Segment__c != '' && caseOwner.Segment__c!=null &&
-                       caseOwner.Geography__c != '' && caseOwner.Geography__c!=null ){
-                           mapKey = (caseOwner.Opportunity_Owner_Role__c+caseOwner.Segment__c+caseOwner.Geography__c).toLowerCase();
-                           keyToUsersMap.put(mapKey ,caseOwner.UserName__c );
-                       }
-                }
-            }
-            Map<String,String> userNameToIdMap =  new Map<String,String>();
-            if(userNames!=null && !userNames.isEmpty()){
-                for(User userObj : [Select Id,username from user where username IN : userNames]){
-                    userNameToIdMap.put( userObj.username ,  userObj.Id );
-                }
-            }
-                
-                
             List<RecordType> recordTypeList = [Select Id,Name from RecordType where Name IN : recordTypeNameList];
             Map<String,String> NameToRecordIdMap = new Map<String,String>();
             for(RecordType recorTypeRec  : recordTypeList){
@@ -69,27 +43,22 @@ public class OpportunityTriggerHelper {
             for(Opportunity oppRec : opportunityNewList){
                 if((oppRec.StageName == 'Closed Won' &&  opportunityOldMap == null)||
                    (oppRec.StageName == 'Closed Won' && oppRec.StageName !=  opportunityOldMap.get(oppRec.id).StageName)){
-                       if(oppRec.Type =='' || oppRec.Type ==null ){
-                           return;
+                       if(oppRec.Type =='' && oppRec.Type ==null ){
+                           //return;
                        }
                      //for(String recordName  : recordTypeToCreateWhenCaseIsCLosed){
-                        //ownerId = OppRec.OwnerId;
+                        ownerId = OppRec.OwnerId;
                         /*if(recordName == 'Accounting' && queueNameToIdMap.get(recordName) != null){
                             ownerId = queueNameToIdMap.get(recordName);
                         } else */
                         /*if(recordName == 'Client Success' && userRecList.size() > 0){
                             ownerId = userRecList[0].Id;
                         }*/
-                       /*if(!userRecList.isEmpty()){
-                           ownerId = userRecList[0].Id; 
-                       }*/
-                       if(true){
-                           
-                       }
+                       
                        if(oppRec.Type == 'New Logo'){
-                           /*if(!userRecList.isEmpty()){
+                           if(!userRecList.isEmpty()){
                                ownerId = userRecList[0].Id; 
-                           }*/
+                           }
                            recordName = 'Client Success';
                        }else if(oppRec.Type == 'Opp within 12 months' || oppRec.Type == 'Opp after 12 months'){
                            recordName = 'Existing Business CS Case';

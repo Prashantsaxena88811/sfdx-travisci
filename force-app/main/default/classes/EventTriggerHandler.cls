@@ -23,7 +23,7 @@ public class EventTriggerHandler {
             // Create rolename to points Map
             Map<String,SPIF_Activity_Records__c> roleToPointsMap = New Map<String,SPIF_Activity_Records__c>();
             for( SPIF_Activity_Records__c activityObj : spifActivityRecords){
-                roleToPointsMap.put(activityObj.Rep_Role__c,activityObj);
+                roleToPointsMap.put(activityObj.Rep_Role__c.toLowerCase(),activityObj);
             }
             System.debug('roleToPointsMap==>'+roleToPointsMap);
             
@@ -58,16 +58,23 @@ public class EventTriggerHandler {
             //userList = [Select Id,Name,UserRoleId from User where Id IN : userIds];
             //System.debug('userList-->'+userList);
             // Create Map to Map Id to user 
-            Map<Id,User> idToUserMap = new Map<Id,User>([Select Id,Name,UserRoleId from User where  ID IN :userIds AND UserRoleId IN :userRoleMap.keySet()]);
-           
+            Map<Id,User> idToUserMap = new Map<Id,User>([Select Id,Name,UserRoleId,username from User where  ID IN :userIds AND UserRoleId IN :userRoleMap.keySet()]);
+            Set<String> usernameSet =  new Set<String>();
+            for(Id userIdObj : idToUserMap.keySet()){
+                usernameSet.add(idToUserMap.get(userIdObj).username.toLowerCase());
+            }
             System.debug('idToUserMap-->'+idToUserMap);
             
             //System.debug('eventoIdToLeadId-->'+eventoIdToLeadId);
             //List<Lead> leadList = new List<Lead>();
             Map<Id , Lead > leadIdToTop25Map = new Map<Id , Lead >();
+            Set<String> leadCompanyNameSet =  new Set<String>();
             if(!leadIds.isEmpty()){
-                leadIdToTop25Map = new Map<Id , Lead >([Select Id,Top_25_Account__c,Title from lead where isConverted = false and  Id IN:leadIds and Top_25_Account__c!=null and  Top_25_Account__c IN :idToUserMap.keySet()]);
+                leadIdToTop25Map = new Map<Id , Lead >([Select Id,Top_25_Account__c,Title,Company from lead where isConverted = false and  Id IN:leadIds and Top_25_Account__c!=null and  Top_25_Account__c IN :idToUserMap.keySet()]);
                 system.debug('leadIdToTop25Map-->'+leadIdToTop25Map);
+                for(Id leadIdObj : leadIdToTop25Map.keySet()){
+                    leadCompanyNameSet.add(leadIdToTop25Map.get(leadIdObj).Company.toLowerCase());
+                }
                 
             }
             //Map<Id , Contact > contactIdToTop25Map = new Map<Id , Contact >();
@@ -75,11 +82,11 @@ public class EventTriggerHandler {
             if(!contactIds.isEmpty()){
                // contactIdToTop25Map = new Map<Id , Contact >([Select Id,Top_25_Account__c from Contact where Id IN:contactIds and Top_25_Account__c!=null and Top_25_Account__c IN :idToUserMap.keySet()]);
                 //system.debug('contactIdToTop25Map-->'+contactIdToTop25Map);
-                List<Contact> contactList = new List<Contact>();
+                /*List<Contact> contactList = new List<Contact>();
                 contactList =[Select id,AccountId,Account.Top_25_Account__c from Contact Where Id IN :contactIds and Account.Top_25_Account__c !=null and Account.Top_25_Account__c IN : idToUserMap.keySet()];
                 for(Contact conObj :contactList){
                     contactIdToTop25InfoMap.put(conObj.Id ,conObj.Account.Top_25_Account__c);
-                }
+                }*/
                 
             }
             
@@ -87,6 +94,25 @@ public class EventTriggerHandler {
             List<SPIF__c> spifList =  new List<SPIF__c>();
             String description = '';
             Integer points = 0;
+            
+            // SPIF record will only be created if the active for spif for spif is marked as true for that user.
+            List<Top_25_Accounts__c> top25AccountList = new List<Top_25_Accounts__c>();
+            top25AccountList = [Select Id ,Active_for_SPIF__c,Username__c,company__c from  Top_25_Accounts__c where company__c!=null AND Active_for_SPIF__c=true AND Username__c!=null AND Username__c IN :usernameSet AND Company__c IN : leadCompanyNameSet ];
+            Map<String,String> username_TO_ID_MAP =  new Map<String,String>();
+            for(user userObj : [Select Id , username from user where username IN :usernameSet]){
+                username_TO_ID_MAP.put(userObj.username.toLowerCase() , String.valueOf(userObj.Id));
+            }
+            System.debug('username_TO_ID_MAP==>'+username_TO_ID_MAP);
+            Set<String> usernameSet_Top =  new Set<String>();
+            for(Top_25_Accounts__c topAcc : top25AccountList){
+                System.debug('topAcc.Username__c=>'+topAcc.Username__c);
+                if(username_TO_ID_MAP.containsKey(topAcc.Username__c.toLowerCase()) && username_TO_ID_MAP.get(topAcc.Username__c.toLowerCase())!=null){
+                  usernameSet_Top.add(topAcc.company__c.toLowerCase()+username_TO_ID_MAP.get(topAcc.Username__c.toLowerCase()));  
+                }
+            }
+            //Map<Id,User> active_SPFI_userMap = new Map<Id,User>([Select Id from user where username IN : usernameSet]);
+            
+            // end
             
             EventTriggerHandler eventTriggerHandlerObj = new EventTriggerHandler();
             System.debug('filteredEventList----<>'+filteredEventList);
@@ -98,17 +124,17 @@ public class EventTriggerHandler {
                     system.debug('eventObj-->'+eventObj);
                     SPIF__c spifObj = new SPIF__c();
                     if( eventObj.whoId !=null && idToUserMap !=null && idToUserMap.containsKey(eventObj.OwnerId) 
-                       && (( leadIdToTop25Map.containsKey(eventObj.whoId) 
-                            && eventObj.OwnerId == leadIdToTop25Map.get(eventObj.whoId).Top_25_Account__c) || 
+                       && (( leadIdToTop25Map.containsKey(eventObj.whoId) && eventObj.OwnerId == leadIdToTop25Map.get(eventObj.whoId).Top_25_Account__c
+                           && usernameSet_Top.contains(leadIdToTop25Map.get(eventObj.whoId).Company.toLowerCase()+eventObj.OwnerId) ) || 
                            ( contactIdToTop25InfoMap.containsKey(eventObj.whoId) 
                             && eventObj.OwnerId == contactIdToTop25InfoMap.get(eventObj.whoId)) ) ){
                                 eventIdsTobeUpdated.add(eventObj.Id);
                                 description = eventObj.description == null ? '' : eventObj.description ;
                                 leadTitle = leadIdToTop25Map.get(eventObj.whoId).Title == null ? '' : leadIdToTop25Map.get(eventObj.whoId).Title ;
                                 if( roleToPointsMap!=null && !roleToPointsMap.isEmpty() && 
-                                   roleToPointsMap.containsKey( userRoleMap.get(idToUserMap.get(eventObj.OwnerId).UserRoleId).Name )){
+                                   roleToPointsMap.containsKey( userRoleMap.get(idToUserMap.get(eventObj.OwnerId).UserRoleId).Name.toLowerCase() )){
                                        roleName = userRoleMap.get(idToUserMap.get(eventObj.OwnerId).UserRoleId).Name;
-                                    points = roleToPointsMap.get(roleName ).Points__c==null ? 0 :Integer.valueOf(roleToPointsMap.get(roleName ).Points__c);
+                                    points = roleToPointsMap.get(roleName.toLowerCase() ).Points__c==null ? 0 :Integer.valueOf(roleToPointsMap.get(roleName.toLowerCase() ).Points__c);
                                     spifObj = eventTriggerHandlerObj.returnSPIFRecord( eventObj.OwnerId ,points ,
                                                                                       eventObj.Subject +' | '+idToUserMap.get(eventObj.OwnerId).Name,
                                                                                       description ,URL.getSalesforceBaseUrl().toExternalForm() +'/' + eventObj.Id ,

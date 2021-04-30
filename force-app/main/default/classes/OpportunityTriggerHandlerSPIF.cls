@@ -17,7 +17,7 @@ public class OpportunityTriggerHandlerSPIF {
             // Create rolename to points Map
             Map<String,SPIF_Activity_Records__c> roleToPointsMap = New Map<String,SPIF_Activity_Records__c>();
             for( SPIF_Activity_Records__c activityObj : spifActivityRecords){
-                roleToPointsMap.put(activityObj.Rep_Role__c,activityObj);
+                roleToPointsMap.put(activityObj.Rep_Role__c.toLowerCase(),activityObj);
             }
             
             Map<Id,UserRole> userRoleMap =  new Map<Id,UserRole>([Select Id,Name from UserRole where Name IN : roleToPointsMap.keySet()]);
@@ -34,22 +34,45 @@ public class OpportunityTriggerHandlerSPIF {
                 
             }
             
-            Map<Id, Account> accountMap = new Map<Id, Account>([Select id,Top_25_Account__c,Is_SPIF_for_Opp_Created__c from Account where Id IN : accountIds 
+            Map<Id, Account> accountMap = new Map<Id, Account>([Select id,Top_25_Account__c,Name,Is_SPIF_for_Opp_Created__c from Account where Id IN : accountIds 
                                                                 AND Top_25_Account__c !=null AND Is_SPIF_for_Opp_Created__c = false]);
             // Map<Id, User> userMap = new Map<Id, User>([Select id ,Name, UserRoleId from  User where Id IN : userIds AND  UserRoleId IN :userRoleMap.keySet() ]);
             System.debug('accountMap-->'+accountMap);
             userIds  = new Set<Id>();
+            Set<String> companyNameSet =  new Set<String>();
             for(Id accIdObj : accountMap.keySet()){
                 userIds.add(accountMap.get(accIdObj).Top_25_Account__c);
+                companyNameSet.add(accountMap.get(accIdObj).Name.toLowerCase());
             }
             //System.debug('UserRoleId-->'+userRoleMap.keySet());
              System.debug('UserRoleId-val->'+userRoleMap);
             System.debug('userIds-->'+userIds);
-            Map<Id, User> userMap = new Map<Id, User>([Select id ,Name, UserRoleId from  User where Id IN : userIds AND  UserRoleId IN :userRoleMap.keySet() ]);
+            Map<Id, User> userMap = new Map<Id, User>([Select id ,Name,UserName,UserRoleId from  User where Id IN : userIds AND  UserRoleId IN :userRoleMap.keySet() ]);
             System.debug('userMap-->'+userMap);
+            Set<String> usernameSet =  new Set<String>();
+            for(Id userIdObj : userMap.keySet()){
+                usernameSet.add(userMap.get(userIdObj).username.toLowerCase());
+            }
             
             EventTriggerHandler eventTriggerHandlerObj = new EventTriggerHandler();
             
+            // SPIF record will only be created if the active for spif for spif is marked as true for that user.
+            List<Top_25_Accounts__c> top25AccountList = new List<Top_25_Accounts__c>();
+            top25AccountList = [Select Id ,Active_for_SPIF__c,Username__c,company__c from  Top_25_Accounts__c where company__c!=null AND Active_for_SPIF__c=true AND Username__c!=null AND Username__c IN :usernameSet AND Company__c IN : companyNameSet ];
+            Map<String,String> username_TO_ID_MAP =  new Map<String,String>();
+            for(user userObj : [Select Id , username from user where username IN :usernameSet]){
+                username_TO_ID_MAP.put(userObj.username.toLowerCase() , String.valueOf(userObj.Id));
+            }
+            Set<String> usernameSet_Top =  new Set<String>();
+            for(Top_25_Accounts__c topAcc : top25AccountList){
+                if(username_TO_ID_MAP.containsKey(topAcc.Username__c.toLowerCase()) && username_TO_ID_MAP.get(topAcc.Username__c.toLowerCase())!=null){
+                  usernameSet_Top.add(topAcc.company__c.toLowerCase()+username_TO_ID_MAP.get(topAcc.Username__c.toLowerCase()));  
+                }
+            }
+            System.debug('usernameSet_Top=>'+usernameSet_Top);
+            //Map<Id,User> active_SPFI_userMap = new Map<Id,User>([Select Id from user where username IN : usernameSet]);
+            
+            // end
             
             List<SPIF__c> spifList =  new List<SPIF__c>();
             String description = '';
@@ -60,8 +83,11 @@ public class OpportunityTriggerHandlerSPIF {
             Date recordDate = Date.newInstance(2021, 1, 1);
             for(Opportunity oppObj : opportunitynewList ){
                 System.debug('obj**-->'+oppObj);
+                System.debug('newkey==>'+accountMap.get(oppObj.AccountId).Name.toLowerCase()+accountMap.get(oppObj.AccountId).Top_25_Account__c);
                 if(oppObj.createdDate >recordDate && oppObj.AccountId!=null && !accountIds.contains(oppObj.AccountId) && userMap!=null && accountMap.containsKey(oppObj.AccountId) &&  
-                   accountMap.get(oppObj.AccountId).Top_25_Account__c!=null && userMap.containsKey(accountMap.get(oppObj.AccountId).Top_25_Account__c) &&
+                   accountMap.get(oppObj.AccountId).Top_25_Account__c!=null && 
+                   usernameSet_Top.contains(accountMap.get(oppObj.AccountId).Name.toLowerCase()+accountMap.get(oppObj.AccountId).Top_25_Account__c) &&
+                   userMap.containsKey(accountMap.get(oppObj.AccountId).Top_25_Account__c) &&
                    userMap.get( accountMap.get(oppObj.AccountId).Top_25_Account__c).UserRoleId!=null
                    &&  userRoleMap.containsKey( userMap.get( accountMap.get(oppObj.AccountId).Top_25_Account__c).UserRoleId ) ){
                        System.debug('*******1*****');
@@ -70,12 +96,12 @@ public class OpportunityTriggerHandlerSPIF {
                        roleName = userRoleMap.get( userMap.get(accountMap.get(oppObj.AccountId).Top_25_Account__c).UserRoleId ).Name;
                        description = oppObj.description == null ? '' : oppObj.description ;
                        
-                       if(  roleToPointsMap!=null && roleToPointsMap.containsKey(roleName) ){
+                       if(  roleToPointsMap!=null && roleToPointsMap.containsKey(roleName.toLowerCase()) ){
                            System.debug('oppObj.AccountId-->'+oppObj.AccountId);
                            System.debug('accountMap.get(oppObj.AccountId)-->'+accountMap.get(oppObj.AccountId));
                            System.debug('>>>>>>>>>->'+userMap.get(accountMap.get(oppObj.AccountId).Top_25_Account__c));
                            
-                           points = roleToPointsMap.get(roleName).Points__c==null ? 0 :Integer.valueOf(roleToPointsMap.get(roleName).Points__c);
+                           points = roleToPointsMap.get(roleName.toLowerCase()).Points__c==null ? 0 :Integer.valueOf(roleToPointsMap.get(roleName.toLowerCase()).Points__c);
                            System.debug('-1-> '+String.valueOf(accountMap.get(oppObj.AccountId).Top_25_Account__c));
                            System.debug('-2-> '+oppObj.Id);
                           
