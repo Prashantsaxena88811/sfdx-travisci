@@ -9,8 +9,11 @@ public class LeadTriggerHandlerRoundRobin {
     public  static Map<String , List<Lead_Owner_Round_Robin__c> > industryToListOfUsersMap_leadOwner_Vals = new Map<String , List<Lead_Owner_Round_Robin__c> >();
     public  static Map<String,Integer> CounterMap_IndustryleadOwner_Vals = new Map<String,Integer>();
     
-    public  static List<EDU_Round_Robin__c> EDU_UsersList_Vals = new List<EDU_Round_Robin__c>();
-    public  static Integer CountEDU = 0;
+    /*public  static List<EDU_Round_Robin__c> EDU_UsersList_Vals = new List<EDU_Round_Robin__c>();
+    public  static Integer CountEDU = 0;*/
+    public  static Map<String,List<EDU_Round_Robin__c>> EDU_UsersListMap_Vals =  new Map<String,List<EDU_Round_Robin__c>>();    
+    public  static Map<String,Integer> eduLeadCounterMap_Vals = new Map<String,Integer>();    
+    
     
     public  static Map<String , List<Lead_Owner_Round_Robin__c> > SegmentGeoToListOfUsersMap_leadOwner_Vals = new Map<String , List<Lead_Owner_Round_Robin__c> >();
     public  static Map<String,Integer> CounterMap_leadOwner_Vals = new Map<String,Integer>();
@@ -153,13 +156,23 @@ globalCompanySet.add(compObj.Company__c.toLowerCase());
             
             /*EDU USERS SETUP START*/
             List<EDU_Round_Robin__c> EDU_UsersList = new List<EDU_Round_Robin__c>();
-            EDU_UsersList = [Select Id,User_Name__c,Date__c from EDU_Round_Robin__c where User_Name__c!=null order by date__c asc];
-            //Integer CountEDU = 0;
+            EDU_UsersList = [Select Id,Geography__c ,User_Name__c,Date__c from EDU_Round_Robin__c where User_Name__c!=null AND Geography__c!=null order by date__c asc];
+            system.debug('EDU_UsersList==>'+EDU_UsersList);
+            mapKey = '';
             for( EDU_Round_Robin__c EDU_User : EDU_UsersList){
+                mapKey = EDU_User.Geography__c.toLowerCase();
+                //usernames.add(EDU_User.User_Name__c.trim());
+                if(!EDU_UsersListMap_Vals.containsKey(mapKey.toLowerCase()) ){
+                    EDU_UsersListMap_Vals.put(mapKey.toLowerCase() , new List<EDU_Round_Robin__c>());
+                }
+                if( !eduLeadCounterMap_Vals.containsKey(mapKey.toLowerCase() ) ){
+                    eduLeadCounterMap_Vals.put( mapKey.toLowerCase() , 0 );
+                }
+                EDU_UsersListMap_Vals.get( mapKey.toLowerCase() ).add(EDU_User);
                 usernames.add(EDU_User.User_Name__c.trim());
             }
             /*EDU USERS SETUP END*/
-            
+            system.debug('EDU_UsersListMap_Vals==>'+EDU_UsersListMap_Vals);
             /*Industry and (Segment,Geography) USERS SETUP START*/
             List<Lead_Owner_Round_Robin__c> lead_Owner_OwnerList = new List<Lead_Owner_Round_Robin__c>();
             lead_Owner_OwnerList = [Select Geography__c,UserName__c,Date__c,Segment__c,Industry__c from Lead_Owner_Round_Robin__c where 
@@ -265,7 +278,7 @@ CounterMap_leadOwner.put( mapKey.toLowerCase() , 0 );
             System.debug('SegmentGeoToListOfUsersMap_leadOwner-->'+SegmentGeoToListOfUsersMap_leadOwner);
             globalLeadCounterMap_Vals = new Map<String,Integer>(globalLeadCounterMap);
             geoToGlobalMap_Vals = new Map<String,List<Global_Lead_Round_Robin__c>>(geoToGlobalMap);
-            EDU_UsersList_Vals = new List<EDU_Round_Robin__c>(EDU_UsersList);
+            //EDU_UsersList_Vals = new List<EDU_Round_Robin__c>(EDU_UsersList);
             SegmentGeoToListOfUsersMap_leadOwner_Vals = new Map<String , List<Lead_Owner_Round_Robin__c> >(SegmentGeoToListOfUsersMap_leadOwner);
             CounterMap_leadOwner_Vals = new Map<String,Integer>(CounterMap_leadOwner);
             catchAllUsersList_Vals = new List<Lead_Owner_Round_Robin__c>(catchAllUsersList);
@@ -382,7 +395,7 @@ CounterMap_leadOwner.put( mapKey.toLowerCase() , 0 );
                                        }
                                    }
                                }
-                               System.debug(leadObj+'------'+!isOwnerAssigned);
+                               System.debug(leadObj+'-->>>>>>>----'+!isOwnerAssigned);
                                
                                // CHECK FOR EDU TYPE LEAD
                                if(!isOwnerAssigned &&
@@ -390,7 +403,8 @@ CounterMap_leadOwner.put( mapKey.toLowerCase() , 0 );
                                    ( leadObj.Company!=null && String.isNotBlank(leadObj.Company) && 
                                     (  leadObj.Company.containsIgnoreCase('college') || leadObj.Company.containsIgnoreCase('university') || leadObj.Company.containsIgnoreCase('School') ) ) ) )
                                {  
-                                   newLeadOwnerId = assignOwnerToEDULeads();
+                                   System.debug('******EDU TYPE LEAD');
+                                   newLeadOwnerId = assignOwnerToEDULeads(leadObj.Geography__c);
                                    if(String.isNotBlank(newLeadOwnerId)){
                                        system.debug(' new owner Id assignOwnerToEDULeads-->'+newLeadOwnerId);
                                        leadObj.OwnerId = newLeadOwnerId;
@@ -593,7 +607,31 @@ CounterMap_leadOwner.put( mapKey.toLowerCase() , 0 );
         return ownerId;
         
     }
-    public static String assignOwnerToEDULeads(){
+    public static String assignOwnerToEDULeads(String mapKey){
+        String ownerId ='';
+        Integer count = 0 ;
+        if( eduLeadCounterMap_Vals.containsKey(mapKey.toLowerCase()) ){
+            
+            mapKey.toLowerCase();
+            System.debug('assignOwnerToEDULeads ROUNDROBIN RUN');
+            count = eduLeadCounterMap_Vals.get(mapKey.toLowerCase() );
+            OwnerId = userNameToId_Vals.get( EDU_UsersListMap_Vals.get(mapKey.toLowerCase())[count].User_Name__c.toLowerCase() );
+            //update time on user records
+            EDU_UsersListMap_Vals.get(mapKey.toLowerCase())[count].Date__c = DateTime.now() ; 
+            //add user to the map to update the date time
+            customSettingRecordToBeUpdated.put(EDU_UsersListMap_Vals.get(mapKey.toLowerCase())[count].Id , EDU_UsersListMap_Vals.get(mapKey.toLowerCase())[count]);
+            count = count +1;
+            if( count >= EDU_UsersListMap_Vals.get(mapKey.toLowerCase()).size() ){
+                System.debug('industryToListOfUsersMap_leadOwner_Vals lead owner before Mid-Market reseeting the value---->'+count);
+                count = 0;
+                //CounterMap_IndustryleadOwner_Vals.put( mapKey.toLowerCase() , count );
+            } 
+            eduLeadCounterMap_Vals.put( mapKey.toLowerCase() , count );
+            
+        }
+        return ownerId;
+    }
+    /*public static String assignOwnerToEDULeads(){
         String ownerId ='';
         System.debug('>>assignOwnerToEDULeads');
         if(EDU_UsersList_Vals!=null && !EDU_UsersList_Vals.isEmpty()){
@@ -608,7 +646,7 @@ CounterMap_leadOwner.put( mapKey.toLowerCase() , 0 );
             CountEDU = CountEDU +1;
         }
         return ownerId;
-    }
+    }*/
     
     public static String assignOwnerToSegment_geo_Lead(String mapKey){ // ISG = Industry/Segment/Geography
         String ownerId ='';

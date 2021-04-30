@@ -379,5 +379,27 @@ public class LeadTriggerHandlerTest {
         
         Test.stopTest();
     }
+    @isTest
+    public static void testMethod5(){
+        EDU_Round_Robin__c eduObj1 =  new EDU_Round_Robin__c();
+        eduObj1.Geography__c = 'APAC';
+        eduObj1.User_name__c = 'test@user.comTEST';
+        eduObj1.Name = 'test';
+        insert eduObj1;
+        Test.startTest();
+        Lead leadObj10 = new Lead();
+        leadObj10.Status = 'Round Robin';
+        leadObj10.country = '3M';
+        leadObj10.LastName = 'tstLastName';
+        leadObj10.Company = '3M';
+        leadObj10.Industry = 'Automotive';
+        leadObj10.Geography__c ='Unknown';
+        leadObj10.Employee_Range__c = 'Fewer than 100';
+        leadObj10.Segment__c ='Mid-Market';
+        leadObj10.Industry = 'Automotive';
+        leadObj10.OwnerId = [Select Id from user where username ='emmersiontestUser@sf.com'].Id;
+        insert leadObj10;
+        Test.StopTest();
+    }
     
 }
