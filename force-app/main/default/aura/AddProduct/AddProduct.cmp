@@ -1,0 +1,47 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="emmersionProductList" type="List" default="[]"/>
+    <aura:attribute name="recordId" type="String" />
+     <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <aura:iteration items="{!v.emmersionProductList}" var="item" indexVar="index">
+        <lightning:layout multipleRows="true">
+            <lightning:layoutItem size="3" padding="around-small">
+                <div class="custom-box">
+                    <c:customLookup selectedRecord="{!item.selectedRecord}" objectName="product2" fieldName="Name" label="Product Name" iconName="standard:account" placeholder="Enter Value" />
+                </div>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="3" padding="around-small">
+                <div class="custom-box">
+                    <lightning:input type="number" name="input1" label="Enter Quantity" value="{!item.Quantity}"/>
+                </div>
+            </lightning:layoutItem>
+           
+            <lightning:layoutItem size="2" padding="around-small">
+                <div class="custom-box">
+                    <lightning:input type="number"  name="input2" label="Price" value="{!item.Price}"/>
+                </div>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="1" padding="around-small">
+                <div class="slds-p-top_large">
+                    <a onclick="{!c.addRows}">
+                        <lightning:icon iconName="utility:add" class="slds-icon slds-icon_small" size="small" alternativeText="add"/>
+                        <span class="slds-assistive-text">Add Icon</span>
+                    </a>
+                </div>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="1" padding="around-small">
+                <aura:if isTrue="{!index !=0}">
+                    <div class="slds-p-top_large">
+                        <a onclick="{!c.removeRow}" id="{!index}">
+                            <lightning:icon variant="error" iconName="utility:delete" class="slds-icon slds-icon_small" size="small" alternativeText="icon"/>
+                            <span class="slds-assistive-text">Delete Icon</span>
+                        </a>
+                    </div>
+                </aura:if>
+            </lightning:layoutItem>
+            
+        </lightning:layout>
+    </aura:iteration>
+    
+    
+</aura:component>
