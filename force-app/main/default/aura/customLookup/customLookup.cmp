@@ -22,7 +22,6 @@
     <!-- Component Markup -->
     <aura:attribute name="recordId" type="String" />
     <aura:attribute name="index" type="Integer" />
-    index in child==>{!v.index}
     <div>
         <aura:if isTrue="{!!empty(v.label)}">
 			<label class="slds-form-element__label">{!v.label}</label>

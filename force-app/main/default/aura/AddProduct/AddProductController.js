@@ -14,6 +14,22 @@
         helper.fetchEmmerision_helper(component, event, helper,false);
     }, 
     saveProducts :  function(component, event, helper) {
+        let productList = component.get('v.emmersionProductList');
+        let prodListLength = productList.length;
+        for(let index=0;index<prodListLength;index++){
+            if((productList[index]['selectedRecord']['value']== null) ){
+                helper.showToastMessages_helper(component, event, helper ,'error' , 'Add Product  name  in all rows');
+                return;
+            }
+            if(productList[index]['Quantity'] ==''){
+                helper.showToastMessages_helper(component, event, helper ,'error' , 'Add Quantity in all rows');
+                return;
+            }
+            if(productList[index]['Price'] =='' || productList[index]['Price'] ==null){
+                helper.showToastMessages_helper(component, event, helper ,'error' , 'Add Price in all rows');
+                return;                
+            }
+        }
         helper.saveProducts_helper(component, event, helper);
     }, 
     removeRow : function(component, event, helper) {
@@ -38,6 +54,7 @@
             // set price to null for that index
             let emmersionProductListVar = component.get('v.emmersionProductList');
             emmersionProductListVar[index].Price = '';
+            emmersionProductListVar[index].Quantity = '';
             component.set('v.emmersionProductList',emmersionProductListVar);
         }
         

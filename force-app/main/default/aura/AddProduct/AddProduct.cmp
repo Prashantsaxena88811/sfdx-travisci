@@ -4,7 +4,6 @@
     <aura:attribute name="recordId" type="String" />
     <aura:handler name="ProductAddRemoveEvnt" event="c:ProductAddRemove" action="{!c.ProductAddRemoveEv}"/>
     <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
-    Add Product recordId => {!v.recordId}
     <lightning:layout multipleRows="true">
         <lightning:layoutItem size="12" padding="around-small">
             <center>
@@ -14,24 +13,26 @@
         </lightning:layoutItem>
     </lightning:layout>
     <aura:iteration items="{!v.emmersionProductList}" var="item" indexVar="index">
-        INDex=> {!index}
+        
         <lightning:layout multipleRows="true">
             <lightning:layoutItem size="4" padding="around-small">
                 <div class="custom-box">
                     <c:customLookup index="{!index}" recordId ="{!v.recordId}" selectedRecord="{!item.selectedRecord}" objectName="product2" fieldName="Name" label="Product Name" iconName="standard:account" placeholder="Enter Value" />
                 </div>
             </lightning:layoutItem>
+            
+            <lightning:layoutItem size="2" padding="around-small">
+                <div class="custom-box">
+                    <lightning:input type="number"  name="input2" label="Price Per Quantity" value="{!item.Price}"/>
+                </div>
+            </lightning:layoutItem>
+            
             <lightning:layoutItem size="2" padding="around-small">
                 <div class="custom-box">
                     <lightning:input type="number" name="input1" label="Enter Quantity" value="{!item.Quantity}"/>
                 </div>
             </lightning:layoutItem>
-           
-            <lightning:layoutItem size="2" padding="around-small">
-                <div class="custom-box">
-                    <lightning:input type="number"  name="input2" label="Price" value="{!item.Price}"/>
-                </div>
-            </lightning:layoutItem>
+            
             <lightning:layoutItem size="1" padding="around-small">
                 <div class="slds-p-top_large">
                     <a onclick="{!c.addRows}">

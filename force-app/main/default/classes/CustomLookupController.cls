@@ -17,26 +17,27 @@ public with sharing class CustomLookupController {
             String pbName = '';
             String ProductCodeClause = '';
             if(currentOp!=null && !currentOp.isEmpty()){
-                if(currentOp[0].Type != null && currentOp[0].Type!='' && 
-                   currentOp[0].Area_of_Interest__c != null && currentOp[0].Area_of_Interest__c!=''){
-                       List<String> areaOfInterestList = currentOp[0].Area_of_Interest__c.split(';');
-                       Set<String> areaOfInterestSet = new Set<String>();
-                       for(String val :areaOfInterestList ){
-                           areaOfInterestSet.add(val.toLowerCase());
-                       }
+                if(currentOp[0].Type != null && currentOp[0].Type!=''){
+                    List<String> areaOfInterestList = currentOp[0].Area_of_Interest__c.split(';');
+                    Set<String> areaOfInterestSet = new Set<String>();
+                    for(String val :areaOfInterestList ){
+                        areaOfInterestSet.add(val.toLowerCase());
+                    }
                     if( currentOp[0].Type == 'KeyedIn Projects'){
                         pbName = 'KeyedIn Projects';
-                        if(areaOfInterestSet.contains('KeyedIn Projects'.toLowerCase())){
-                            productFamilyList.add('KeyedIn Projects Software');
-                            productFamilyList.add('Keyedin Projects Services');
-                        }
-                        if(areaOfInterestSet.contains('KeyedIn Enterprise'.toLowerCase())){
-                            productFamilyList.add('KeyedIn Enterprise Software');
-                            productFamilyList.add('Keyedin Projects Services');
-                        }
-                        if(areaOfInterestSet.contains('KeyedIn Adaptive Portfolio'.toLowerCase())){
-                            productFamilyList.add('KeyedIn Adaptive Portfolios Software');
-                            productFamilyList.add('Keyedin Projects Services');
+                        if(currentOp[0].Area_of_Interest__c != null && currentOp[0].Area_of_Interest__c!=''){
+                            if(areaOfInterestSet.contains('KeyedIn Projects'.toLowerCase())){
+                                productFamilyList.add('KeyedIn Projects Software');
+                                productFamilyList.add('Keyedin Projects Services');
+                            }
+                            if(areaOfInterestSet.contains('KeyedIn Enterprise'.toLowerCase())){
+                                productFamilyList.add('KeyedIn Enterprise Software');
+                                productFamilyList.add('Keyedin Projects Services');
+                            }
+                            if(areaOfInterestSet.contains('KeyedIn Adaptive Portfolio'.toLowerCase())){
+                                productFamilyList.add('KeyedIn Adaptive Portfolios Software');
+                                productFamilyList.add('Keyedin Projects Services');
+                            }
                         }
                         
                     }else if(currentOp[0].Type == 'KeyedIn Manufacturing-SMB'){
@@ -50,7 +51,7 @@ public with sharing class CustomLookupController {
                         productFamilyList.add('Keyedin Sign Software');
                         
                     }
-                       
+                    
                 }
                 if(currentOp[0].Region__c == 'US'){
                     ProductCodeClause = '(productcode like \'%USA%\' or productcode like \'%ALL%\')';
@@ -102,14 +103,14 @@ public with sharing class CustomLookupController {
                 }
                 for(SObject s : sobjectList) {
                     if(productIds.contains(s.Id)){
-                       recordsDataList.add( new RecordsData((String)s.get('Name'), (String)s.get('id')) ); 
+                        recordsDataList.add( new RecordsData((String)s.get('Name'), (String)s.get('id')) ); 
                     }
                     
                 }
             }
             /*for(SObject s : sobjectList) {
-                recordsDataList.add( new RecordsData((String)s.get('Name'), (String)s.get('id')) );
-            }*/
+recordsDataList.add( new RecordsData((String)s.get('Name'), (String)s.get('id')) );
+}*/
             
             System.debug('recordsDataList==>'+recordsDataList);
             return recordsDataList;
@@ -191,7 +192,7 @@ public with sharing class CustomLookupController {
                 pickListDatacurrency.add( new pickListDataWrp(p.getLabel(), p.getValue(),true) );
                 
             }else{
-              pickListDatacurrency.add( new pickListDataWrp(p.getLabel(), p.getValue(),false) );  
+                pickListDatacurrency.add( new pickListDataWrp(p.getLabel(), p.getValue(),false) );  
             }
         }
         dataWrpObj.pickListDatacurrency = pickListDatacurrency;
@@ -201,6 +202,63 @@ public with sharing class CustomLookupController {
         System.debug('pickListDataType==>'+pickListDataType);
         System.debug('dataWrpObj==>'+dataWrpObj);
         return dataWrpObj;
+    }
+    
+    @AuraEnabled
+    public static void insertLineItems(String SelectedProdList ,String OpportunityId){
+        try{
+            System.debug('SelectedProdList==>'+SelectedProdList);
+            System.debug('OpportunityId==>'+OpportunityId);
+            String pbName='';
+            List<selectedProdWrapper> selectedProdWrapperList =  (List<selectedProdWrapper>)JSON.deserialize(SelectedProdList, List<selectedProdWrapper>.class);
+            System.debug('selectedProdWrapperList--<>'+selectedProdWrapperList);
+            Set<Id> selectedProductIds = new Set<Id>();
+            for(selectedProdWrapper selectedProdWrapperObj : selectedProdWrapperList){
+                selectedProductIds.add(selectedProdWrapperObj.selectedRecord.value);
+            }
+            
+            List<Opportunity> currentOp = new List<Opportunity>();
+            currentOp = [Select Id,Type,Area_of_Interest__c,Region__c,CurrencyIsoCode from Opportunity where Id=:opportunityId];
+            System.debug('currentOp==>'+currentOp);
+            
+            if(currentOp[0].Type != null && currentOp[0].Type!=''){
+                if( currentOp[0].Type == 'KeyedIn Projects'){
+                    pbName = 'KeyedIn Projects';
+                }else if(currentOp[0].Type == 'KeyedIn Manufacturing-SMB'){
+                    pbName = 'KeyedIn Manufacturing';
+                }else if(currentOp[0].Type == 'KeyedIn Manufacturing-Sign Edition'){
+                    pbName = 'KeyedIn Sign';
+                }
+            }
+            
+            List<PricebookEntry> pbEntry = new  List<PricebookEntry>();
+            pbEntry = [Select Id,Product2ID from pricebookEntry  where CurrencyIsoCode=:currentOp[0].CurrencyIsoCode 
+                       AND Product2Id IN :selectedProductIds and pricebook2.Name =:pbName];
+            Map<String,String> productToPB_EntryMap = new Map<String,String>();
+            for(PricebookEntry pbObj : pbEntry ){
+                if(!productToPB_EntryMap.containsKey(pbObj.Product2ID)){
+                    productToPB_EntryMap.put(pbObj.Product2ID,pbObj.Id);
+                }
+            }
+            List<OpportunityLineItem> OpportunityLineItemList = new List<OpportunityLineItem>();
+            for(selectedProdWrapper selectProductObj :  selectedProdWrapperList){
+                if(productToPB_EntryMap.containsKey(selectProductObj.selectedRecord.value)){
+                    OpportunityLineItem oli = new OpportunityLineItem();
+                    oli.OpportunityId = OpportunityId;
+                    oli.PricebookEntryId = productToPB_EntryMap.get(selectProductObj.selectedRecord.value);
+                    oli.UnitPrice = selectProductObj.Price;
+                    oli.Quantity = selectProductObj.Quantity;
+                    OpportunityLineItemList.add(oli);  
+                }
+                
+            }
+            if(OpportunityLineItemList!=null && !OpportunityLineItemList.isEmpty()){
+                insert OpportunityLineItemList;
+                System.debug('OpportunityLineItemList-->'+OpportunityLineItemList);
+            }
+        }catch(Exception e){
+            System.debug('get exception on line number==>'+e.getLineNumber()+' error is =>'+e.getMessage());
+        }
     }
     
     public class RecordsData {
@@ -223,12 +281,23 @@ public with sharing class CustomLookupController {
     }
     
     public class dataWrp{
-         @AuraEnabled public List<pickListDataWrp> pickListDataType;
-         @AuraEnabled public List<pickListDataWrp> pickListDatacurrency;
-       
+        @AuraEnabled public List<pickListDataWrp> pickListDataType;
+        @AuraEnabled public List<pickListDataWrp> pickListDatacurrency;
+        
     }
-    
-    
-   
+    public class selectedProdWrapper{
+        @AuraEnabled
+        public selectedRecordcls selectedRecord;
+        @AuraEnabled
+        public Integer Quantity;
+        @AuraEnabled
+        public Decimal Price;
+    }
+    public class selectedRecordcls{
+        @AuraEnabled
+        public String label;
+        @AuraEnabled
+        public String value;
+    }
     
 }
