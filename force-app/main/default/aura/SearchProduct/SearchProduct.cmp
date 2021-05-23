@@ -13,7 +13,7 @@
         </lightning:tab>
         
         <lightning:tab label="Screen2" id="2">
-            <c:AddProduct/>
+            <c:AddProduct recordId="{!v.recordId}"/>
         </lightning:tab>
         
         <lightning:tab label="Screen3" id="3">

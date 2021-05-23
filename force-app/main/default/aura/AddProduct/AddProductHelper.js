@@ -175,5 +175,39 @@
             mode: 'dismissible'
         });
         toastEvent.fire();
+    },
+    ProductAddRemoveEv_helper : function(component ,event , helper,index){
+        let productInfo = component.get('v.emmersionProductList')[index];
+        console.log('productInfo=>'+JSON.stringify(productInfo));
+        var action = component.get("c.getProductPrices");
+        action.setParams({ OpportunityId : component.get('v.recordId'),
+                           productId : productInfo.selectedRecord.value });
+        action.setCallback(this, function(response) {
+            var state = response.getState();
+            console.log('Add product helper==>'+state);
+            if (state === "SUCCESS") {
+                alert("From server: " + response.getReturnValue());
+                let emmersionProductListVar = component.get('v.emmersionProductList');
+                emmersionProductListVar[index].Price = response.getReturnValue();
+                component.set('v.emmersionProductList',emmersionProductListVar);
+                
+            }
+            else if (state === "INCOMPLETE") {
+                // do something
+            }
+                else if (state === "ERROR") {
+                    var errors = response.getError();
+                    if (errors) {
+                        if (errors[0] && errors[0].message) {
+                            console.log("Error message: " + 
+                                        errors[0].message);
+                        }
+                    } else {
+                        console.log("Unknown error");
+                    }
+                }
+        });
+        $A.enqueueAction(action);
+        
     }
 })

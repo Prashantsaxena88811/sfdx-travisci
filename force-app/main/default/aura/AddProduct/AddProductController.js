@@ -26,5 +26,20 @@
     },
     showToastMessages : function(component, event, helper){
         helper.showToastMessages_helper(component, event, helper ,'error');
+    },
+    ProductAddRemoveEv : function(component, event, helper){
+        alert('ProductAddRemoveEv');
+        var message = event.getParam("message"); 
+        var index = event.getParam("index");
+        console.log(message+'--'+index);
+        if(message == 'Item Added'){
+            helper.ProductAddRemoveEv_helper(component, event, helper,index);
+        }else if(message == 'Item Removed'){
+            // set price to null for that index
+            let emmersionProductListVar = component.get('v.emmersionProductList');
+            emmersionProductListVar[index].Price = '';
+            component.set('v.emmersionProductList',emmersionProductListVar);
+        }
+        
     }
 })

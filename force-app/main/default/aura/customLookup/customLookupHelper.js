@@ -7,6 +7,7 @@
 		// Calling Apex Method
     	var action = component.get('c.fetchRecords');
         action.setParams({
+            'opportunityId' : component.get('v.recordId'),
             'objectName' : component.get('v.objectName'),
             'filterFieldList' : component.get('v.fieldNameList'),
             'searchString' : searchString,

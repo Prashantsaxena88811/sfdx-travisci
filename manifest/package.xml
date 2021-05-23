@@ -10,6 +10,7 @@
         <members>SearchProduct</members>
         <members>AddProduct</members>
         <members>customLookup</members>
+        <members>ProductAddRemove</members>
         <name>AuraDefinitionBundle</name>
     </types>
     <types>

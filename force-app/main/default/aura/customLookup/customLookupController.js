@@ -24,9 +24,15 @@
             if(index != -1) {
                 var selectedRecord = recordsList[index];
             }
+            alert(selectedRecord + selectedRecord.value);
             component.set('v.selectedRecord',selectedRecord);
             component.set('v.value',selectedRecord.value);
             $A.util.removeClass(component.find('resultsDiv'),'slds-is-open');
+            
+            var cmpEvent = component.getEvent("ProductAddRemoveEvnt"); 
+            cmpEvent.setParams({"message" : "Item Added","index" :component.get('v.index') }); 
+            cmpEvent.fire(); 
+            console.log('*********add*****************');
         }
 	},
     
@@ -38,12 +44,18 @@
 
     // To remove the selected item.
 	removeItem : function( component, event, helper ){
+        alert('Item removed');
         component.set('v.selectedRecord','');
         component.set('v.value','');
         component.set('v.searchString','');
         setTimeout( function() {
             component.find( 'inputLookup' ).focus();
         }, 250);
+        
+        var cmpEvent = component.getEvent("ProductAddRemoveEvnt"); 
+        cmpEvent.setParams({"message" : "Item Removed","index" :component.get('v.index')}); 
+        cmpEvent.fire(); 
+        console.log('*********remove****************');
     },
 
     // To close the dropdown if clicked outside the dropdown.
