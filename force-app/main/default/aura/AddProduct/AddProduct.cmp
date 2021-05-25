@@ -7,8 +7,8 @@
     <lightning:layout multipleRows="true">
         <lightning:layoutItem size="12" padding="around-small">
             <center>
-                <lightning:button variant="brand" label="CalCulate Price" title="Brand action" onclick="{! c.calculatePrice }" />
-                <lightning:button variant="brand" label="Save Products" title="Brand action" onclick="{! c.saveProducts }" />
+              <!--  <lightning:button variant="brand" label="CalCulate Price" title="Brand action" onclick="{! c.calculatePrice }" />
+               --> <lightning:button variant="brand" label="Save Products" title="Brand action" onclick="{! c.saveProducts }" />
             </center>
         </lightning:layoutItem>
     </lightning:layout>

@@ -18,7 +18,10 @@ public with sharing class CustomLookupController {
             String ProductCodeClause = '';
             if(currentOp!=null && !currentOp.isEmpty()){
                 if(currentOp[0].Type != null && currentOp[0].Type!=''){
-                    List<String> areaOfInterestList = currentOp[0].Area_of_Interest__c.split(';');
+                    List<String> areaOfInterestList  =  new List<String>();
+                    if(currentOp[0].Area_of_Interest__c != null && currentOp[0].Area_of_Interest__c!=''){
+                       areaOfInterestList =  currentOp[0].Area_of_Interest__c.split(';');
+                    }
                     Set<String> areaOfInterestSet = new Set<String>();
                     for(String val :areaOfInterestList ){
                         areaOfInterestSet.add(val.toLowerCase());
@@ -80,7 +83,7 @@ public with sharing class CustomLookupController {
                 /* query += ' WHERE '+filterField+
 ' LIKE ' + '\'%' + String.escapeSingleQuotes(searchString.trim()) + '%\' LIMIT 49999';*/
                 System.debug('productFamilyList=>'+productFamilyList);
-                query += ' WHERE '+filterField+' AND '+ProductCodeClause+' AND Family IN:productFamilyList'+' LIMIT 49999';
+                query += ' WHERE '+filterField+' AND '+ProductCodeClause+' AND Family IN:productFamilyList'+' And isActive=true'+' LIMIT 49999';
                 System.debug('Final Query==>'+query);
             }
             List<Sobject> sobjectList  = new List<Sobject>();
@@ -89,7 +92,7 @@ public with sharing class CustomLookupController {
                 //Set<Set>
                 List<PriceBOOk2> pb = new List<PriceBOOk2>();
                 pb = [Select Id,(Select Id,Product2.Name,Product2Id from PricebookEntries where 
-                                 Product2Id IN :sobjectList AND CurrencyIsoCode=:currentOp[0].CurrencyIsoCode) from pricebook2 where Name=:pbName];
+                                 Product2Id IN :sobjectList AND CurrencyIsoCode=:currentOp[0].CurrencyIsoCode AND isActive=true) from pricebook2 where Name=:pbName];
                 System.debug('pb.PricebookEntries=>'+pb[0].PricebookEntries);
                 Set<String> productIds = new Set<String>();
                 for(PriceBOOk2 pbVal : pb) {
@@ -134,8 +137,7 @@ recordsDataList.add( new RecordsData((String)s.get('Name'), (String)s.get('id'))
             String pbName = '';
             
             if(currentOp!=null && !currentOp.isEmpty()){
-                if(currentOp[0].Type != null && currentOp[0].Type!='' && 
-                   currentOp[0].Area_of_Interest__c != null && currentOp[0].Area_of_Interest__c!=''){
+                if(currentOp[0].Type != null && currentOp[0].Type!=''){
                        
                        if( currentOp[0].Type == 'KeyedIn Projects'){
                            pbName = 'KeyedIn Projects';
@@ -149,7 +151,7 @@ recordsDataList.add( new RecordsData((String)s.get('Name'), (String)s.get('id'))
             
             List<PriceBOOk2> pb = new List<PriceBOOk2>();
             pb = [Select Id,(Select Id,Product2Id,UnitPrice from PricebookEntries where 
-                             CurrencyIsoCode=:currentOp[0].CurrencyIsoCode AND Product2Id=:productId limit 1)
+                             CurrencyIsoCode=:currentOp[0].CurrencyIsoCode AND Product2Id=:productId AND isActive=true limit 1)
                   from pricebook2 where Name=:pbName];
             System.debug('pb.PricebookEntries=>'+pb[0].PricebookEntries);
             return pb[0].PricebookEntries[0].UnitPrice;
@@ -240,6 +242,7 @@ recordsDataList.add( new RecordsData((String)s.get('Name'), (String)s.get('id'))
                     productToPB_EntryMap.put(pbObj.Product2ID,pbObj.Id);
                 }
             }
+            System.debug('productToPB_EntryMap==>'+productToPB_EntryMap);
             List<OpportunityLineItem> OpportunityLineItemList = new List<OpportunityLineItem>();
             for(selectedProdWrapper selectProductObj :  selectedProdWrapperList){
                 if(productToPB_EntryMap.containsKey(selectProductObj.selectedRecord.value)){
@@ -256,8 +259,15 @@ recordsDataList.add( new RecordsData((String)s.get('Name'), (String)s.get('id'))
                 insert OpportunityLineItemList;
                 System.debug('OpportunityLineItemList-->'+OpportunityLineItemList);
             }
-        }catch(Exception e){
-            System.debug('get exception on line number==>'+e.getLineNumber()+' error is =>'+e.getMessage());
+        }catch(Exception err){
+            System.debug('get exception on line number==>'+err.getLineNumber()+' error is =>'+err.getMessage());
+            System.debug('get exception on line number==>'+err.getLInenumber() + ' error is=>'+err.getMessage());
+            if ( false && String.isNotBlank( err.getMessage() ) && err.getMessage().contains( 'error:' ) ) {
+                throw new AuraHandledException(err.getMessage().split('error:')[1].split(':')[0] + '.');
+            } else {
+                System.debug('**thwor exception**');
+                throw new AuraHandledException(err.getMessage());
+            }
         }
     }
     

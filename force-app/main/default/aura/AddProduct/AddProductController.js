@@ -25,7 +25,14 @@
                 helper.showToastMessages_helper(component, event, helper ,'error' , 'Add Quantity in all rows');
                 return;
             }
-            if(productList[index]['Price'] =='' || productList[index]['Price'] ==null){
+            console.log('price=>'+productList[index]['Price'])
+            if( productList[index]['Price']!='0' &&( productList[index]['Price'] =='' || productList[index]['Price'] ==null) ){
+                if(productList[index]['Price'] =='' && productList[index]['Price']>-1){
+                    console.log('Price is blank');
+                }
+                if(productList[index]['Price'] ==null){
+                    console.log('Price is null');
+                }
                 helper.showToastMessages_helper(component, event, helper ,'error' , 'Add Price in all rows');
                 return;                
             }
