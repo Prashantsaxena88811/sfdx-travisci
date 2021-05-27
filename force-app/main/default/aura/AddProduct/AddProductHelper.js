@@ -3,8 +3,7 @@
         var emmersionProductListVar = component.get("v.emmersionProductList");
         emmersionProductListVar.push({
             'selectedRecord': '',
-            'Quantity': '',
-            'Price': ''
+            'Quantity': ''
         });
         console.log(emmersionProductListVar);
         component.set("v.emmersionProductList", emmersionProductListVar);

@@ -9,11 +9,14 @@
 
     // When a keyword is entered in search box
 	searchRecords : function( component, event, helper ) {
-        if( !$A.util.isEmpty(component.get('v.searchString')) ) {
+        /*if( !$A.util.isEmpty(component.get('v.searchString')) ) {
 		    helper.searchRecordsHelper( component, event, helper, '' );
         } else {
             $A.util.removeClass(component.find('resultsDiv'),'slds-is-open');
-        }
+        }*/
+        console.log('*****searchRecords*******');
+        helper.searchRecordsHelper( component, event, helper, '' );
+        $A.util.removeClass(component.find('resultsDiv'),'slds-is-open');
 	},
 
     // When an item is selected
@@ -29,15 +32,22 @@
             component.set('v.value',selectedRecord.value);
             $A.util.removeClass(component.find('resultsDiv'),'slds-is-open');
             
-            var cmpEvent = component.getEvent("ProductAddRemoveEvnt"); 
+            /*var cmpEvent = component.getEvent("ProductAddRemoveEvnt"); 
             cmpEvent.setParams({"message" : "Item Added","index" :component.get('v.index') }); 
             cmpEvent.fire(); 
-            console.log('*********add*****************');
+            console.log('*********add*****************');*/
         }
 	},
     
     showRecords : function( component, event, helper ) {
-        if(!$A.util.isEmpty(component.get('v.recordsList')) && !$A.util.isEmpty(component.get('v.searchString'))) {
+        /*if(!$A.util.isEmpty(component.get('v.recordsList')) && !$A.util.isEmpty(component.get('v.searchString'))) {
+            $A.util.addClass(component.find('resultsDiv'),'slds-is-open');
+        }*/
+        console.log('*******show records*****');
+        helper.searchRecordsHelper( component, event, helper, '' );
+        $A.util.removeClass(component.find('resultsDiv'),'slds-is-open');
+        console.log('recordsList'+JSON.stringify(component.get('v.recordsList')));
+        if(!$A.util.isEmpty(component.get('v.recordsList'))) {
             $A.util.addClass(component.find('resultsDiv'),'slds-is-open');
         }
 	},
@@ -52,10 +62,10 @@
             component.find( 'inputLookup' ).focus();
         }, 250);
         
-        var cmpEvent = component.getEvent("ProductAddRemoveEvnt"); 
+        /*var cmpEvent = component.getEvent("ProductAddRemoveEvnt"); 
         cmpEvent.setParams({"message" : "Item Removed","index" :component.get('v.index')}); 
         cmpEvent.fire(); 
-        console.log('*********remove****************');
+        console.log('*********remove****************');*/
     },
 
     // To close the dropdown if clicked outside the dropdown.

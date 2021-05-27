@@ -91,22 +91,22 @@ public with sharing class CustomLookupController {
             if(objectName == 'Product2'){
                 //Set<Set>
                 List<PriceBOOk2> pb = new List<PriceBOOk2>();
-                pb = [Select Id,(Select Id,Product2.Name,Product2Id from PricebookEntries where 
+                pb = [Select Id,(Select Id,Product2.Name,Product2Id,UnitPrice from PricebookEntries where 
                                  Product2Id IN :sobjectList AND CurrencyIsoCode=:currentOp[0].CurrencyIsoCode AND isActive=true) from pricebook2 where Name=:pbName];
                 System.debug('pb.PricebookEntries=>'+pb[0].PricebookEntries);
-                Set<String> productIds = new Set<String>();
+                Map<String,PriceBookEntry> product_TO_PbEntry_MAP =  new Map<String,PriceBookEntry>();
                 for(PriceBOOk2 pbVal : pb) {
                     if(pbVal.PricebookEntries!=null && !pbVal.PricebookEntries.isEmpty()){
                         for(PricebookEntry pbObj : pbVal.PricebookEntries){
-                            productIds.add(pbObj.Product2Id);
+                            product_TO_PbEntry_MAP.put(pbObj.Product2Id,pbObj);
                         }
                         
                     }
                     
                 }
                 for(SObject s : sobjectList) {
-                    if(productIds.contains(s.Id)){
-                        recordsDataList.add( new RecordsData((String)s.get('Name'), (String)s.get('id')) ); 
+                    if(product_TO_PbEntry_MAP.containsKey(s.Id)){
+                        recordsDataList.add( new RecordsData( (String)s.get('Name'), (String)s.get('id'),product_TO_PbEntry_MAP.get((String)s.get('id'))) ); 
                     }
                     
                 }
@@ -211,56 +211,23 @@ recordsDataList.add( new RecordsData((String)s.get('Name'), (String)s.get('id'))
         try{
             System.debug('SelectedProdList==>'+SelectedProdList);
             System.debug('OpportunityId==>'+OpportunityId);
-            String pbName='';
             List<selectedProdWrapper> selectedProdWrapperList =  (List<selectedProdWrapper>)JSON.deserialize(SelectedProdList, List<selectedProdWrapper>.class);
             System.debug('selectedProdWrapperList--<>'+selectedProdWrapperList);
-            Set<Id> selectedProductIds = new Set<Id>();
-            for(selectedProdWrapper selectedProdWrapperObj : selectedProdWrapperList){
-                selectedProductIds.add(selectedProdWrapperObj.selectedRecord.value);
-            }
-            
-            List<Opportunity> currentOp = new List<Opportunity>();
-            currentOp = [Select Id,Type,Area_of_Interest__c,Region__c,CurrencyIsoCode from Opportunity where Id=:opportunityId];
-            System.debug('currentOp==>'+currentOp);
-            
-            if(currentOp[0].Type != null && currentOp[0].Type!=''){
-                if( currentOp[0].Type == 'KeyedIn Projects'){
-                    pbName = 'KeyedIn Projects';
-                }else if(currentOp[0].Type == 'KeyedIn Manufacturing-SMB'){
-                    pbName = 'KeyedIn Manufacturing';
-                }else if(currentOp[0].Type == 'KeyedIn Manufacturing-Sign Edition'){
-                    pbName = 'KeyedIn Sign';
-                }
-            }
-            
-            List<PricebookEntry> pbEntry = new  List<PricebookEntry>();
-            pbEntry = [Select Id,Product2ID from pricebookEntry  where CurrencyIsoCode=:currentOp[0].CurrencyIsoCode 
-                       AND Product2Id IN :selectedProductIds and pricebook2.Name =:pbName];
-            Map<String,String> productToPB_EntryMap = new Map<String,String>();
-            for(PricebookEntry pbObj : pbEntry ){
-                if(!productToPB_EntryMap.containsKey(pbObj.Product2ID)){
-                    productToPB_EntryMap.put(pbObj.Product2ID,pbObj.Id);
-                }
-            }
-            System.debug('productToPB_EntryMap==>'+productToPB_EntryMap);
             List<OpportunityLineItem> OpportunityLineItemList = new List<OpportunityLineItem>();
             for(selectedProdWrapper selectProductObj :  selectedProdWrapperList){
-                if(productToPB_EntryMap.containsKey(selectProductObj.selectedRecord.value)){
-                    OpportunityLineItem oli = new OpportunityLineItem();
-                    oli.OpportunityId = OpportunityId;
-                    oli.PricebookEntryId = productToPB_EntryMap.get(selectProductObj.selectedRecord.value);
-                    oli.UnitPrice = selectProductObj.Price;
-                    oli.Quantity = selectProductObj.Quantity;
-                    OpportunityLineItemList.add(oli);  
-                }
-                
+                OpportunityLineItem oli = new OpportunityLineItem();
+                oli.OpportunityId = OpportunityId;
+                oli.PricebookEntryId = selectProductObj.selectedRecord.PBEntry.ID;
+                oli.UnitPrice = selectProductObj.selectedRecord.PBEntry.UnitPrice;
+                oli.Quantity = selectProductObj.Quantity;
+                OpportunityLineItemList.add(oli);  
             }
             if(OpportunityLineItemList!=null && !OpportunityLineItemList.isEmpty()){
                 insert OpportunityLineItemList;
                 System.debug('OpportunityLineItemList-->'+OpportunityLineItemList);
             }
         }catch(Exception err){
-            System.debug('get exception on line number==>'+err.getLineNumber()+' error is =>'+err.getMessage());
+            System.debug('get exception on line number==>'+err.getLineNumber()+' error is =>'+err.getMessage()+'  trace-<'+err.getStackTraceString());
             System.debug('get exception on line number==>'+err.getLInenumber() + ' error is=>'+err.getMessage());
             if ( false && String.isNotBlank( err.getMessage() ) && err.getMessage().contains( 'error:' ) ) {
                 throw new AuraHandledException(err.getMessage().split('error:')[1].split(':')[0] + '.');
@@ -274,9 +241,11 @@ recordsDataList.add( new RecordsData((String)s.get('Name'), (String)s.get('id'))
     public class RecordsData {
         @AuraEnabled public String label;
         @AuraEnabled public String value;
-        public RecordsData(String label, String value) {
+        @AuraEnabled public PriceBookEntry PBEntry;
+        public RecordsData(String label, String value , PriceBookEntry PBEntry) {
             this.label = label;
             this.value = value;
+            this.PBEntry = PBEntry;
         }
     }
     public class pickListDataWrp {
@@ -297,17 +266,17 @@ recordsDataList.add( new RecordsData((String)s.get('Name'), (String)s.get('id'))
     }
     public class selectedProdWrapper{
         @AuraEnabled
-        public selectedRecordcls selectedRecord;
+        public RecordsData selectedRecord;
         @AuraEnabled
         public Integer Quantity;
-        @AuraEnabled
-        public Decimal Price;
+        /*@AuraEnabled
+        public Decimal Price;*/
     }
-    public class selectedRecordcls{
+    /*public class selectedRecordcls{
         @AuraEnabled
         public String label;
         @AuraEnabled
         public String value;
-    }
+    }*/
     
 }
