@@ -53,7 +53,10 @@ public with sharing class CustomLookupController {
                         productFamilyList.add('KeyedIn Sign Services');
                         productFamilyList.add('Keyedin Sign Software');
                         
+                    }else if(currentOp[0].Type == 'KeyedIn Partner Program' || currentOp[0].Type == 'KeyedIn Community - Boardshaper'){
+                        pbName = 'Standard Price Book';
                     }
+                    
                     
                 }
                 if(currentOp[0].Region__c == 'US'){
@@ -68,7 +71,7 @@ public with sharing class CustomLookupController {
             
             String query = 'SELECT Id, ' + filterField + ' FROM '+objectName;
             if(String.isNotBlank(value)) {
-                query += ' WHERE Id = \''+ value + '\' LIMIT 49999';
+                query += ' WHERE Id = \''+ value + '\' LIMIT 2000';
             } else {
                 filterField = '';
                 for(Integer count = 0 ; count <filterFieldList.size(); count++){
@@ -83,7 +86,12 @@ public with sharing class CustomLookupController {
                 /* query += ' WHERE '+filterField+
 ' LIKE ' + '\'%' + String.escapeSingleQuotes(searchString.trim()) + '%\' LIMIT 49999';*/
                 System.debug('productFamilyList=>'+productFamilyList);
-                query += ' WHERE '+filterField+' AND '+ProductCodeClause+' AND Family IN:productFamilyList'+' And isActive=true'+' LIMIT 49999';
+                query += ' WHERE '+filterField+' AND '+ProductCodeClause;
+                if(productFamilyList!=null && !productFamilyList.isEmpty()){
+                   query +=  ' AND Family IN:productFamilyList';
+                }
+                query += ' And isActive=true'+' LIMIT 49999';
+                //query += ' WHERE '+filterField+' AND '+ProductCodeClause+' AND Family IN:productFamilyList'+' And isActive=true'+' LIMIT 49999';
                 System.debug('Final Query==>'+query);
             }
             List<Sobject> sobjectList  = new List<Sobject>();
@@ -91,8 +99,8 @@ public with sharing class CustomLookupController {
             if(objectName == 'Product2'){
                 //Set<Set>
                 List<PriceBOOk2> pb = new List<PriceBOOk2>();
-                pb = [Select Id,(Select Id,Product2.Name,Product2Id,UnitPrice from PricebookEntries where 
-                                 Product2Id IN :sobjectList AND CurrencyIsoCode=:currentOp[0].CurrencyIsoCode AND isActive=true) from pricebook2 where Name=:pbName];
+                pb = [Select Id,Name,(Select Id,Product2.Name,Product2Id,UnitPrice from PricebookEntries where 
+                                 Product2Id IN :sobjectList AND CurrencyIsoCode=:currentOp[0].CurrencyIsoCode AND isActive=true) from pricebook2 where Name=:pbName Limit 1];
                 System.debug('pb.PricebookEntries=>'+pb[0].PricebookEntries);
                 Map<String,PriceBookEntry> product_TO_PbEntry_MAP =  new Map<String,PriceBookEntry>();
                 for(PriceBOOk2 pbVal : pb) {
@@ -126,7 +134,7 @@ recordsDataList.add( new RecordsData((String)s.get('Name'), (String)s.get('id'))
             }
         }
     }
-    @AuraEnabled 
+    /*@AuraEnabled 
     public static decimal getProductPrices(String OpportunityId,String productId){
         try{
             System.debug('OpportunityId=>'+OpportunityId);
@@ -163,8 +171,8 @@ recordsDataList.add( new RecordsData((String)s.get('Name'), (String)s.get('id'))
                 throw new AuraHandledException(err.getMessage());
             }
         }
-    }
-    @AuraEnabled 
+    }*/
+   /* @AuraEnabled 
     public static dataWrp getTypeFieldValue(String OpportunityId){
         System.debug('getTypeFieldValue==>'+OpportunityId);
         List<Opportunity> opp =  new List<Opportunity>();
@@ -204,7 +212,7 @@ recordsDataList.add( new RecordsData((String)s.get('Name'), (String)s.get('id'))
         System.debug('pickListDataType==>'+pickListDataType);
         System.debug('dataWrpObj==>'+dataWrpObj);
         return dataWrpObj;
-    }
+    }*/
     
     @AuraEnabled
     public static void insertLineItems(String SelectedProdList ,String OpportunityId){
