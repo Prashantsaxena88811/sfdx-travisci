@@ -6,7 +6,7 @@ public class OpportunityTriggerHandler {
                 accountIds.add(oppRec.AccountId);
             }
         }
-        Map<Id, Account> accountById = new Map<Id, Account>([Select id,(Select SDR__c,CloseDate from Opportunities  where Recordtype.DeveloperName = 'New_Logo' and SDR__c!=null and Stagename = 'Closed Won' order by CloseDate asc Limit 1) from Account where Id IN :accountIds]);
+        Map<Id, Account> accountById = new Map<Id, Account>([Select id,(Select SDR__c,CloseDate from Opportunities  where Recordtype.DeveloperName = 'Initial Deal' and SDR__c!=null and Stagename = 'Closed Won' order by CloseDate asc Limit 1) from Account where Id IN :accountIds]);
         for(opportunity oppRec : opportunityNewList){
             if(oppRec.AccountId != null && accountById.containsKey(oppRec.AccountId) 
                && accountById.get(oppRec.AccountId).Opportunities !=null ){
@@ -22,7 +22,7 @@ public class OpportunityTriggerHandler {
     public static void createDualOpportunities(List<Opportunity> opportunityNewList , Map<Id, Opportunity> OpportunityOldMap){
         try{
             RecordType recordType = new RecordType();
-            recordType = [select id from recordtype where DeveloperName = 'Existing_Business' and SobjectType = 'Opportunity'];
+            recordType = [select id from recordtype where DeveloperName = 'Amendment' and SobjectType = 'Opportunity'];
             List<opportunity> cloneOpportunityList =  new List<opportunity>();
             Integer count = 0;
             String deserialzeSerialze;
@@ -32,6 +32,7 @@ public class OpportunityTriggerHandler {
                     if(oppRec.Future_Opp__c){
                         Opportunity opp = new Opportunity();
                         opp.Is_Future_Opp__c = true;
+                        opp.Age_Status__c = 'Future Opportunity';                       
                         deserialzeSerialze =  (JSON.serializePretty(oppRec));
                         opp = (Opportunity)JSON.deserialize(deserialzeSerialze, Opportunity.Class);
                         opp.Name = oppRec.Name+' Future Opp';
@@ -39,6 +40,7 @@ public class OpportunityTriggerHandler {
                         opp.RecordTypeId = recordType.Id;
                         opp.Future_Opp__c = false;
                         opp.Is_Future_Opp__c = true;
+                        opp.Age_Status__c = 'Future Opportunity'; 
                         opp.Type = 'Opp within 12 months';
                         opp.Stated_Annual_Need__c = oppRec.Future_Stated_Annual_Need__c;
                         opp.Future_Stated_Annual_Need__c = '';

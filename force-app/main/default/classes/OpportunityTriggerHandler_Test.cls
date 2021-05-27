@@ -36,6 +36,7 @@ public class OpportunityTriggerHandler_Test {
         op1.closedate = date.today();
         op1.stagename ='Closed Won';
         op1.AccountId = aa.Id;
+        op1.Type = 'New Logo';
         op1.RecordtypeId = recordType1.Id;
         op1.SDR__c = user.id;
         insert op1;
@@ -43,6 +44,7 @@ public class OpportunityTriggerHandler_Test {
         
         Opportunity op = new Opportunity();
         op.Name ='test op';
+        op.Type = 'New Logo';
         op.closedate = date.today();
         op.stagename ='Discovery';
         op.AccountId = aa.Id;
@@ -82,6 +84,7 @@ public class OpportunityTriggerHandler_Test {
         
         Opportunity op1 = new Opportunity();
         op1.Name ='test op';
+        op1.Type = 'New Logo';
         op1.closedate = date.today();
         op1.stagename ='Closed Won';
         op1.AccountId = aa.Id;
