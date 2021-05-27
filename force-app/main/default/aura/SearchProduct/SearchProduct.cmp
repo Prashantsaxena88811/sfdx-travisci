@@ -3,34 +3,10 @@
     <aura:attribute name="recordId" type="String" />
     <aura:html tag="style">
         .slds-modal__container{
-        max-width: 80rem !important;
+        max-width: 82rem !important;
         width:80% !important;
         }
     </aura:html>
-    <lightning:tabset selectedTabId="{!v.selTabId}" >
-        <lightning:tab label="Screen1" id="1">
-            <c:Screen_Opportunity_Pickllist recordId="{!v.recordId}"/>
-        </lightning:tab>
-        
-        <lightning:tab label="Screen2" id="2">
-            <c:AddProduct recordId="{!v.recordId}"/>
-        </lightning:tab>
-        
-        <lightning:tab label="Screen3" id="3">
-           <b> Product Save Logic</b>
-        </lightning:tab>
-        
-        
-        
-    </lightning:tabset>
+    <c:AddProduct recordId="{!v.recordId}"/>
     
-    <div class="slds-clearfix">
-        <div class="slds-float_left">
-            <!--disabled the back button on first Tab-->    
-            <lightning:button disabled="{!v.selTabId == '1'}" variant="neutral" label="Back" onclick="{!c.back}" />
-        </div>
-        <div class="slds-float_right">
-            <lightning:button variant="brand" label="Next" onclick="{!c.next}" />
-        </div>
-    </div>
 </aura:component>

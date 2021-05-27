@@ -14,15 +14,18 @@
         helper.fetchEmmerision_helper(component, event, helper,false);
     }, 
     saveProducts :  function(component, event, helper) {
+        component.set('v.loaded',true);
         let productList = component.get('v.emmersionProductList');
         let prodListLength = productList.length;
         for(let index=0;index<prodListLength;index++){
             if(productList[index]['selectedRecord']['value']== null ){
                 helper.showToastMessages_helper(component, event, helper ,'error' , 'Add Product  name  in all rows');
+                component.set('v.loaded',false);
                 return;
             }
             if(productList[index]['Quantity'] ==''){
                 helper.showToastMessages_helper(component, event, helper ,'error' , 'Add Quantity in all rows');
+                component.set('v.loaded',false);
                 return;
             }
             //console.log('price=>'+productList[index]['Price'])
@@ -34,6 +37,7 @@
                     console.log('Price is null');
                 }*/
                 helper.showToastMessages_helper(component, event, helper ,'error' , 'Add Price in all rows');
+                component.set('v.loaded',false);
                 return;                
             }
         }

@@ -18,6 +18,7 @@
             );
             action.setCallback(this, function(response) {
                 var state = response.getState();
+                component.set('v.loaded',false);
                 if (state === "SUCCESS") {
                       helper.showToastMessages_helper(component, event, helper ,'success' , 'Opportunity Product Saved Successfully');
                         var dismissActionPanel = $A.get("e.force:closeQuickAction");

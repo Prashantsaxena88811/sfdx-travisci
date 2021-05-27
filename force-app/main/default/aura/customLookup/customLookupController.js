@@ -27,7 +27,7 @@
             if(index != -1) {
                 var selectedRecord = recordsList[index];
             }
-            alert(selectedRecord + selectedRecord.value);
+            //alert(selectedRecord + selectedRecord.value);
             component.set('v.selectedRecord',selectedRecord);
             component.set('v.value',selectedRecord.value);
             $A.util.removeClass(component.find('resultsDiv'),'slds-is-open');
@@ -54,7 +54,7 @@
 
     // To remove the selected item.
 	removeItem : function( component, event, helper ){
-        alert('Item removed');
+        //('Item removed');
         component.set('v.selectedRecord','');
         component.set('v.value','');
         component.set('v.searchString','');
