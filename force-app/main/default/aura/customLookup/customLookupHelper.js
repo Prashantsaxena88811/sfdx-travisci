@@ -10,7 +10,8 @@
             'objectName' : component.get('v.objectName'),
             'filterField' : component.get('v.fieldName'),
             'searchString' : searchString,
-            'value' : value
+            'value' : value,
+            'pricingType':component.get('v.pricingType')
         });
         action.setCallback(this,function(response){
         	var result = response.getReturnValue();

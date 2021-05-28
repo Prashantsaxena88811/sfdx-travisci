@@ -1,15 +1,15 @@
 public with sharing class CustomLookupController {
  
     @AuraEnabled
-    public static List<RecordsData> fetchRecords(String objectName, String filterField, String searchString, String value) {
+    public static List<RecordsData> fetchRecords(String objectName, String filterField, String searchString, String value,String pricingType) {
         try {
             List<RecordsData> recordsDataList = new List<RecordsData>();
             String query = 'SELECT Id, ' + filterField + ' FROM '+objectName;
             if(String.isNotBlank(value)) {
-                query += ' WHERE Id = \''+ value + '\' LIMIT 49999';
+                query += ' WHERE Id = \''+ value + '\' LIMIT 2000';
             } else {
                 query += ' WHERE '+filterField+
-                		' LIKE ' + '\'' + String.escapeSingleQuotes(searchString.trim()) + '%\' LIMIT 49999';
+                		' LIKE ' + '\'%' + String.escapeSingleQuotes(searchString.trim()) + '%\''+' AND Prcing_Type__c includes (\''+pricingType+'\')' + ' LIMIT 49999';
             }
 	        for(SObject s : Database.query(query)) {
 	            recordsDataList.add( new RecordsData((String)s.get(filterField), (String)s.get('id')) );

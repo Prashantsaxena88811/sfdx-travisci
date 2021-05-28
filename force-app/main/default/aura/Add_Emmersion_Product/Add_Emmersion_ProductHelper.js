@@ -10,7 +10,78 @@
         console.log(emmersionProductListVar);
         component.set("v.emmersionProductList", emmersionProductListVar);
     },
-    fetchEmmerision_helper  : function(component ,event , helper , isProdSave){
+    calculateProductPrice_helper : function(component ,event , helper , isProdSave){
+        try{
+            
+            
+            console.log('**calculateProductPrice_helper**');
+            var action = component.get("c.getAllPrices");
+            var productIds = [];
+            var  emmersionProductList = component.get("v.emmersionProductList");
+            console.log('************22********');
+            for(let index=0; index<emmersionProductList.length ; index++){
+                productIds.push(emmersionProductList[index].selectedRecord.value);
+            }
+            console.log(productIds);
+            
+            action.setParams(
+                { selectedProIds : productIds,pricingType :component.get('v.pricingType') });
+            action.setCallback(this, function(response) {
+                var state = response.getState();
+                if (state === "SUCCESS") {
+                    //alert("From server: " + response.getReturnValue());
+                    console.log('calculateProductPrice_helper');
+                    console.log(response.getReturnValue());
+                    if(response.getReturnValue() !=null){
+                       helper.addPriceToProducts(component ,event , helper ,response.getReturnValue(),isProdSave); 
+                    }
+                    
+                }
+                else if (state === "INCOMPLETE") {
+                    // do something
+                }
+                    else if (state === "ERROR") {
+                        var errors = response.getError();
+                        if (errors) {
+                            if (errors[0] && errors[0].message) {
+                                console.log("Error message: " + 
+                                            errors[0].message);
+                            }
+                        } else {
+                            console.log("Unknown error");
+                        }
+                    }
+            });
+            
+            $A.enqueueAction(action);
+        }catch(err){
+            console.log('calculateProductPrice_helper-->'+err.message);
+        }
+    },
+    addPriceToProducts : function(component ,event , helper , priceList , isProdSave){
+        try{ 
+            console.clear();
+            let prodLength = component.get('v.emmersionProductList').length;
+            let productsList = component.get('v.emmersionProductList');
+            let priceListLength = priceList.length;
+            console.log(productsList);
+            console.log(priceList);
+            for(let prodIndex=0 ;prodIndex<prodLength;prodIndex++ ){
+                for(let priceIndex=0 ;priceIndex<priceListLength;priceIndex++){
+                    if( priceList[priceIndex].Tier__c>=productsList[prodIndex].Quantity && productsList[prodIndex].Quantity >= priceList[priceIndex].Tier_From__c ){
+                        console.log('****************************'+priceList[priceIndex].Monthly_Price_Per_Test__c);
+                        productsList[prodIndex].Price = priceList[priceIndex].Monthly_Price_Per_Test__c;
+                        break;
+                    }
+                }
+            }
+            component.set('v.emmersionProductList',productsList);
+        }catch(err){
+            console.log('get exception in addPriceToProducts->'+err.message);
+        }
+    }, 
+    
+    /*fetchEmmerision_helper  : function(component ,event , helper , isProdSave){
         // create a one-time use instance of the serverEcho action
         // in the server-side controller
         console.log('************11********');
@@ -48,8 +119,8 @@
                 }
         });
         $A.enqueueAction(action);
-    },
-    calculatePirce_helper :  function(component ,event , helper , emmersionPriceMapping , isProdSave){
+    },*/
+    /*calculatePirce_helper :  function(component ,event , helper , emmersionPriceMapping , isProdSave){
         try{
             console.log(emmersionPriceMapping);
             console.log('*************');
@@ -124,7 +195,7 @@
         }catch(e){
             console.log(e.message);
         }
-    },
+    },*/
     passValueToServer : function(component ,event , helper , emmersionProductList){
         try{
             var action = component.get("c.insertLineItems");
@@ -136,10 +207,10 @@
             action.setCallback(this, function(response) {
                 var state = response.getState();
                 if (state === "SUCCESS") {
-                      helper.showToastMessages_helper(component, event, helper ,'success' , 'Opportunity Product Saved Successfully');
-                        var dismissActionPanel = $A.get("e.force:closeQuickAction");
-                        dismissActionPanel.fire();
-                        $A.get('e.force:refreshView').fire();
+                    helper.showToastMessages_helper(component, event, helper ,'success' , 'Opportunity Product Saved Successfully');
+                    var dismissActionPanel = $A.get("e.force:closeQuickAction");
+                    dismissActionPanel.fire();
+                    $A.get('e.force:refreshView').fire();
                 }
                 else if (state === "INCOMPLETE") {
                     // do something
@@ -168,7 +239,7 @@
     showToastMessages_helper : function(component ,event , helper , msgType , errMsg){
         var toastEvent = $A.get("e.force:showToast");
         toastEvent.setParams({
-            title : 'Error Message',
+            title : msgType,
             message: errMsg,
             duration:' 5000',
             key: 'info_alt',

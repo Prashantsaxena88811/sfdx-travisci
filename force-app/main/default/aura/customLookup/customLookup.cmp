@@ -15,7 +15,9 @@
     <aura:attribute name="selectedRecord" type="Object" access="public" default="" description="selected Record Details" />
     <aura:attribute name="recordsList" 	  type="List"   access="public" description="List of Records having data" />
     <aura:attribute name="message" 		  type="String" access="public" default="" />
-
+	
+    <aura:attribute name="pricingType" type="String"/>
+    {!v.pricingType}
     <!-- Component Markup -->
     <div>
         <aura:if isTrue="{!!empty(v.label)}">

@@ -360,8 +360,10 @@ CounterMap_leadOwner.put( mapKey.toLowerCase() , 0 );
                         System.debug('---global--lead--obj--'+leadObj);
                         if( leadObj.Company.toLowerCase() == 'Capita' || leadObj.Company.toLowerCase() == 'bp' || leadObj.Company.toLowerCase() == 'abb' || leadObj.Company.toLowerCase() == 'Intel' ){
                             isGlobalLead =  true; 
+                            System.debug('Exact match of capita');
                         }
                         if(!isGlobalLead){
+                            System.debug('contains match of capita');
                             for(Global_List__c globalLead : globalList ){
                                 if( !(leadObj.Company.toLowerCase() == 'Capita' || globalLead.company__c.toLowerCase() == 'bp' || globalLead.company__c.toLowerCase() == 'abb' || globalLead.company__c.toLowerCase() == 'Intel') 
                                    && leadObj.Company.containsIgnoreCase(globalLead.company__c) ){
