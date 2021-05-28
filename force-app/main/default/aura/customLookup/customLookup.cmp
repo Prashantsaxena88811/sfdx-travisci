@@ -1,5 +1,5 @@
 <aura:component controller="CustomLookupController" >
-
+	<aura:registerEvent name="ProductAddRemoveEvnt" type="c:ProductAddRemove" />
 	<!-- Attributes that can be set while component calling-->
     <aura:attribute name="objectName" 	type="string" default="" required="true" />
     <aura:attribute name="fieldName" 	type="string" default="" required="true" />
@@ -17,7 +17,8 @@
     <aura:attribute name="message" 		  type="String" access="public" default="" />
 	
     <aura:attribute name="pricingType" type="String"/>
-    {!v.pricingType}
+    <aura:attribute name="index" type="Integer" />
+    {!v.pricingType} {!v.index}
     <!-- Component Markup -->
     <div>
         <aura:if isTrue="{!!empty(v.label)}">

@@ -23,8 +23,13 @@ public class CalculatePriceForEmmersionProduct {
         
     }
     @AuraEnabled
-    public static void insertLineItems(String SelectedProdList ,String OpportunityId){
+    public static void insertLineItems(String SelectedProdList ,String OpportunityId, String pricingType){
         try{
+            List<Opportunity> opportunityRec = new List<Opportunity>();
+            opportunityRec = [Select id,Annual_billing__c from Opportunity where Id=:OpportunityId];
+            if(opportunityRec.isEmpty()){
+                return;
+            }
             System.debug('SelectedProdList-->'+SelectedProdList);
             List<selectedProdWrapper> selectedProdWrapperList =  (List<selectedProdWrapper>)JSON.deserialize(SelectedProdList, List<selectedProdWrapper>.class);
             System.debug('selectedProdWrapperList--<>'+selectedProdWrapperList);
@@ -32,7 +37,7 @@ public class CalculatePriceForEmmersionProduct {
             for(selectedProdWrapper selectedProdWrapperObj : selectedProdWrapperList){
                 selectedProductIds.add(selectedProdWrapperObj.selectedRecord.value);
             }
-           
+            
             List<Pricebook2> idList = new List<Pricebook2>();            
             idList = [select id, name from Pricebook2 where isStandard = true limit 1];
             //fetch alreadt insert PB entries of standard Price book
@@ -80,8 +85,16 @@ public class CalculatePriceForEmmersionProduct {
                 OpportunityLineItem oli = new OpportunityLineItem();
                 oli.OpportunityId = OpportunityId;
                 oli.PricebookEntryId = prod_To_PB_Map.get(selectProductObj.selectedRecord.value).Id;
-                oli.UnitPrice = selectProductObj.Price;
-                oli.Billing_Term__c = selectProductObj.BillingTerm;
+                
+                if(pricingType == 'Postpaid' || pricingType == 'Bulk Order'){
+                    oli.UnitPrice = (double)selectProductObj.Price/selectProductObj.Quantity;
+                }else{
+                    oli.UnitPrice = selectProductObj.Price;
+                    if(pricingType == 'Subscription' && opportunityRec[0].Annual_billing__c){
+                        oli.Discount = 10;
+                    }
+                }
+                //oli.Billing_Term__c = selectProductObj.BillingTerm;
                 oli.Quantity = selectProductObj.Quantity;
                 OpportunityLineItemList.add(oli);
             }
@@ -92,7 +105,7 @@ public class CalculatePriceForEmmersionProduct {
         }catch(Exception e){
             System.debug('get exception on line number-->'+e.getLineNumber() +' error is-->'+e.getMessage() );
             throw new AuraHandledException('Darn it! Something went wrong: '
-            + e.getMessage()); 
+                                           + e.getMessage()); 
             //return null;
         }
         
@@ -102,6 +115,7 @@ public class CalculatePriceForEmmersionProduct {
     @AuraEnabled
     public static List<Emmersion_Pricing__c> getAllPrices(List<String> selectedProIds , String pricingType){
         try{
+            System.debug('*********getAllPrices********');
             System.debug('selectedProIds-->'+selectedProIds);
             String ss ='aaaaaaaaaaaaaaaaa';
             System.debug('aaaaaaaaaaaaaaaaa==>'+ss);
@@ -120,6 +134,24 @@ public class CalculatePriceForEmmersionProduct {
         }
         
         
+    }
+    
+    @AuraEnabled
+    public static Map<String,PriceBookEntry> getAllStandardPrices(List<String> selectedProIds , String pricingType){
+        try{
+            System.debug('*********getAllStandardPrices********');
+            List<PriceBookEntry> pb_entries = new List<PriceBookEntry>();
+            pb_entries = [Select id,Product2Id,UnitPrice from PriceBookEntry where Product2Id IN:selectedProIds AND  PriceBook2.Name=:'Standard Price Book'  AND isActive=true];
+            System.debug('pb_entries==>'+pb_entries);
+            Map<String,PriceBookEntry> prodIdTOPrice_Map = new Map<String,PriceBookEntry>();
+            for(PriceBookEntry pbEntry:pb_entries){
+                prodIdTOPrice_Map.put(String.valueOf(pbEntry.Product2Id),pbEntry);
+            }
+            return prodIdTOPrice_Map;
+        }catch(Exception e){
+            System.debug('get exception on line number-->'+e.getLineNumber() +' error is-->'+e.getMessage() );
+            throw new AuraHandledException('Darn it! Something went wrong: ' + e.getMessage()); 
+        }
     }
     
     public class selectedProdWrapper{

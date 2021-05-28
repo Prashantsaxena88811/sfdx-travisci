@@ -25,6 +25,7 @@
 <types>
 <members>Add_Emmersion_Product</members>
 <members>customLookup</members>
+<members>ProductAddRemove</members>
 <name>AuraDefinitionBundle</name>
 </types>
 <types>

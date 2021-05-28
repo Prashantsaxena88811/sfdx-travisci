@@ -10,12 +10,10 @@
         console.log(emmersionProductListVar);
         component.set("v.emmersionProductList", emmersionProductListVar);
     },
-    calculateProductPrice_helper : function(component ,event , helper , isProdSave){
+    calculateProductPrice_helper : function(component ,event , helper , isProdSave,functionName){
         try{
             
-            
-            console.log('**calculateProductPrice_helper**');
-            var action = component.get("c.getAllPrices");
+            var action = component.get(functionName); 
             var productIds = [];
             var  emmersionProductList = component.get("v.emmersionProductList");
             console.log('************22********');
@@ -29,11 +27,16 @@
             action.setCallback(this, function(response) {
                 var state = response.getState();
                 if (state === "SUCCESS") {
-                    //alert("From server: " + response.getReturnValue());
-                    console.log('calculateProductPrice_helper');
-                    console.log(response.getReturnValue());
-                    if(response.getReturnValue() !=null){
-                       helper.addPriceToProducts(component ,event , helper ,response.getReturnValue(),isProdSave); 
+                    
+                   
+                    
+                    if(component.get('v.pricingType').toLowerCase() == 'Bulk Order'.toLowerCase() || component.get('v.pricingType').toLowerCase() == 'Subscription'.toLowerCase() 
+                       || component.get('v.pricingType').toLowerCase() == 'Postpaid'.toLowerCase()){
+                        console.log('c.getAllPrices');
+                        helper.addPriceToProducts(component ,event , helper ,response.getReturnValue(),isProdSave); 
+                    }else{
+                        console.log('c.getAllStandardPrices');
+                        helper.addStandardPriceToProducts(component ,event , helper ,response.getReturnValue(),isProdSave); 
                     }
                     
                 }
@@ -76,6 +79,42 @@
                 }
             }
             component.set('v.emmersionProductList',productsList);
+            if(isProdSave){
+                helper.passValueToServer(component ,event , helper , component.get('v.emmersionProductList'));   
+            }
+        }catch(err){
+            console.log('get exception in addPriceToProducts->'+err.message);
+        }
+    }, 
+    addStandardPriceToProducts : function(component ,event , helper , priceList , isProdSave){
+        try{ 
+            console.clear();
+            console.log('priceList');
+            console.log(priceList);
+            /*var pricingMap =  new Map();
+            for(let priceMap=0 ; priceMap<priceList.length ; priceMap++){
+                priceMap.put(priceList[priceMap]);
+            }*/
+            let prodLength = component.get('v.emmersionProductList').length;
+            let productsList = component.get('v.emmersionProductList');
+            let priceListLength = priceList.length;
+            console.log(productsList);
+            console.log(priceList);
+            for(let prodIndex=0 ;prodIndex<prodLength;prodIndex++ ){
+               console.log(productsList[prodIndex]['selectedRecord']['value']);
+                let productId = productsList[prodIndex]['selectedRecord']['value'];
+                if(priceList.hasOwnProperty(productId)){
+                    console.log('YES');
+                    let priceInfo = priceList[productId]['UnitPrice'];
+                    console.log(productId+'-------------'+priceInfo);
+                    productsList[prodIndex]['Price']=priceInfo;
+                }
+            }
+            component.set('v.emmersionProductList',productsList);
+             if(isProdSave){
+                helper.passValueToServer(component ,event , helper , component.get('v.emmersionProductList'));   
+            }
+            
         }catch(err){
             console.log('get exception in addPriceToProducts->'+err.message);
         }
@@ -201,7 +240,10 @@
             var action = component.get("c.insertLineItems");
             console.log('send to server-->'+JSON.stringify(emmersionProductList));
             action.setParams(
-                { SelectedProdList : JSON.stringify(emmersionProductList) , OpportunityId : component.get('v.recordId')
+                { 
+                    SelectedProdList : JSON.stringify(emmersionProductList) ,
+                    OpportunityId : component.get('v.recordId'),
+                    pricingType : component.get('v.pricingType')
                 }
             );
             action.setCallback(this, function(response) {
@@ -233,8 +275,20 @@
         }
     },
     saveProducts_helper : function(component ,event , helper){
-        helper.fetchEmmerision_helper(component ,event , helper , true)
+        //helper.fetchEmmerision_helper(component ,event , helper , true)
         //helper.passValueToServer(component ,event , helper , component.get("v.emmersionProductList")); 
+        //calculateProductPrice_helper
+        let functionName ='';
+        if(component.get('v.pricingType').toLowerCase() == 'Bulk Order'.toLowerCase() || component.get('v.pricingType').toLowerCase() == 'Subscription'.toLowerCase() 
+           || component.get('v.pricingType').toLowerCase() == 'Postpaid'.toLowerCase()){
+            console.log('c.getAllPrices');
+            functionName = "c.getAllPrices"; 
+        }else{
+            console.log('c.getAllStandardPrices');
+            functionName = "c.getAllStandardPrices"; 
+        }
+        
+        helper.calculateProductPrice_helper(component, event, helper,true,functionName)
     },
     showToastMessages_helper : function(component ,event , helper , msgType , errMsg){
         var toastEvent = $A.get("e.force:showToast");

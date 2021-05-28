@@ -4,8 +4,9 @@
     <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
     <aura:attribute name="recordId" type="String" />
     <aura:attribute name="pricingType" type="String"/>
+    <aura:attribute name="pricingMaping" type="Map"/>
     
-    
+    <aura:handler name="ProductAddRemoveEvnt" event="c:ProductAddRemove" action="{!c.ProductAddRemoveEv}"/>
     <aura:html tag="style">
         .slds-modal__container{
         max-width: 80rem !important;
@@ -38,7 +39,7 @@
             <lightning:layout multipleRows="true">
                 <lightning:layoutItem size="3" padding="around-small">
                     <div class="custom-box">
-                        <c:customLookup pricingType="{!v.pricingType}" selectedRecord="{!item.selectedRecord}" objectName="product2" fieldName="Name" label="Product Name" iconName="standard:account" placeholder="Enter Value" />
+                        <c:customLookup index="{!index}" pricingType="{!v.pricingType}" selectedRecord="{!item.selectedRecord}" objectName="product2" fieldName="Name" label="Product Name" iconName="standard:account" placeholder="Enter Value" />
                     </div>
                 </lightning:layoutItem>
                 <lightning:layoutItem size="3" padding="around-small">
@@ -48,7 +49,7 @@
                 </lightning:layoutItem>
                  <lightning:layoutItem size="2" padding="around-small">
                     <div class="custom-box">
-                        <lightning:input type="number"  name="input2" label="Price" value="{!item.Price}"/>
+                        <lightning:input type="number"  name="input2" step=".02" label="Price" value="{!item.Price}"/>
                     </div>
                 </lightning:layoutItem>
                 <!--<lightning:layoutItem size="2" padding="around-small">

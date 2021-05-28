@@ -15,7 +15,18 @@
     }, */
     calculateProductPrice : function(component, event, helper) {
         console.log('**calculateProductPrice**');
-        helper.calculateProductPrice_helper(component, event, helper,false);
+        let functionName ='';
+        //console.log('pricingType=>'+)
+        if(component.get('v.pricingType').toLowerCase() == 'Bulk Order'.toLowerCase() || component.get('v.pricingType').toLowerCase() == 'Subscription'.toLowerCase() 
+           || component.get('v.pricingType').toLowerCase() == 'Postpaid'.toLowerCase()){
+            console.log('c.getAllPrices');
+            functionName = "c.getAllPrices"; 
+        }else{
+            console.log('c.getAllStandardPrices');
+            functionName = "c.getAllStandardPrices"; 
+        }
+        
+        helper.calculateProductPrice_helper(component, event, helper,false,functionName);
     },
     saveProducts :  function(component, event, helper) {
         helper.saveProducts_helper(component, event, helper);
@@ -33,6 +44,29 @@
     },
     onChange :  function(component, event, helper){
         //helper.showToastMessages_helper(component, event, helper ,'error');
+        component.set('v.emmersionProductList',[]);
+        helper.addRowHelper(component ,event , helper);
+    },
+    ProductAddRemoveEv : function(component, event, helper){
+        try{
+            //alert('Item Removed');
+            var message = event.getParam("message"); 
+            console.log('message=>'+message);
+            var index = event.getParam("index");
+            console.log('index=>'+index);
+            if(message == 'Item Removed'){
+                console.log('INNNNNNNNNNNNN');
+                // set price to null for that index
+                let emmersionProductListVar = component.get('v.emmersionProductList');
+                console.log(emmersionProductListVar);
+                emmersionProductListVar[index].Price = '';
+                emmersionProductListVar[index].Quantity = '';
+                component.set('v.emmersionProductList',emmersionProductListVar);
+            }
+        }catch(err){
+            console.log('exception in ProductAddRemoveEv=>'+err.message);
+        }
+        
     },
     
     

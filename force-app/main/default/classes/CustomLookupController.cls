@@ -9,8 +9,9 @@ public with sharing class CustomLookupController {
                 query += ' WHERE Id = \''+ value + '\' LIMIT 2000';
             } else {
                 query += ' WHERE '+filterField+
-                		' LIKE ' + '\'%' + String.escapeSingleQuotes(searchString.trim()) + '%\''+' AND Prcing_Type__c includes (\''+pricingType+'\')' + ' LIMIT 49999';
+                		' LIKE ' + '\'%' + String.escapeSingleQuotes(searchString.trim()) + '%\''+' AND Prcing_Type__c includes (\''+pricingType+'\')' + ' AND isActive=true '+' LIMIT 49999';
             }
+            System.debug('query=>'+query);
 	        for(SObject s : Database.query(query)) {
 	            recordsDataList.add( new RecordsData((String)s.get(filterField), (String)s.get('id')) );
 	        }
