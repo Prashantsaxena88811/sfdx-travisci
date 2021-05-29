@@ -1,4 +1,4 @@
-<aura:component controller="CalculatePriceForEmmersionProduct" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+<aura:component controller="CalculatePriceForEmmersionProduct" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" access="global" >
     <aura:attribute name="selectedRecord" type="Object" access="public" default="" description="selected Record Details" />
     <aura:attribute name="emmersionProductList" type="List" default="[]"/>
     <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
@@ -6,53 +6,93 @@
     <aura:attribute name="pricingType" type="String"/>
     <aura:attribute name="pricingMaping" type="Map"/>
     
-    <aura:handler name="ProductAddRemoveEvnt" event="c:ProductAddRemove" action="{!c.ProductAddRemoveEv}"/>
+    <!--<aura:handler name="ProductAddRemoveEvnt" event="c:ProductAddRemove" action="{!c.ProductAddRemoveEv}"/>
     <aura:html tag="style">
         .slds-modal__container{
         max-width: 80rem !important;
         width:80% !important;
         }
+    </aura:html>-->
+    <aura:html tag="style">
+        .slds-modal__container{
+        max-width: 80rem !important;
+        width:80% !important;
+        }
+        .cuf-content {
+        padding: 0 0rem !important;
+        }
+        .slds-p-around--medium {
+        padding: 0rem !important;
+        }       
+        .slds-modal__content{
+        overflow-y:hidden !important;
+        height:unset !important;
+        max-height:unset !important;
+        }
     </aura:html>
     
-    <!-- <lightning:button variant="brand" label="Brand" title="Brand action" onclick="{! c.handleClick }" />
-    <lightning:button variant="brand" label="addrow" title="Brand action" onclick="{! c.showToastMessages }" />-->
+    <!--Modal Header-->  
+    <div class="modal-header slds-modal__header slds-size_1-of-1">
+        <h4 class="title slds-text-heading--medium">TEST</h4>
+    </div>
+    <!--End Modal Header-->  
     
-    {!v.recordId}
-    <lightning:layout multipleRows="true">
-        <lightning:layoutItem size="12" padding="around-small">
-            <lightning:select name="select1" label="Pricing Ticket" onchange="{! c.onChange }" value="{!v.pricingType}">
-                <option value="Bulk Order">Bulk Order	</option>
-                <option value="Subscription">Subscription</option>
-                <option value="Self-Serve">Self-Serve	</option>
-                <option value="Postpaid">Postpaid</option>
-                <option value="Platform Fee">Platform Fee</option>
-            </lightning:select>
-            <center>
-                <lightning:button variant="brand" label="CalCulate Price" title="Brand action" onclick="{! c.calculateProductPrice }" />
-                <!--<lightning:button variant="brand" label="CalCulate Price" title="Brand action" onclick="{! c.calculatePrice }" />-->
-                <lightning:button variant="brand" label="Save Products" title="Brand action" onclick="{! c.saveProducts }" />
-            </center>
-        </lightning:layoutItem>
-    </lightning:layout>
-    <div>
-        <aura:iteration items="{!v.emmersionProductList}" var="item" indexVar="index">
-            <lightning:layout multipleRows="true">
-                <lightning:layoutItem size="3" padding="around-small">
-                    <div class="custom-box">
-                        <c:customLookup index="{!index}" pricingType="{!v.pricingType}" selectedRecord="{!item.selectedRecord}" objectName="product2" fieldName="Name" label="Product Name" iconName="standard:account" placeholder="Enter Value" />
-                    </div>
-                </lightning:layoutItem>
-                <lightning:layoutItem size="3" padding="around-small">
-                    <div class="custom-box">
-                        <lightning:input type="number" name="input1" label="Enter Quantity" value="{!item.Quantity}"/>
-                    </div>
-                </lightning:layoutItem>
-                 <lightning:layoutItem size="2" padding="around-small">
-                    <div class="custom-box">
-                        <lightning:input type="number"  name="input2" step=".02" label="Price" value="{!item.Price}"/>
-                    </div>
-                </lightning:layoutItem>
-                <!--<lightning:layoutItem size="2" padding="around-small">
+    <!--Modal Body-->   
+    <div class="slds-modal__content slds-p-around--x-small  slds-size_1-of-1 slds-is-relative">
+        <form class="slds-form-stacked">
+            <div>
+                <lightning:layout multipleRows="true">
+                    <lightning:layoutItem size="3" padding="around-small">
+                    </lightning:layoutItem>
+                    
+                    <lightning:layoutItem size="3" padding="around-small">
+                        <!--<lightning:select name="select1" label="Pricing Ticket" onchange="{! c.onChange }" value="{!v.pricingType}">
+                            <option value="Bulk Order">Bulk Order</option>
+                            <option value="Subscription">Subscription</option>
+                            <option value="Self-Serve">Self-Serve</option>
+                            <option value="Postpaid">Postpaid</option>
+                            <option value="Platform Fee">Platform Fee</option>
+                        </lightning:select>-->
+                        
+                        <lightning:select name="select1" label="Pricing Ticket" onchange="{! c.onChange }" value="{!v.pricingType}">
+                            <option value="Bulk Order">Bulk Order</option>
+                            <option value="Subscription">Subscription</option>
+                            <option value="Self-Serve">Self-Serve</option>
+                            <option value="Postpaid">Postpaid</option>
+                            <option value="Platform Fee">Platform Fee</option>
+                        </lightning:select>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="3" padding="around-small">
+                        <div class="slds-p-top_medium">
+                            <lightning:button  variant="brand" label="CalCulate Price" title="Brand action" onclick="{! c.calculateProductPrice }" />
+                            <!--<lightning:button variant="brand" label="CalCulate Price" title="Brand action" onclick="{! c.calculatePrice }" />-->
+                            <!-- <lightning:button variant="brand" label="Save Products" title="Brand action" onclick="{! c.saveProducts }" />-->
+                        </div>
+                    </lightning:layoutItem>
+                    
+                    <lightning:layoutItem size="3" padding="around-small">
+                    </lightning:layoutItem>
+                    
+                </lightning:layout>
+                <div class="slds-scrollable" style="height:5rem">
+                    <aura:iteration items="{!v.emmersionProductList}" var="item" indexVar="index">
+                        <lightning:layout multipleRows="true">
+                            <lightning:layoutItem size="3" padding="around-small">
+                                <div class="custom-box">
+                                    <c:customLookup index="{!index}" pricingType="{!v.pricingType}" selectedRecord="{!item.selectedRecord}" objectName="product2" fieldName="Name" label="Product Name" iconName="standard:account" placeholder="Enter Value" />
+                                </div>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="3" padding="around-small">
+                                <div class="custom-box">
+                                    <lightning:input type="number" name="input1" label="Enter Quantity" value="{!item.Quantity}"/>
+                                </div>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="2" padding="around-small">
+                                <div class="custom-box">
+                                    <lightning:input type="number"  name="input2" step=".02" label="Price" value="{!item.Price}"/>
+                                </div>
+                            </lightning:layoutItem>
+                            <!--<lightning:layoutItem size="2" padding="around-small">
                     <div class="custom-box">
                         <lightning:select name="select1" label="Billing Term" value="{!item.BillingTerm}">
                             <option value="Monthly">Monthly</option>
@@ -60,28 +100,39 @@
                         </lightning:select>
                     </div>
                 </lightning:layoutItem>-->
-               
-                <lightning:layoutItem size="1" padding="around-small">
-                    <div class="slds-p-top_large">
-                        <a onclick="{!c.addRows}">
-                            <lightning:icon iconName="utility:add" class="slds-icon slds-icon_small" size="small" alternativeText="add"/>
-                            <span class="slds-assistive-text">Add Icon</span>
-                        </a>
-                    </div>
-                </lightning:layoutItem>
-                <lightning:layoutItem size="1" padding="around-small">
-                    <aura:if isTrue="{!index !=0}">
-                        <div class="slds-p-top_large">
-                            <a onclick="{!c.removeRow}" id="{!index}">
-                                <lightning:icon variant="error" iconName="utility:delete" class="slds-icon slds-icon_small" size="small" alternativeText="icon"/>
-                                <span class="slds-assistive-text">Delete Icon</span>
-                            </a>
-                        </div>
-                    </aura:if>
-                </lightning:layoutItem>
+                            
+                            <lightning:layoutItem size="1" padding="around-small">
+                                <div class="slds-p-top_large">
+                                    <a onclick="{!c.addRows}">
+                                        <lightning:icon iconName="utility:add" class="slds-icon slds-icon_small" size="small" alternativeText="add"/>
+                                        <span class="slds-assistive-text">Add Icon</span>
+                                    </a>
+                                </div>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="1" padding="around-small">
+                                <aura:if isTrue="{!index !=0}">
+                                    <div class="slds-p-top_large">
+                                        <a onclick="{!c.removeRow}" id="{!index}">
+                                            <lightning:icon variant="error" iconName="utility:delete" class="slds-icon slds-icon_small" size="small" alternativeText="icon"/>
+                                            <span class="slds-assistive-text">Delete Icon</span>
+                                        </a>
+                                    </div>
+                                </aura:if>
+                            </lightning:layoutItem>
+                            
+                        </lightning:layout>
+                    </aura:iteration>
+                </div>
                 
-            </lightning:layout>
-        </aura:iteration>
+            </div>
+        </form> 
+    </div>
+    <!--End of Modal Body--> 
+    
+    <!--Modal Footer-->
+    <div class="modal-footer slds-modal__footer slds-size_1-of-1">
+        <lightning:button variant="brand" label="Save Products" title="Brand action" onclick="{! c.saveProducts }" />
+        <lightning:button variant="Neutral" class="slds-button" label="Cancel" onclick="{!c.handleClose}"/>
     </div>
     
 </aura:component>

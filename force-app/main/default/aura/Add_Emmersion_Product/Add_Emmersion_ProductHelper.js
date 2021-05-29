@@ -63,7 +63,7 @@
     },
     addPriceToProducts : function(component ,event , helper , priceList , isProdSave){
         try{ 
-            console.clear();
+            //console.clear();
             let prodLength = component.get('v.emmersionProductList').length;
             let productsList = component.get('v.emmersionProductList');
             let priceListLength = priceList.length;
@@ -71,11 +71,21 @@
             console.log(priceList);
             for(let prodIndex=0 ;prodIndex<prodLength;prodIndex++ ){
                 for(let priceIndex=0 ;priceIndex<priceListLength;priceIndex++){
-                    if( priceList[priceIndex].Tier__c>=productsList[prodIndex].Quantity && productsList[prodIndex].Quantity >= priceList[priceIndex].Tier_From__c ){
-                        console.log('****************************'+priceList[priceIndex].Monthly_Price_Per_Test__c);
-                        productsList[prodIndex].Price = priceList[priceIndex].Monthly_Price_Per_Test__c;
-                        break;
+                    console.log('quantity--<'+productsList[prodIndex].Quantity);
+                    if(productsList[prodIndex].Quantity !=null){
+                        console.log('******null****');
                     }
+                    if(productsList[prodIndex].Quantity >-1){
+                        console.log('******0****');
+                    }
+                    if(productsList[prodIndex]['selectedRecord']['value']!=null && productsList[prodIndex].Quantity !='' && productsList[prodIndex].Quantity !=null && productsList[prodIndex].Quantity>-1){
+                        if( priceList[priceIndex].Tier__c>=productsList[prodIndex].Quantity && productsList[prodIndex].Quantity >= priceList[priceIndex].Tier_From__c ){
+                            console.log('****************************'+priceList[priceIndex].Monthly_Price_Per_Test__c);
+                            productsList[prodIndex].Price = priceList[priceIndex].Monthly_Price_Per_Test__c;
+                            break;
+                        }
+                    }
+                    
                 }
             }
             component.set('v.emmersionProductList',productsList);
@@ -88,7 +98,7 @@
     }, 
     addStandardPriceToProducts : function(component ,event , helper , priceList , isProdSave){
         try{ 
-            console.clear();
+            //console.clear();
             console.log('priceList');
             console.log(priceList);
             /*var pricingMap =  new Map();
