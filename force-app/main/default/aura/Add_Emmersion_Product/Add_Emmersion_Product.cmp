@@ -5,9 +5,9 @@
     <aura:attribute name="recordId" type="String" />
     <aura:attribute name="pricingType" type="String"/>
     <aura:attribute name="pricingMaping" type="Map"/>
-    
-    <!--<aura:handler name="ProductAddRemoveEvnt" event="c:ProductAddRemove" action="{!c.ProductAddRemoveEv}"/>
-    <aura:html tag="style">
+    <aura:attribute name="loaded" type="Boolean" default="false" />
+    <aura:handler name="ProductAddRemoveEvnt" event="c:ProductAddRemove" action="{!c.ProductAddRemoveEv}"/>
+    <!--<aura:html tag="style">
         .slds-modal__container{
         max-width: 80rem !important;
         width:80% !important;
@@ -33,7 +33,7 @@
     
     <!--Modal Header-->  
     <div class="modal-header slds-modal__header slds-size_1-of-1">
-        <h4 class="title slds-text-heading--medium">TEST</h4>
+        <h4 class="title slds-text-heading--medium">Add Products</h4>
     </div>
     <!--End Modal Header-->  
     
@@ -41,6 +41,11 @@
     <div class="slds-modal__content slds-p-around--x-small  slds-size_1-of-1 slds-is-relative">
         <form class="slds-form-stacked">
             <div>
+                <div class="exampleHolder ">
+                    <aura:if isTrue="{! v.loaded }">
+                        <lightning:spinner alternativeText="Loading" size="medium" />
+                    </aura:if>
+                </div>
                 <lightning:layout multipleRows="true">
                     <lightning:layoutItem size="3" padding="around-small">
                     </lightning:layoutItem>
@@ -74,10 +79,12 @@
                     </lightning:layoutItem>
                     
                 </lightning:layout>
-                <div class="slds-scrollable" style="height:5rem">
+                <div class="slds-scrollable" style="height:15rem">
                     <aura:iteration items="{!v.emmersionProductList}" var="item" indexVar="index">
                         <lightning:layout multipleRows="true">
-                            <lightning:layoutItem size="3" padding="around-small">
+                            <lightning:layoutItem size="1" padding="around-small">
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="4" padding="around-small">
                                 <div class="custom-box">
                                     <c:customLookup index="{!index}" pricingType="{!v.pricingType}" selectedRecord="{!item.selectedRecord}" objectName="product2" fieldName="Name" label="Product Name" iconName="standard:account" placeholder="Enter Value" />
                                 </div>
@@ -131,8 +138,8 @@
     
     <!--Modal Footer-->
     <div class="modal-footer slds-modal__footer slds-size_1-of-1">
-        <lightning:button variant="brand" label="Save Products" title="Brand action" onclick="{! c.saveProducts }" />
-        <lightning:button variant="Neutral" class="slds-button" label="Cancel" onclick="{!c.handleClose}"/>
+        <lightning:button variant="brand" label="Save Products" disabled="{!v.loaded}" title="Brand action" onclick="{! c.saveProducts }" />
+        <lightning:button variant="Neutral" class="slds-button" disabled="{!v.loaded}" label="Cancel" onclick="{!c.handleClose}"/>
     </div>
     
 </aura:component>

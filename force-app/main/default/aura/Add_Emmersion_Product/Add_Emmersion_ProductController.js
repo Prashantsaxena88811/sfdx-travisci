@@ -14,22 +14,12 @@
         helper.fetchEmmerision_helper(component, event, helper,false);
     }, */
     calculateProductPrice : function(component, event, helper) {
-        console.log('**calculateProductPrice**');
-        let functionName ='';
-        //console.log('pricingType=>'+)
-        if(component.get('v.pricingType').toLowerCase() == 'Bulk Order'.toLowerCase() || component.get('v.pricingType').toLowerCase() == 'Subscription'.toLowerCase() 
-           || component.get('v.pricingType').toLowerCase() == 'Postpaid'.toLowerCase()){
-            console.log('c.getAllPrices');
-            functionName = "c.getAllPrices"; 
-        }else{
-            console.log('c.getAllStandardPrices');
-            functionName = "c.getAllStandardPrices"; 
-        }
         
-        helper.calculateProductPrice_helper(component, event, helper,false,functionName);
+        helper.validateProduct_CalculatePrice(component, event, helper,false);
     },
     saveProducts :  function(component, event, helper) {
-        helper.saveProducts_helper(component, event, helper);
+         helper.validateProduct_CalculatePrice(component, event, helper,true);
+       // helper.saveProducts_helper(component, event, helper);
     }, 
     removeRow : function(component, event, helper) {
         console.log('removeRow->'+event.currentTarget.id);

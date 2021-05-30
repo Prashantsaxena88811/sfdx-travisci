@@ -113,7 +113,7 @@ public class CalculatePriceForEmmersionProduct {
     }
     
     @AuraEnabled
-    public static List<Emmersion_Pricing__c> getAllPrices(List<String> selectedProIds , String pricingType){
+    public static Map<Id,List<Emmersion_Pricing__c>> getAllPrices(List<String> selectedProIds , String pricingType){
         try{
             System.debug('*********getAllPrices********');
             System.debug('selectedProIds-->'+selectedProIds);
@@ -125,9 +125,15 @@ public class CalculatePriceForEmmersionProduct {
             emmersionPricingList = [Select Monthly_Price_Per_Test__c,Product__c,Tier_From__c,Tier__c FROM Emmersion_Pricing__c
                                     where Product__c IN : selectedProIds AND Pricing_Type__c =:pricingType   order by Tier_From__c asc];
             
-            
+            Map<Id,List<Emmersion_Pricing__c>> productIDTOPricingMap = new Map<Id,List<Emmersion_Pricing__c>>();
+            for(Emmersion_Pricing__c priceObj:emmersionPricingList){
+                if(!productIDTOPricingMap.containsKey(priceObj.Product__c)){
+                   productIDTOPricingMap.put(priceObj.Product__c,new List<Emmersion_Pricing__c>()); 
+                }
+                productIDTOPricingMap.get(priceObj.Product__c).add(priceObj);
+            }
             System.debug('emmersionPricingList-->'+emmersionPricingList);
-            return emmersionPricingList;
+            return productIDTOPricingMap;
         }catch(Exception e){
             System.debug('get exception on line number-->'+e.getLineNumber() +' error is-->'+e.getMessage() );
             throw new AuraHandledException('Darn it! Something went wrong: ' + e.getMessage()); 

@@ -3,12 +3,51 @@
         var emmersionProductListVar = component.get("v.emmersionProductList");
         emmersionProductListVar.push({
             'selectedRecord': '',
-            'BillingTerm': 'Monthly',
             'Quantity': '',
             'Price': ''
         });
         console.log(emmersionProductListVar);
         component.set("v.emmersionProductList", emmersionProductListVar);
+    },
+    validateProduct_CalculatePrice : function(component ,event , helper , isProdSave){
+        try{
+            component.set('v.loaded',true);
+            let emmersionProductList = component.get('v.emmersionProductList');
+            let emmersionProductListLength = component.get('v.emmersionProductList').length;
+            for(let index=0 ; index<emmersionProductListLength ; index++){
+                if( (emmersionProductList[index]['selectedRecord']['value']== null) || emmersionProductList[index]['Quantity'] =='' ){
+                    console.log('*BLANK*');
+                    helper.showToastMessages_helper(component, event, helper ,'error' , 'Add Product  name and Quantity in all rows');
+                    component.set('v.loaded',false);
+                    return;
+                }
+                if(isProdSave){
+                    if(  emmersionProductList[index]['Price'] =='' ){
+                        console.log('*BLANK*');
+                        helper.showToastMessages_helper(component, event, helper ,'error' , 'Add Prices in all rows');
+                        component.set('v.loaded',false);
+                        return;
+                    }
+                }
+            }
+            
+            console.log('**calculateProductPrice**');
+            let functionName ='';
+            //console.log('pricingType=>'+)
+            if(component.get('v.pricingType').toLowerCase() == 'Bulk Order'.toLowerCase() || component.get('v.pricingType').toLowerCase() == 'Subscription'.toLowerCase() 
+               || component.get('v.pricingType').toLowerCase() == 'Postpaid'.toLowerCase()){
+                console.log('c.getAllPrices');
+                functionName = "c.getAllPrices"; 
+            }else{
+                console.log('c.getAllStandardPrices');
+                functionName = "c.getAllStandardPrices"; 
+            }
+            
+            helper.calculateProductPrice_helper(component, event, helper,isProdSave,functionName);
+        }catch(err){
+            component.set('v.loaded',false);
+            console.log('error in validateProduct_CalculatePrice=>'+err.message);
+        }
     },
     calculateProductPrice_helper : function(component ,event , helper , isProdSave,functionName){
         try{
@@ -41,17 +80,21 @@
                     
                 }
                 else if (state === "INCOMPLETE") {
+                    component.set('v.loaded',false);
                     // do something
                 }
                     else if (state === "ERROR") {
+                        component.set('v.loaded',false);
                         var errors = response.getError();
                         if (errors) {
                             if (errors[0] && errors[0].message) {
                                 console.log("Error message: " + 
                                             errors[0].message);
+                                helper.showToastMessages_helper(component, event, helper ,'error' , errors[0].message);
                             }
                         } else {
                             console.log("Unknown error");
+                            helper.showToastMessages_helper(component, event, helper ,'error' , 'Unknown error');
                         }
                     }
             });
@@ -64,31 +107,36 @@
     addPriceToProducts : function(component ,event , helper , priceList , isProdSave){
         try{ 
             //console.clear();
+            console.log(priceList);
             let prodLength = component.get('v.emmersionProductList').length;
             let productsList = component.get('v.emmersionProductList');
-            let priceListLength = priceList.length;
+            
             console.log(productsList);
             console.log(priceList);
             for(let prodIndex=0 ;prodIndex<prodLength;prodIndex++ ){
-                for(let priceIndex=0 ;priceIndex<priceListLength;priceIndex++){
-                    console.log('quantity--<'+productsList[prodIndex].Quantity);
-                    if(productsList[prodIndex].Quantity !=null){
-                        console.log('******null****');
-                    }
-                    if(productsList[prodIndex].Quantity >-1){
-                        console.log('******0****');
-                    }
-                    if(productsList[prodIndex]['selectedRecord']['value']!=null && productsList[prodIndex].Quantity !='' && productsList[prodIndex].Quantity !=null && productsList[prodIndex].Quantity>-1){
-                        if( priceList[priceIndex].Tier__c>=productsList[prodIndex].Quantity && productsList[prodIndex].Quantity >= priceList[priceIndex].Tier_From__c ){
-                            console.log('****************************'+priceList[priceIndex].Monthly_Price_Per_Test__c);
-                            productsList[prodIndex].Price = priceList[priceIndex].Monthly_Price_Per_Test__c;
-                            break;
+                let productId = productsList[prodIndex]['selectedRecord']['value'];
+                if(priceList.hasOwnProperty(productId)){
+                    let productPricelist =   priceList[productId];
+                    let priceListLength = productPricelist.length;
+                    console.log('productPricelist');
+                    console.log(productPricelist);
+                    for(let priceIndex=0 ;priceIndex<priceListLength;priceIndex++){
+                        console.log('quantity--<'+productsList[prodIndex].Quantity);
+                        
+                        if(productsList[prodIndex]['selectedRecord']['value']!=null){
+                            if( productPricelist[priceIndex].Tier__c>=productsList[prodIndex].Quantity && productsList[prodIndex].Quantity >= productPricelist[priceIndex].Tier_From__c ){
+                                console.log('****************************'+productPricelist[priceIndex].Monthly_Price_Per_Test__c);
+                                productsList[prodIndex].Price = productPricelist[priceIndex].Monthly_Price_Per_Test__c;
+                                break;
+                            }
                         }
+                        
                     }
-                    
                 }
+                
             }
             component.set('v.emmersionProductList',productsList);
+            component.set('v.loaded',false);
             if(isProdSave){
                 helper.passValueToServer(component ,event , helper , component.get('v.emmersionProductList'));   
             }
@@ -121,6 +169,7 @@
                 }
             }
             component.set('v.emmersionProductList',productsList);
+            component.set('v.loaded',false);
              if(isProdSave){
                 helper.passValueToServer(component ,event , helper , component.get('v.emmersionProductList'));   
             }
@@ -247,6 +296,7 @@
     },*/
     passValueToServer : function(component ,event , helper , emmersionProductList){
         try{
+            component.set('v.loaded',true);
             var action = component.get("c.insertLineItems");
             console.log('send to server-->'+JSON.stringify(emmersionProductList));
             action.setParams(
@@ -260,31 +310,37 @@
                 var state = response.getState();
                 if (state === "SUCCESS") {
                     helper.showToastMessages_helper(component, event, helper ,'success' , 'Opportunity Product Saved Successfully');
+                    component.set('v.loaded',false);
                     var dismissActionPanel = $A.get("e.force:closeQuickAction");
                     dismissActionPanel.fire();
                     $A.get('e.force:refreshView').fire();
                 }
                 else if (state === "INCOMPLETE") {
+                    component.set('v.loaded',false);
                     // do something
                 }
                     else if (state === "ERROR") {
+                        component.set('v.loaded',false);
                         var errors = response.getError();
                         if (errors) {
                             if (errors[0] && errors[0].message) {
                                 console.log("Error message: " + 
                                             errors[0].message);
+                                helper.showToastMessages_helper(component, event, helper ,'error' , errors[0].message);
                             }
                         } else {
                             console.log("Unknown error");
+                            helper.showToastMessages_helper(component, event, helper ,'error' , 'Unknown error');
                         }
                     }
             });
             $A.enqueueAction(action);
         }catch(err){
+            component.set('v.loaded',false);
             console.log(err.message);
         }
     },
-    saveProducts_helper : function(component ,event , helper){
+   /* saveProducts_helper : function(component ,event , helper){
         //helper.fetchEmmerision_helper(component ,event , helper , true)
         //helper.passValueToServer(component ,event , helper , component.get("v.emmersionProductList")); 
         //calculateProductPrice_helper
@@ -299,7 +355,7 @@
         }
         
         helper.calculateProductPrice_helper(component, event, helper,true,functionName)
-    },
+    },*/
     showToastMessages_helper : function(component ,event , helper , msgType , errMsg){
         var toastEvent = $A.get("e.force:showToast");
         toastEvent.setParams({
