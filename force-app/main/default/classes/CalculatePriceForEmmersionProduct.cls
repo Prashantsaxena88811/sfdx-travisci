@@ -87,7 +87,12 @@ public class CalculatePriceForEmmersionProduct {
                 oli.PricebookEntryId = prod_To_PB_Map.get(selectProductObj.selectedRecord.value).Id;
                 
                 if(pricingType == 'Postpaid' || pricingType == 'Bulk Order'){
-                    oli.UnitPrice = (double)selectProductObj.Price/selectProductObj.Quantity;
+                    
+                    if((double)selectProductObj.Price  == 0){
+                        oli.UnitPrice =(double)selectProductObj.Price;
+                    }else{
+                        oli.UnitPrice = (double)selectProductObj.Price/selectProductObj.Quantity;
+                    }
                 }else{
                     oli.UnitPrice = selectProductObj.Price;
                     if(pricingType == 'Subscription' && opportunityRec[0].Annual_billing__c){
