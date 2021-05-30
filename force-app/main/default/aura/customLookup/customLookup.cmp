@@ -1,6 +1,6 @@
 <aura:component controller="CustomLookupController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
 	
-   <!-- <aura:registerEvent name="ProductAddRemoveEvnt" type="c:ProductAddRemove" />-->
+    <aura:registerEvent name="ProductAddRemoveEvnt" type="c:ProductAddRemove" />
 
 	<!-- Attributes that can be set while component calling-->
     <aura:attribute name="objectName" 	type="string" default="" required="true" />

@@ -62,10 +62,10 @@
             component.find( 'inputLookup' ).focus();
         }, 250);
         
-        /*var cmpEvent = component.getEvent("ProductAddRemoveEvnt"); 
+        var cmpEvent = component.getEvent("ProductAddRemoveEvnt"); 
         cmpEvent.setParams({"message" : "Item Removed","index" :component.get('v.index')}); 
         cmpEvent.fire(); 
-        console.log('*********remove****************');*/
+        console.log('*********remove****************');
     },
 
     // To close the dropdown if clicked outside the dropdown.

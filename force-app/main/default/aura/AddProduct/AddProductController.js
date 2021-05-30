@@ -55,7 +55,7 @@
         helper.showToastMessages_helper(component, event, helper ,'error');
     },
     ProductAddRemoveEv : function(component, event, helper){
-        alert('ProductAddRemoveEv');
+        //alert('ProductAddRemoveEv');
         var message = event.getParam("message"); 
         var index = event.getParam("index");
         console.log(message+'--'+index);
@@ -64,7 +64,7 @@
         }else if(message == 'Item Removed'){
             // set price to null for that index
             let emmersionProductListVar = component.get('v.emmersionProductList');
-            emmersionProductListVar[index].Price = '';
+            //emmersionProductListVar[index].Price = '';
             emmersionProductListVar[index].Quantity = '';
             component.set('v.emmersionProductList',emmersionProductListVar);
         }
