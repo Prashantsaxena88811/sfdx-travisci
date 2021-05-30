@@ -110,7 +110,10 @@
             console.log(priceList);
             let prodLength = component.get('v.emmersionProductList').length;
             let productsList = component.get('v.emmersionProductList');
-            
+            let priceField= 'Flat_Price__c';
+            if(component.get('v.pricingType').toLowerCase() == 'Subscription'.toLowerCase()){
+                priceField = 'Monthly_Price_Per_Test__c';
+            }
             console.log(productsList);
             console.log(priceList);
             for(let prodIndex=0 ;prodIndex<prodLength;prodIndex++ ){
@@ -125,8 +128,8 @@
                         
                         if(productsList[prodIndex]['selectedRecord']['value']!=null){
                             if( productPricelist[priceIndex].Tier__c>=productsList[prodIndex].Quantity && productsList[prodIndex].Quantity >= productPricelist[priceIndex].Tier_From__c ){
-                                console.log('****************************'+productPricelist[priceIndex].Monthly_Price_Per_Test__c);
-                                productsList[prodIndex].Price = productPricelist[priceIndex].Monthly_Price_Per_Test__c;
+                                console.log('****************************'+productPricelist[priceIndex][priceField]);
+                                productsList[prodIndex].Price = productPricelist[priceIndex][priceField];
                                 break;
                             }
                         }

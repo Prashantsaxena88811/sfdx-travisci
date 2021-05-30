@@ -122,8 +122,16 @@ public class CalculatePriceForEmmersionProduct {
             System.debug('pricingType==>'+pricingType);
             //pricingType = pricingType;
             List<Emmersion_Pricing__c> emmersionPricingList = new List<Emmersion_Pricing__c>();
-            emmersionPricingList = [Select Monthly_Price_Per_Test__c,Product__c,Tier_From__c,Tier__c FROM Emmersion_Pricing__c
-                                    where Product__c IN : selectedProIds AND Pricing_Type__c =:pricingType   order by Tier_From__c asc];
+            if(pricingType == 'Postpaid' || pricingType == 'Bulk Order'){
+                emmersionPricingList = [Select Flat_Price__c,Monthly_Price_Per_Test__c,Product__c,Tier_From__c,Tier__c FROM Emmersion_Pricing__c
+                                        where Product__c IN : selectedProIds AND Pricing_Type__c =:pricingType AND
+                                        Flat_Price__c!=null AND Tier_From__c!=null AND Tier__c!=null order by Tier_From__c asc];
+            }else{
+                emmersionPricingList = [Select Flat_Price__c,Monthly_Price_Per_Test__c,Product__c,Tier_From__c,Tier__c FROM Emmersion_Pricing__c
+                                        where Product__c IN : selectedProIds AND Pricing_Type__c =:pricingType AND
+                                        Monthly_Price_Per_Test__c!=null AND Tier_From__c!=null AND Tier__c!=null  order by Tier_From__c asc];
+            }
+            
             
             Map<Id,List<Emmersion_Pricing__c>> productIDTOPricingMap = new Map<Id,List<Emmersion_Pricing__c>>();
             for(Emmersion_Pricing__c priceObj:emmersionPricingList){
