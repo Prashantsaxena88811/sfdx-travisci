@@ -26,7 +26,7 @@ public class CalculatePriceForEmmersionProduct {
     public static void insertLineItems(String SelectedProdList ,String OpportunityId, String pricingType){
         try{
             List<Opportunity> opportunityRec = new List<Opportunity>();
-            opportunityRec = [Select id,Annual_billing__c from Opportunity where Id=:OpportunityId];
+            opportunityRec = [Select id from Opportunity where Id=:OpportunityId];
             if(opportunityRec.isEmpty()){
                 return;
             }
@@ -86,7 +86,7 @@ public class CalculatePriceForEmmersionProduct {
                 oli.OpportunityId = OpportunityId;
                 oli.PricebookEntryId = prod_To_PB_Map.get(selectProductObj.selectedRecord.value).Id;
                 
-                if(pricingType == 'Postpaid' || pricingType == 'Bulk Order'){
+                if(pricingType == 'Postpaid' /**|| pricingType == 'Bulk Order'**/){
                     
                     if((double)selectProductObj.Price  == 0){
                         oli.UnitPrice =(double)selectProductObj.Price;
@@ -95,9 +95,9 @@ public class CalculatePriceForEmmersionProduct {
                     }
                 }else{
                     oli.UnitPrice = selectProductObj.Price;
-                    if(pricingType == 'Subscription' && opportunityRec[0].Annual_billing__c){
+                    /*if(pricingType == 'Subscription' && opportunityRec[0].Annual_billing__c){
                         oli.Discount = 10;
-                    }
+                    }*/
                 }
                 //oli.Billing_Term__c = selectProductObj.BillingTerm;
                 oli.Quantity = selectProductObj.Quantity;
@@ -118,9 +118,9 @@ public class CalculatePriceForEmmersionProduct {
     }
     
     @AuraEnabled
-    public static Map<Id,List<Emmersion_Pricing__c>> getAllPrices(List<String> selectedProIds , String pricingType){
+    public static priceWrapper getAllPrices(List<String> selectedProIds , String pricingType){
         try{
-            System.debug('*********getAllPrices********');
+            System.debug('*********getAllPrices*******1*');
             System.debug('selectedProIds-->'+selectedProIds);
             String ss ='aaaaaaaaaaaaaaaaa';
             System.debug('aaaaaaaaaaaaaaaaa==>'+ss);
@@ -136,8 +136,25 @@ public class CalculatePriceForEmmersionProduct {
                                         where Product__c IN : selectedProIds AND Pricing_Type__c =:pricingType AND
                                         Monthly_Price_Per_Test__c!=null AND Tier_From__c!=null AND Tier__c!=null  order by Tier_From__c asc];
             }
+            priceWrapper priceWrapperObj = new priceWrapper();
+            /*get standard Price for Platform Fee- $250 Start*/
+            PriceBook2 standard_pb = new PriceBook2();
+            List<Product2> platformProduct= new List<Product2>();
+            platformProduct = [Select Id,name from Product2 where name =:'Platform Fee- $250'];                
+            standard_pb = [select id, name from Pricebook2 where isStandard = true limit 1];
+            System.debug('platformProduct=>'+platformProduct);
+            System.debug('standard_pb=>'+standard_pb);
+            if( standard_pb!=new PriceBook2() && standard_pb!=null && !platformProduct.isEmpty()){
+                List<PriceBookEntry> pb_entries = new List<PriceBookEntry>();
+                System.debug('platformProduct=1>'+platformProduct);
+                pb_entries = [Select id,Product2Id,UnitPrice from PriceBookEntry where Product2Id IN:platformProduct AND  PriceBook2.Name=:'Standard Price Book'  AND isActive=true];
+                System.debug('pb_entries==>'+pb_entries);
+                priceWrapperObj.Standard_PriceEntry = pb_entries;
+            }
+            /*get standard Price for Platform Fee- $250 End*/
             
             
+           
             Map<Id,List<Emmersion_Pricing__c>> productIDTOPricingMap = new Map<Id,List<Emmersion_Pricing__c>>();
             for(Emmersion_Pricing__c priceObj:emmersionPricingList){
                 if(!productIDTOPricingMap.containsKey(priceObj.Product__c)){
@@ -146,7 +163,12 @@ public class CalculatePriceForEmmersionProduct {
                 productIDTOPricingMap.get(priceObj.Product__c).add(priceObj);
             }
             System.debug('emmersionPricingList-->'+emmersionPricingList);
-            return productIDTOPricingMap;
+            //return productIDTOPricingMap;
+            
+            
+            priceWrapperObj.productsToPriceMappinVar = productIDTOPricingMap;
+            return priceWrapperObj;
+            
         }catch(Exception e){
             System.debug('get exception on line number-->'+e.getLineNumber() +' error is-->'+e.getMessage() );
             throw new AuraHandledException('Darn it! Something went wrong: ' + e.getMessage()); 
@@ -171,6 +193,14 @@ public class CalculatePriceForEmmersionProduct {
             System.debug('get exception on line number-->'+e.getLineNumber() +' error is-->'+e.getMessage() );
             throw new AuraHandledException('Darn it! Something went wrong: ' + e.getMessage()); 
         }
+    }
+    
+    public class priceWrapper{
+        @AuraEnabled
+        public Map<Id,List<Emmersion_Pricing__c>> productsToPriceMappinVar;
+        @AuraEnabled
+        public List<PriceBookEntry> Standard_PriceEntry;
+        
     }
     
     public class selectedProdWrapper{

@@ -67,7 +67,7 @@
                 var state = response.getState();
                 if (state === "SUCCESS") {
                     
-                   
+                    
                     
                     if(component.get('v.pricingType').toLowerCase() == 'Bulk Order'.toLowerCase() || component.get('v.pricingType').toLowerCase() == 'Subscription'.toLowerCase() 
                        || component.get('v.pricingType').toLowerCase() == 'Postpaid'.toLowerCase()){
@@ -104,9 +104,20 @@
             console.log('calculateProductPrice_helper-->'+err.message);
         }
     },
-    addPriceToProducts : function(component ,event , helper , priceList , isProdSave){
+    addPriceToProducts : function(component ,event , helper , priceMap , isProdSave){
         try{ 
             //console.clear();
+            console.log('priceMap');
+            console.log(priceMap);
+            let priceList = priceMap.productsToPriceMappinVar;
+            let standardPrice_platformProduct;
+            let paltform_productName = 'Platform Fee- $250';
+            if( priceMap.Standard_PriceEntry!=null && priceMap.Standard_PriceEntry.length>0){
+                standardPrice_platformProduct = priceMap.Standard_PriceEntry[0];
+            }
+            if(standardPrice_platformProduct == null){
+                console.log('standardPrice_platformProduct NULL');  
+            }
             console.log(priceList);
             let prodLength = component.get('v.emmersionProductList').length;
             let productsList = component.get('v.emmersionProductList');
@@ -119,29 +130,54 @@
             console.log(priceList);
             let productTotalPrice=0;
             for(let prodIndex=0 ;prodIndex<prodLength;prodIndex++ ){
+                
                 let productId = productsList[prodIndex]['selectedRecord']['value'];
-                if(priceList.hasOwnProperty(productId)){
-                    let productPricelist =   priceList[productId];
-                    let priceListLength = productPricelist.length;
-                    console.log('productPricelist');
-                    console.log(productPricelist);
-                    for(let priceIndex=0 ;priceIndex<priceListLength;priceIndex++){
-                        console.log('quantity--<'+productsList[prodIndex].Quantity);
-                        
-                        if(productsList[prodIndex]['selectedRecord']['value']!=null){
-                            if( productPricelist[priceIndex].Tier__c>=productsList[prodIndex].Quantity && productsList[prodIndex].Quantity >= productPricelist[priceIndex].Tier_From__c ){
-                                console.log('****************************'+productPricelist[priceIndex][priceField]);
-                                productsList[prodIndex].Price = productPricelist[priceIndex][priceField];
-                                productTotalPrice = productTotalPrice+productPricelist[priceIndex][priceField];
-                                break;
+                let productName = productsList[prodIndex]['selectedRecord']['label'];
+                console.log('productName==>'+productName);
+                if(productName.toLowerCase() != paltform_productName.toLowerCase()){
+                    if(priceList.hasOwnProperty(productId)){
+                        let productPricelist =   priceList[productId];
+                        let priceListLength = productPricelist.length;
+                        console.log('productPricelist');
+                        console.log(productPricelist);
+                        for(let priceIndex=0 ;priceIndex<priceListLength;priceIndex++){
+                            console.log('quantity--<'+productsList[prodIndex].Quantity);
+                            
+                            if(productsList[prodIndex]['selectedRecord']['value']!=null){
+                                if( productPricelist[priceIndex].Tier__c>=productsList[prodIndex].Quantity && productsList[prodIndex].Quantity >= productPricelist[priceIndex].Tier_From__c ){
+                                    console.log('****************************'+productPricelist[priceIndex][priceField]);
+                                    productsList[prodIndex].Price = productPricelist[priceIndex][priceField];
+                                    if(component.get('v.pricingType').toLowerCase() == 'Postpaid'.toLowerCase()){
+                                        productTotalPrice = productTotalPrice+productPricelist[priceIndex][priceField];
+                                    }
+                                    else{
+                                        console.log('calculate total price for prcing types');
+                                        console.log('productPricelist_price=>'+productPricelist[priceIndex][priceField]);
+                                        console.log('productPricelist_Quantity=>'+productsList[prodIndex].Quantity);
+                                        let productTotalValue = productPricelist[priceIndex][priceField] *productsList[prodIndex].Quantity;
+                                        productTotalPrice = productTotalPrice +productTotalValue;
+                                    }
+                                    break;
+                                }
                             }
+                            
                         }
-                        
                     }
                 }
+                else{
+                    if(standardPrice_platformProduct != null){
+                        productsList[prodIndex].Price  = standardPrice_platformProduct.UnitPrice;
+                        let productTotalValue = standardPrice_platformProduct.UnitPrice *productsList[prodIndex].Quantity;
+                        productTotalPrice = productTotalPrice +productTotalValue;
+                    }
+                    
+                }
+                /*if(component.get('v.pricingType').toLowerCase() != 'Postpaid'.toLowerCase()){
+                    productTotalPrice = productTotalPrice*productsList[prodIndex].Quantity;
+                }*/
                 
             }
-             component.set('v.totalPrice',productTotalPrice);
+            component.set('v.totalPrice',productTotalPrice);
             component.set('v.emmersionProductList',productsList);
             component.set('v.loaded',false);
             if(isProdSave){
@@ -167,20 +203,22 @@
             console.log(priceList);
             let productTotalPrice =0;
             for(let prodIndex=0 ;prodIndex<prodLength;prodIndex++ ){
-               console.log(productsList[prodIndex]['selectedRecord']['value']);
+                console.log(productsList[prodIndex]['selectedRecord']['value']);
                 let productId = productsList[prodIndex]['selectedRecord']['value'];
                 if(priceList.hasOwnProperty(productId)){
                     console.log('YES');
                     let priceInfo = priceList[productId]['UnitPrice'];
                     console.log(productId+'-------------'+priceInfo);
                     productsList[prodIndex]['Price']=priceInfo;
-                    productTotalPrice = productTotalPrice +priceInfo;
+                    let productTotalValue = priceInfo * productTotalPrice*productsList[prodIndex].Quantity;
+                    productTotalPrice = productTotalPrice +productTotalValue;
+                    //productTotalPrice = productTotalPrice +priceInfo;
                 }
             }
-             component.set('v.totalPrice',productTotalPrice);
+            component.set('v.totalPrice',productTotalPrice);
             component.set('v.emmersionProductList',productsList);
             component.set('v.loaded',false);
-             if(isProdSave){
+            if(isProdSave){
                 helper.passValueToServer(component ,event , helper , component.get('v.emmersionProductList'));   
             }
             
@@ -350,7 +388,7 @@
             console.log(err.message);
         }
     },
-   /* saveProducts_helper : function(component ,event , helper){
+    /* saveProducts_helper : function(component ,event , helper){
         //helper.fetchEmmerision_helper(component ,event , helper , true)
         //helper.passValueToServer(component ,event , helper , component.get("v.emmersionProductList")); 
         //calculateProductPrice_helper
@@ -377,5 +415,34 @@
             mode: 'dismissible'
         });
         toastEvent.fire();
+    },
+    calculateTotalPriceHelper : function(component ,event , helper ){
+        console.log('calcualte total price');
+        let productTotalPrice = 0;
+        let prodLength = component.get('v.emmersionProductList').length;
+        let emmersionProductListVar = component.get('v.emmersionProductList');
+        console.log('prodLength==>'+prodLength);
+        for(let prodIndex=0 ;prodIndex<prodLength;prodIndex++){
+            if(emmersionProductListVar[prodIndex]!=null){
+                console.log('calcualte total price1');
+                let priceInfo = emmersionProductListVar[prodIndex]['Price'];
+                let quantity = emmersionProductListVar[prodIndex]['Quantity'];
+                if(priceInfo!=null && quantity!=null){
+                    console.log('calcualte total price2');
+                    if(component.get('v.pricingType').toLowerCase() == 'Postpaid'.toLowerCase()){
+                        console.log('calcualte total price4');
+                        productTotalPrice = productTotalPrice+priceInfo;
+                    }
+                    else{
+                        console.log('calcualte total price5');
+                        let productTotalValue = priceInfo*quantity;
+                        productTotalPrice = productTotalPrice +productTotalValue;
+                    }
+                }
+                
+            }
+            
+        }
+        component.set('v.totalPrice',productTotalPrice);
     }
 })

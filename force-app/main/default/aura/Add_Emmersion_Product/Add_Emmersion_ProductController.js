@@ -27,6 +27,7 @@
         let emmersionProductListVar = component.get("v.emmersionProductList");
         emmersionProductListVar.splice(itemRemove,1);
         component.set("v.emmersionProductList",emmersionProductListVar);
+        helper.calculateTotalPriceHelper(component, event,helper);
         //helper.fetchEmmerision_helper(component, event, helper);
     },
     showToastMessages : function(component, event, helper){
@@ -53,6 +54,10 @@
                 emmersionProductListVar[index].Price = '';
                 emmersionProductListVar[index].Quantity = '';
                 component.set('v.emmersionProductList',emmersionProductListVar);
+                
+                helper.calculateTotalPriceHelper(component, event,helper);
+                
+                
             }
         }catch(err){
             console.log('exception in ProductAddRemoveEv=>'+err.message);

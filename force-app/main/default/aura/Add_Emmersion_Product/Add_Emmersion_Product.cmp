@@ -60,12 +60,12 @@
                             <option value="Platform Fee">Platform Fee</option>
                         </lightning:select>-->
                         
-                        <lightning:select name="select1" label="Pricing Ticket" onchange="{! c.onChange }" value="{!v.pricingType}">
+                        <lightning:select name="select1" label="Billing Type" onchange="{! c.onChange }" value="{!v.pricingType}">
                             <option value="Bulk Order">Bulk Order</option>
                             <option value="Subscription">Subscription</option>
                             <option value="Self-Serve">Self-Serve</option>
                             <option value="Postpaid">Postpaid</option>
-                            <option value="Platform Fee">Platform Fee</option>
+                           <!-- <option value="Platform Fee">Platform Fee</option>-->
                         </lightning:select>
                     </lightning:layoutItem>
                     <lightning:layoutItem size="3" padding="around-small">
@@ -97,7 +97,7 @@
                             </lightning:layoutItem>
                             <lightning:layoutItem size="2" padding="around-small">
                                 <div class="custom-box">
-                                    <lightning:input type="number"  name="input2" step=".02" label="Price" value="{!item.Price}"/>
+                                    <lightning:input type="number"  disabled="true" name="input2" step=".02" label="Price" value="{!item.Price}"/>
                                 </div>
                             </lightning:layoutItem>
                             <!--<lightning:layoutItem size="2" padding="around-small">
@@ -144,7 +144,7 @@
                     <lightning:layoutItem size="2" padding="around-small">
                         <div class="custom-box">
                             <lightning:input type="number"  name="input2" step=".02" 
-                                             disabled="true" label="Total Price" value="{!v.totalPrice}"/>
+                                             disabled="true" label="{!v.pricingType == 'Postpaid' ? 'Total Price' : 'Total Price(Price*Quantity)'}" value="{!v.totalPrice}"/>
                         </div>
                     </lightning:layoutItem>
                     
