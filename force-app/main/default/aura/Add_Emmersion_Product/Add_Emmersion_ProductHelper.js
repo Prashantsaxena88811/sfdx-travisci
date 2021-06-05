@@ -111,11 +111,13 @@
             let prodLength = component.get('v.emmersionProductList').length;
             let productsList = component.get('v.emmersionProductList');
             let priceField= 'Flat_Price__c';
-            if(component.get('v.pricingType').toLowerCase() == 'Subscription'.toLowerCase()){
+            if(component.get('v.pricingType').toLowerCase() == 'Subscription'.toLowerCase() || 
+               component.get('v.pricingType').toLowerCase() == 'Bulk Order'.toLowerCase()){
                 priceField = 'Monthly_Price_Per_Test__c';
             }
             console.log(productsList);
             console.log(priceList);
+            let productTotalPrice=0;
             for(let prodIndex=0 ;prodIndex<prodLength;prodIndex++ ){
                 let productId = productsList[prodIndex]['selectedRecord']['value'];
                 if(priceList.hasOwnProperty(productId)){
@@ -130,6 +132,7 @@
                             if( productPricelist[priceIndex].Tier__c>=productsList[prodIndex].Quantity && productsList[prodIndex].Quantity >= productPricelist[priceIndex].Tier_From__c ){
                                 console.log('****************************'+productPricelist[priceIndex][priceField]);
                                 productsList[prodIndex].Price = productPricelist[priceIndex][priceField];
+                                productTotalPrice = productTotalPrice+productPricelist[priceIndex][priceField];
                                 break;
                             }
                         }
@@ -138,6 +141,7 @@
                 }
                 
             }
+             component.set('v.totalPrice',productTotalPrice);
             component.set('v.emmersionProductList',productsList);
             component.set('v.loaded',false);
             if(isProdSave){
@@ -161,6 +165,7 @@
             let priceListLength = priceList.length;
             console.log(productsList);
             console.log(priceList);
+            let productTotalPrice =0;
             for(let prodIndex=0 ;prodIndex<prodLength;prodIndex++ ){
                console.log(productsList[prodIndex]['selectedRecord']['value']);
                 let productId = productsList[prodIndex]['selectedRecord']['value'];
@@ -169,8 +174,10 @@
                     let priceInfo = priceList[productId]['UnitPrice'];
                     console.log(productId+'-------------'+priceInfo);
                     productsList[prodIndex]['Price']=priceInfo;
+                    productTotalPrice = productTotalPrice +priceInfo;
                 }
             }
+             component.set('v.totalPrice',productTotalPrice);
             component.set('v.emmersionProductList',productsList);
             component.set('v.loaded',false);
              if(isProdSave){

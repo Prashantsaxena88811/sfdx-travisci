@@ -6,6 +6,7 @@
     <aura:attribute name="pricingType" type="String"/>
     <aura:attribute name="pricingMaping" type="Map"/>
     <aura:attribute name="loaded" type="Boolean" default="false" />
+    <aura:attribute name="totalPrice" type="double"  />
     <aura:handler name="ProductAddRemoveEvnt" event="c:ProductAddRemove" action="{!c.ProductAddRemoveEv}"/>
     <!--<aura:html tag="style">
         .slds-modal__container{
@@ -129,6 +130,30 @@
                             
                         </lightning:layout>
                     </aura:iteration>
+                   <lightning:layout multipleRows="true"> 
+                    <lightning:layoutItem size="1" padding="around-small">
+                    </lightning:layoutItem>
+                    
+                    <lightning:layoutItem size="4" padding="around-small">
+                        
+                    </lightning:layoutItem>
+                    
+                    <lightning:layoutItem size="3" padding="around-small">
+                    </lightning:layoutItem>
+                    
+                    <lightning:layoutItem size="2" padding="around-small">
+                        <div class="custom-box">
+                            <lightning:input type="number"  name="input2" step=".02" 
+                                             disabled="true" label="Total Price" value="{!v.totalPrice}"/>
+                        </div>
+                    </lightning:layoutItem>
+                    
+                    <lightning:layoutItem size="1" padding="around-small">
+                    </lightning:layoutItem>
+                    
+                    <lightning:layoutItem size="1" padding="around-small">
+                    </lightning:layoutItem>
+                    </lightning:layout>
                 </div>
                 
             </div>

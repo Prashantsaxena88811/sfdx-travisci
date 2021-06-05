@@ -35,6 +35,7 @@
     onChange :  function(component, event, helper){
         //helper.showToastMessages_helper(component, event, helper ,'error');
         component.set('v.emmersionProductList',[]);
+        component.set('v.totalPrice',0);
         helper.addRowHelper(component ,event , helper);
     },
     ProductAddRemoveEv : function(component, event, helper){
