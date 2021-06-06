@@ -4,6 +4,7 @@
         <members>CustomLookupController</members>
         <members>CustomLookupController_Test</members>
         <members>OpportunityNewTriggerHandler</members>
+        <members>OpportunityNewTriggerHandlerTest</members>
         <name>ApexClass</name>
     </types>
     <types>
