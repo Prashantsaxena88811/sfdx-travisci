@@ -23,6 +23,7 @@
     <aura:attribute name="recordId" type="String" />
     <aura:attribute name="index" type="Integer" />
     <div>
+       <!-- <lightning:button variant="brand" label="Save Products1" title="Brand action" onclick="{! c.testm1 }" />-->
         <aura:if isTrue="{!!empty(v.label)}">
 			<label class="slds-form-element__label">{!v.label}</label>
         </aura:if>

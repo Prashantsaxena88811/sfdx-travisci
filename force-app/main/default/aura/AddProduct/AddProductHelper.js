@@ -20,10 +20,10 @@
                 var state = response.getState();
                 component.set('v.loaded',false);
                 if (state === "SUCCESS") {
-                      helper.showToastMessages_helper(component, event, helper ,'success' , 'Opportunity Product Saved Successfully');
-                        var dismissActionPanel = $A.get("e.force:closeQuickAction");
-                        dismissActionPanel.fire();
-                        $A.get('e.force:refreshView').fire();
+                    helper.showToastMessages_helper(component, event, helper ,'success' , 'Opportunity Product Saved Successfully');
+                    var dismissActionPanel = $A.get("e.force:closeQuickAction");
+                    dismissActionPanel.fire();
+                    $A.get('e.force:refreshView').fire();
                 }
                 else if (state === "INCOMPLETE") {
                     // do something
@@ -70,7 +70,7 @@
         console.log('productInfo=>'+JSON.stringify(productInfo));
         var action = component.get("c.getProductPrices");
         action.setParams({ OpportunityId : component.get('v.recordId'),
-                           productId : productInfo.selectedRecord.value });
+                          productId : productInfo.selectedRecord.value });
         action.setCallback(this, function(response) {
             var state = response.getState();
             console.log('Add product helper==>'+state);
@@ -100,4 +100,6 @@
         $A.enqueueAction(action);
         
     }
+    
+    
 })

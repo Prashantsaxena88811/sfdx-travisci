@@ -1,11 +1,5 @@
 public with sharing class CustomLookupController {
-    
-    public static void getProductFamilyMapping(){
-        
-        Map<String,Map<String, List<String> >> type_AreaOfInterestMap = new Map<String,Map<String, List<String> >>();
-        
-        Map<String,List<String>> AreaOfInterestToFamily_FamilyMap =  new Map<String,List<String>>();
-    }
+ 
     
     @AuraEnabled
     public static List<RecordsData> fetchRecords(String opportunityId , String objectName, List<String> filterFieldList, String searchString, String value) {
@@ -65,6 +59,7 @@ public with sharing class CustomLookupController {
                     ProductCodeClause = '(productcode like \'%ROW%\' or productcode like \'%ALL%\')';
                 }
             }
+            System.debug('pbName=>'+pbName);
             System.debug('filterFieldList=>'+filterFieldList);
             List<RecordsData> recordsDataList = new List<RecordsData>();
             String filterField  = String.join( filterFieldList, ', ' ); 
@@ -93,15 +88,19 @@ public with sharing class CustomLookupController {
                 query += ' And isActive=true'+' LIMIT 49999';
                 //query += ' WHERE '+filterField+' AND '+ProductCodeClause+' AND Family IN:productFamilyList'+' And isActive=true'+' LIMIT 49999';
                 System.debug('Final Query==>'+query);
+                System.debug('productFamilyList=>'+productFamilyList);
             }
+            
             List<Sobject> sobjectList  = new List<Sobject>();
             sobjectList = Database.query(query);
+            System.debug('sobjectList=>'+sobjectList);
             if(objectName == 'Product2'){
                 //Set<Set>
                 List<PriceBOOk2> pb = new List<PriceBOOk2>();
                 pb = [Select Id,Name,(Select Id,Product2.Name,Product2Id,UnitPrice from PricebookEntries where 
                                  Product2Id IN :sobjectList AND CurrencyIsoCode=:currentOp[0].CurrencyIsoCode AND isActive=true) from pricebook2 where Name=:pbName Limit 1];
-                System.debug('pb.PricebookEntries=>'+pb[0].PricebookEntries);
+                //System.debug('pb.PricebookEntries=>'+pb[0].PricebookEntries);
+                System.debug('pb.PricebookEntries=>'+pb);
                 Map<String,PriceBookEntry> product_TO_PbEntry_MAP =  new Map<String,PriceBookEntry>();
                 for(PriceBOOk2 pbVal : pb) {
                     if(pbVal.PricebookEntries!=null && !pbVal.PricebookEntries.isEmpty()){
@@ -134,85 +133,8 @@ recordsDataList.add( new RecordsData((String)s.get('Name'), (String)s.get('id'))
             }
         }
     }
-    /*@AuraEnabled 
-    public static decimal getProductPrices(String OpportunityId,String productId){
-        try{
-            System.debug('OpportunityId=>'+OpportunityId);
-            System.debug('productId=>'+productId);
-            List<Opportunity> currentOp = new List<Opportunity>();
-            currentOp = [Select Id,Type,Area_of_Interest__c,Region__c,CurrencyIsoCode from Opportunity where Id=:opportunityId];
-            System.debug('currentOp==>'+currentOp);
-            String pbName = '';
-            
-            if(currentOp!=null && !currentOp.isEmpty()){
-                if(currentOp[0].Type != null && currentOp[0].Type!=''){
-                       
-                       if( currentOp[0].Type == 'KeyedIn Projects'){
-                           pbName = 'KeyedIn Projects';
-                       }else if(currentOp[0].Type == 'KeyedIn Manufacturing-SMB'){
-                           pbName = 'KeyedIn Manufacturing';
-                       }else if(currentOp[0].Type == 'KeyedIn Manufacturing-Sign Edition'){
-                           pbName = 'KeyedIn Sign';
-                       }
-                   }
-            }
-            
-            List<PriceBOOk2> pb = new List<PriceBOOk2>();
-            pb = [Select Id,(Select Id,Product2Id,UnitPrice from PricebookEntries where 
-                             CurrencyIsoCode=:currentOp[0].CurrencyIsoCode AND Product2Id=:productId AND isActive=true limit 1)
-                  from pricebook2 where Name=:pbName];
-            System.debug('pb.PricebookEntries=>'+pb[0].PricebookEntries);
-            return pb[0].PricebookEntries[0].UnitPrice;
-        } catch (Exception err) {
-            System.debug('get exception on line number==>'+err.getLInenumber() + ' error is=>'+err.getMessage());
-            if ( String.isNotBlank( err.getMessage() ) && err.getMessage().contains( 'error:' ) ) {
-                throw new AuraHandledException(err.getMessage().split('error:')[1].split(':')[0] + '.');
-            } else {
-                throw new AuraHandledException(err.getMessage());
-            }
-        }
-    }*/
-   /* @AuraEnabled 
-    public static dataWrp getTypeFieldValue(String OpportunityId){
-        System.debug('getTypeFieldValue==>'+OpportunityId);
-        List<Opportunity> opp =  new List<Opportunity>();
-        opp = [Select Id ,type,CurrencyIsoCode from Opportunity where Id=:OpportunityId];
-        if(opp.isEmpty()){
-            return null;
-        }
-        dataWrp dataWrpObj = new dataWrp();
-        List<pickListDataWrp> pickListDataType = new List<pickListDataWrp>();
-        List<pickListDataWrp> pickListDatacurrency = new List<pickListDataWrp>();
-        Schema.DescribeFieldResult fieldResult = Opportunity.Type.getDescribe();
-        
-        List<Schema.PicklistEntry> pValues = fieldResult.getPicklistValues();
-        for (Schema.PicklistEntry p: pValues) {
-            if(opp[0].Type == p.getValue()){
-                pickListDataType.add( new pickListDataWrp(p.getLabel(), p.getValue() ,  true) );
-            }else{
-                pickListDataType.add( new pickListDataWrp(p.getLabel(), p.getValue(),false) );
-            }
-            
-        }
-        
-        fieldResult = Opportunity.CurrencyIsoCode.getDescribe();
-        pValues = fieldResult.getPicklistValues();
-        for (Schema.PicklistEntry p: pValues) {
-            if(opp[0].CurrencyIsoCode == p.getValue()){
-                pickListDatacurrency.add( new pickListDataWrp(p.getLabel(), p.getValue(),true) );
-                
-            }else{
-                pickListDatacurrency.add( new pickListDataWrp(p.getLabel(), p.getValue(),false) );  
-            }
-        }
-        dataWrpObj.pickListDatacurrency = pickListDatacurrency;
-        dataWrpObj.pickListDataType = pickListDataType;
-        
-        System.debug('pickListDatacurrency==>'+pickListDatacurrency);
-        System.debug('pickListDataType==>'+pickListDataType);
-        System.debug('dataWrpObj==>'+dataWrpObj);
-        return dataWrpObj;
-    }*/
+   
+  
     
     @AuraEnabled
     public static void insertLineItems(String SelectedProdList ,String OpportunityId){
@@ -237,12 +159,7 @@ recordsDataList.add( new RecordsData((String)s.get('Name'), (String)s.get('id'))
         }catch(Exception err){
             System.debug('get exception on line number==>'+err.getLineNumber()+' error is =>'+err.getMessage()+'  trace-<'+err.getStackTraceString());
             System.debug('get exception on line number==>'+err.getLInenumber() + ' error is=>'+err.getMessage());
-            if ( false && String.isNotBlank( err.getMessage() ) && err.getMessage().contains( 'error:' ) ) {
-                throw new AuraHandledException(err.getMessage().split('error:')[1].split(':')[0] + '.');
-            } else {
-                System.debug('**thwor exception**');
-                throw new AuraHandledException(err.getMessage());
-            }
+             throw new AuraHandledException(err.getMessage());
         }
     }
     
@@ -255,8 +172,11 @@ recordsDataList.add( new RecordsData((String)s.get('Name'), (String)s.get('id'))
             this.value = value;
             this.PBEntry = PBEntry;
         }
+        public RecordsData(){
+            
+        }
     }
-    public class pickListDataWrp {
+    /*public class pickListDataWrp {
         @AuraEnabled public String label;
         @AuraEnabled public String value;
         @AuraEnabled public Boolean selected;
@@ -265,13 +185,8 @@ recordsDataList.add( new RecordsData((String)s.get('Name'), (String)s.get('id'))
             this.value = value;
             this.selected = selected;
         }
-    }
+    }*/
     
-    public class dataWrp{
-        @AuraEnabled public List<pickListDataWrp> pickListDataType;
-        @AuraEnabled public List<pickListDataWrp> pickListDatacurrency;
-        
-    }
     public class selectedProdWrapper{
         @AuraEnabled
         public RecordsData selectedRecord;
@@ -280,11 +195,6 @@ recordsDataList.add( new RecordsData((String)s.get('Name'), (String)s.get('id'))
         /*@AuraEnabled
         public Decimal Price;*/
     }
-    /*public class selectedRecordcls{
-        @AuraEnabled
-        public String label;
-        @AuraEnabled
-        public String value;
-    }*/
+   
     
 }

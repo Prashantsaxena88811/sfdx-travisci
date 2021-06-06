@@ -72,4 +72,11 @@
     blurEvent : function( component, event, helper ){
     	$A.util.removeClass(component.find('resultsDiv'),'slds-is-open');
     },
+    
+    testm1 : function( component, event, helper){
+        var cmpEvent = component.getEvent("ProductAddRemoveEvnt"); 
+        cmpEvent.setParams({"message" : "Item Removed","index" :'eeeeeee'}); 
+        cmpEvent.fire(); 
+        
+    }
 })

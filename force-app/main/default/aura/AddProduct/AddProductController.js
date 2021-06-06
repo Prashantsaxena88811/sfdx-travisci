@@ -69,5 +69,11 @@
             component.set('v.emmersionProductList',emmersionProductListVar);
         }
         
+    },
+    catchM1 : function(component ,event , helper){
+        var message = event.getParam("message"); 
+        var index = event.getParam("index");
+        console.log('message==>'+message);
+        console.log('index==>'+index);
     }
 })
