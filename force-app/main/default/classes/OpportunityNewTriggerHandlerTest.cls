@@ -20,7 +20,7 @@ private class OpportunityNewTriggerHandlerTest {
         
         
         Account acc2 = new Account();
-        acc2.Name = 'testAccount2';
+        acc2.Name = 'account_sample';
         insert acc2;
         
         Contact con = new Contact();
@@ -123,7 +123,7 @@ private class OpportunityNewTriggerHandlerTest {
         Opportunity opp = getOpportunityRecord('New');
         opp.StageName = 'Closed Won';
         opp.Term_Start_Date__c = date.today();
-        opp.Term_End_Date__c = Date.today() + 1;
+        opp.Term_End_Date__c = Date.today().addYears(4) + 1;
         
         Asset getAsset = new Asset();
         test.startTest();
@@ -323,7 +323,7 @@ private class OpportunityNewTriggerHandlerTest {
         System.assertEquals(true, opp.RecordTypeId != null);
         
     }
-        @isTest
+   /* not used    @isTest
     private static void testupdateOpptyWithRecordType4(){
         Opportunity opp = getOpportunityRecord('Renewal');
         opp.Notes__c = 'wertyuiop'; 
@@ -340,5 +340,5 @@ private class OpportunityNewTriggerHandlerTest {
         
         test.stopTest();
         
-    }
+    }*/
 }
