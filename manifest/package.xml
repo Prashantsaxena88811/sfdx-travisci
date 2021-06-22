@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>	DiscoverCon_RelatedRecordsToSave	</members>
+<members>	Discovery_contact	</members>
+<members>	Discovery_Contact_NORelatedList	</members>
+<members>	Discovery_SalesInvoice	</members>
+<members>	Discovery_update_Contact_Checkbox	</members>
+<members>	DQ_awana_role_church_role_values	</members>
+<members>	DQ_Brit_Check_ON_US_Contact	</members>
+<members>	DQ_Check_All_Contact_purged_houseHold	</members>
+<members>	DQ_Check_All_Contact_purged_house_TEST	</members>
+<members>	DQ_Count_contacts_On_HouseHold	</members>
+<members>	DQ_Count_contacts_On_HouseHold_Test	</members>
+<members>	DQ_Count_Donation	</members>
+<members>	DQ_COUNT_NO_ORD_DON_CAM	</members>
+<members>	DQ_COUNT_NO_ORD_DON_CAM_WO_affilaiton	</members>
+<members>	DQ_Count_OF_Duplicate_US_HH	</members>
+<members>	DQ_Create_HH_ACCOUNT	</members>
+<members>	DQ_Create_HH_ACCOUNT_Test	</members>
+<members>	DQ_Delete_Contact	</members>
+<members>	DQ_delete_Contact_batch	</members>
+<members>	DQ_Delete_Contact_NO_campaign	</members>
+<members>	DQ_Delete_Contact_NO_campaign_TEST	</members>
+<members>	DQ_Delete_Contact_TEST	</members>
+<members>	DQ_Delete_Contact_V2	</members>
+<members>	DQ_Delete_Contact_V4	</members>
+<members>	DQ_Delete_Contact_V4_1	</members>
+<members>	DQ_Delete_Contact_V4_4	</members>
+<members>	DQ_Delete_Contact_V4_4_Copy	</members>
+<members>	DQ_Delete_Contact_V4_4_Test	</members>
+<members>	DQ_Delete_Contact_V4_Test	</members>
+<members>	DQ_Delete_Contact_V5	</members>
+<members>	DQ_Delete_Contact_V6	</members>
+<members>	DQ_Delete_Contact_V6_Test	</members>
+<members>	DQ_Delete_Contact_V7	</members>
+<members>	DQ_Delete_Contact_V8	</members>
+<members>	DQ_Delete_Contact_With_only_notes	</members>
+<members>	DQ_Delete_Contact_With_only_notes_Test	</members>
+<members>	DQ_Delete_Invocies	</members>
+<members>	DQ_Delete_Invocies_Test	</members>
+<members>	DQ_delete_order_batch	</members>
+<members>	DQ_delete_order_batch_Test	</members>
+<members>	DQ_delete_order_batch_V1	</members>
+<members>	DQ_Discovery_CreateHouseHold_Accounts	</members>
+<members>	DQ_DUP_EMAIL_ONLY	</members>
+<members>	DQ_GetContactInfo_Dup_Email	</members>
+<members>	DQ_GetContactInfo_Dup_Email_Batch	</members>
+<members>	DQ_GetContactInfo_Dup_Email_NAme	</members>
+<members>	DQ_GetContactInfo_Dup_Name_ZIP	</members>
+<members>	DQ_insert_custom_metadata	</members>
+<members>	DQ_Merge	</members>
+<members>	DQ_MERGE_OF_Dupl_HH_EMAIL	</members>
+<members>	DQ_MERGE_OF_Duplicate_HH_HH_V1	</members>
+<members>	DQ_MERGE_OF_Duplicate_HH_HH_ZIP_V1	</members>
+<members>	DQ_MERGE_OF_Duplicate_US_HH	</members>
+<members>	DQ_MERGE_OF_Duplicate_US_HH_V2	</members>
+<members>	DQ_MERGE_OF_Duplicate_US_HH_V2_Test	</members>
+<members>	DQ_MERGE_OF_Duplicate_US_HH_V4	</members>
+<members>	DQ_MERGE_OF_Duplicate_US_HH_V5	</members>
+<members>	DQ_MERGE_OF_Duplicate_US_HH_V6	</members>
+<members>	DQ_MERGE_OF_Dupl_ZIP_US_HH_V1	</members>
+<members>	DQ_MERGE_OF_Dupl_ZIP_US_HH_V2	</members>
+<members>	DQ_MERGE_OF_Dupl_ZIP_US_HH_V4	</members>
+<members>	DQ_MERGE_OF_Dupl_ZIP_US_HH_V5	</members>
+<members>	DQ_MERGE_OF_Dupl_ZIP_US_HH_V5_Test	</members>
+<members>	DQ_NO_Email_No_Donation	</members>
+<members>	DQ_RelatedLIst_Check_On_Household	</members>
+<members>	DQ_RelatedLIst_Check_On_Household_V2	</members>
+<members>	DQ_RelatedLIst_Check_On_House_test	</members>
+<members>	DQ_Update_transaction_status	</members>
+<members>	DQ_Update_transaction_Status_AND_Date	</members>
+<members>	DQ_Update_transaction_Status_DATE_Test	</members>
+<members>   DQ_MERGE_OF_Dupl_HH_EMAIL_Test  </members>
+<members>	EDQConstants	</members>
+<members>	Payment_ePDQ	</members>
+<members>	TrailheadQueue	</members>
+
+        <name>ApexClass</name>
+    </types>
+   
+    
+    <version>51.0</version>
+</Package>
