@@ -33,6 +33,7 @@ global class DQ_MERGE_OF_Dupl_HH_EMAIL implements Database.Batchable<sObject>,Da
     }
     
     global void execute(Database.BatchableContext BC, List<DuplicateRecordSet> DuplicateRecordSetChunk) {
+        Savepoint sp = Database.setSavepoint();
         try {
             
             // Church Value Mapping
@@ -131,6 +132,7 @@ global class DQ_MERGE_OF_Dupl_HH_EMAIL implements Database.Batchable<sObject>,Da
                 if(contactDataMap!=null && !contactDataMap.isEmpty()){
                     List<npe5__Affiliation__c> affiliationList = new List<npe5__Affiliation__c>();
                     List<Contact> contactToBeMarked = new List<Contact>();
+                    List<Account> accountToBeMarked = new List<Account>();
                     Set<String> HH_ContactIds = new Set<String>();
                     //Set<Id> relatedAccountIds = new Set<Id>();
                     // Map duplicaterecordId to Account Set
@@ -346,7 +348,23 @@ global class DQ_MERGE_OF_Dupl_HH_EMAIL implements Database.Batchable<sObject>,Da
                                         
                                         System.debug('accountMap_withALL_field.get(masterAccountId)=>'+accountMap_withALL_field.get(masterAccountId));
                                         //merege account start populate the fields END
-                                        Merge accountMap_withALL_field.get(masterAccountId)  mergerAccountId; 
+                                        if(isMergeRecord){
+                                            System.debug('**do not merge Account Records');
+                                            Merge accountMap_withALL_field.get(masterAccountId)  mergerAccountId;  
+                                        }else{
+                                            System.debug('**do not merge Account Records');
+                                            Account ac1 = new Account();
+                                            ac1.Id = masterAccountId;
+                                            ac1.Record_Value__c = 'Master';
+                                            
+                                            Account ac2 = new Account();
+                                            ac2.Id = mergerAccountId;
+                                            ac2.Record_Value__c = 'Merger';
+                                            
+                                            accountToBeMarked.add(ac1);
+                                            accountToBeMarked.add(ac2);
+                                        }
+                                        
                                         
                                     }
                                     else{ //  both Contact belongs to Same Account
@@ -507,11 +525,11 @@ global class DQ_MERGE_OF_Dupl_HH_EMAIL implements Database.Batchable<sObject>,Da
                                             System.debug('Do not merge Contact records');
                                                contact conObj = new Contact();
                                                conObj.Id = masterContactId;
-                                               conObj.Merge_DUP_HH_with_contact__c = true;
+                                               conObj.Record_Value__c = 'Master';
                                                
                                                contact conObj1 = new Contact();
                                                conObj1.Id = mergerContactId;
-                                               conObj1.Merge_DUP_HH_with_contact__c = true;
+                                               conObj1.Record_Value__c = 'Merger';
                                                
                                                contactToBeMarked.add(conObj);
                                                contactToBeMarked.add(conObj1);
@@ -547,7 +565,15 @@ global class DQ_MERGE_OF_Dupl_HH_EMAIL implements Database.Batchable<sObject>,Da
                         System.debug('ContactToBeMarked==>'+ContactToBeMarked);
                         if(!isMergeRecord){
                             System.debug('***contactToBeMarked****');
-                           // update contactToBeMarked; 
+                            update contactToBeMarked; 
+                        }
+                        
+                    }
+                    if(accountToBeMarked!=null && !accountToBeMarked.isEmpty()){
+                        System.debug('accountToBeMarked==>'+accountToBeMarked);
+                        if(!isMergeRecord){
+                            System.debug('***accountToBeMarked****');
+                            update accountToBeMarked; 
                         }
                         
                     }
@@ -555,6 +581,8 @@ global class DQ_MERGE_OF_Dupl_HH_EMAIL implements Database.Batchable<sObject>,Da
                 }
             }
         }catch(Exception e){
+            Database.rollback(sp);
+            
             System.debug('get exception on line number-->'+e.getLineNumber()+' error is=>'+e.getMessage()+' trace->'+e.getStackTraceString());
         }
     }  
