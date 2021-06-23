@@ -5,11 +5,11 @@ public class DQ_insert_custom_metadata {
     /**
 *@desc: A method to insert multiple records for custom metadata object in a single go. 
 **/
-    public void insertbulkMetadata(){
+    public void insertbulkMetadata(boolean insertData){
         try{
             List<Test_obj__c> customMetaDataRecordsTobe_inserted = new List<Test_obj__c>();
-            customMetaDataRecordsTobe_inserted = [Select Custom_Field_Name__c,Custom_Metadata_Label__c,include_in_logic__c,Data_Type__c from Test_obj__c where 
-                                                  Custom_Metadata_Label__c!=null  order by Name];
+            customMetaDataRecordsTobe_inserted = [Select Entity_Type__c,Custom_Field_Name__c,Custom_Metadata_Label__c,include_in_logic__c,Data_Type__c from Test_obj__c where 
+                                                  Custom_Metadata_Label__c!=null AND Entity_Type__c='Account'  order by Name];
             System.debug('customMetaDataRecordsTobe_inserted==>'+customMetaDataRecordsTobe_inserted);
             Metadata.DeployContainer mdContainer = new Metadata.DeployContainer();
             Integer count = 1;
@@ -18,7 +18,7 @@ public class DQ_insert_custom_metadata {
                 //First Record 
                 Metadata.CustomMetadata firstMetadataRec =  new Metadata.CustomMetadata();
                 //firstMetadataRec.fullName = nameSpacePrefix + 'Contact_Merge__mdt.'+rec.Custom_Metadata_Label__c.replace('__c', '').mid(0, 40);
-                firstMetadataRec.fullName = 'Contact_Merge__mdt.'+rec.Custom_Metadata_Label__c;
+                firstMetadataRec.fullName = 'Contact_Merge__mdt.'+rec.Custom_Metadata_Label__c.replace(' ', '_');
                 count = count +1;
                 firstMetadataRec.label = rec.Custom_Metadata_Label__c;
                 //firstMetadataRec.Field_API_Name__c = rec.Custom_Metadata_Label__c;
@@ -41,15 +41,26 @@ public class DQ_insert_custom_metadata {
                 Metadata.CustomMetadataValue customField2 = new Metadata.CustomMetadataValue();
                 customField2.field = 'Field_API_Name__c';
                 customField2.value = rec.Custom_Field_Name__c;
+                
+                Metadata.CustomMetadataValue customField4 = new Metadata.CustomMetadataValue();
+                customField4.field = 'Entity_Type__c';
+                customField4.value = rec.Entity_Type__c;
+                
                 System.debug('rec.Custom_Field_Name__c=>'+rec.Custom_Field_Name__c);
                 
                 firstMetadataRec.values.add(customField1); 
                 firstMetadataRec.values.add(customField2); 
+                firstMetadataRec.values.add(customField4); 
                 mdContainer.addMetadata(firstMetadataRec);  //adding record container that will be used to deploy the records in custom metadata.                        
             }
-            Id jobId = Metadata.Operations.enqueueDeployment(mdContainer, null);
+            System.debug('mdContainer=>'+mdContainer);
+            if(insertData){
+               Id jobId = Metadata.Operations.enqueueDeployment(mdContainer, null); 
+                 system.debug('jobId***'+jobId);
+            }
             
-            system.debug('jobId***'+jobId);
+            
+           
         }
         catch(Exception ex){             
             //System.assert(false,ex.getMessage()); 

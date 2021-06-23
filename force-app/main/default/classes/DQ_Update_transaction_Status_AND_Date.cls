@@ -17,13 +17,15 @@ global class DQ_Update_transaction_Status_AND_Date  implements Database.Batchabl
         if(Test.isRunningTest() && false){
             query='Select Id,Chargent_Order__c from order Where Order_Created_Date__c<:purgeBeforeDate AND  Is_Transaction_Records_Updated__c=False Limit 1'; 
         }else{
-            query='Select Id,Chargent_Order__c from order Where Order_Created_Date__c<:purgeBeforeDate AND  Is_Transaction_Records_Updated__c=False';   
+            //query='Select Id,Chargent_Order__c from order Where Order_Created_Date__c<:purgeBeforeDate AND  Is_Transaction_Records_Updated__c=False'; 
+            query='Select Id,Chargent_Order__c from order Where  Id=\'8012C000001n9bm\'  limit 1';   
         }
         return Database.getQueryLocator(query);
         
     }
     
     global void execute(Database.BatchableContext BC, List<order> OrderChunk) {
+        Savepoint sp = Database.setSavepoint();
         try {
             Set<Id> chargentOrder_Ids = new  Set<Id>();
             System.debug('delete only');
@@ -42,14 +44,13 @@ global class DQ_Update_transaction_Status_AND_Date  implements Database.Batchabl
             if(chargentOrder_Ids!=null && !chargentOrder_Ids.isEmpty()){
                 List<ChargentOrders__Transaction__c> transactionList = new List<ChargentOrders__Transaction__c>();
                 transactionList = [Select Id,CreatedDate,ChargentOrders__Type__c,ChargentOrders__Bank_Transfer_Settlement_Date__c,
-                                   ChargentOrders__Bank_Account_Status__c from ChargentOrders__Transaction__c 
+                                   ChargentOrders__Bank_Account_Status__c,ChargentOrders__Gateway_Date__c from ChargentOrders__Transaction__c 
                                    where ChargentOrders__Order__c IN:chargentOrder_Ids
-                                   AND ChargentOrders__Type__c ='Charge' AND ChargentOrders__Bank_Transfer_Settlement_Date__c=null 
-                                   AND ChargentOrders__Bank_Account_Status__c=null];
+                                   AND ChargentOrders__Type__c ='Charge' AND ChargentOrders__Gateway_Date__c!=null];
                 
                 if(transactionList!=null && !transactionList.isEmpty()){
                     for(ChargentOrders__Transaction__c transactionObj:transactionList){
-                        transactionObj.ChargentOrders__Bank_Transfer_Settlement_Date__c = transactionObj.CreatedDate;
+                        transactionObj.ChargentOrders__Bank_Transfer_Settlement_Date__c = transactionObj.ChargentOrders__Gateway_Date__c;
                         transactionObj.ChargentOrders__Bank_Account_Status__c = 'settled';
                     }
                     System.debug('transactionList-->'+transactionList);
@@ -67,6 +68,7 @@ global class DQ_Update_transaction_Status_AND_Date  implements Database.Batchabl
             
             
         }catch(Exception e){
+            Database.rollback(sp);
             System.debug('get exception on line number-->'+e.getLineNumber()+' error is=>'+e.getMessage()+' trace->'+e.getStackTraceString());
         }
     }  

@@ -37,7 +37,7 @@ global class DQ_MERGE_OF_Dupl_HH_EMAIL implements Database.Batchable<sObject>,Da
         try {
             
             // Church Value Mapping
-            Map<String,String> churchValueMapping = new Map<String,String>();
+            /*Map<String,String> churchValueMapping = new Map<String,String>();
             churchValueMapping.put('Associate Pastor'.toLowerCase(),'Pastor / Associate Pastor');
             churchValueMapping.put('Business Manager'.toLowerCase(),'Church Staff Member');
             churchValueMapping.put('Children\'s Ministry Director'.toLowerCase(),'Children\'s Pastor / Director');
@@ -51,7 +51,7 @@ global class DQ_MERGE_OF_Dupl_HH_EMAIL implements Database.Batchable<sObject>,Da
             
             churchValueMapping.put('Rorheim Ambassador'.toLowerCase(),'');
             churchValueMapping.put('Worship Director'.toLowerCase(),'Church Staff Member');
-            churchValueMapping.put('Youth pastor'.toLowerCase(),'Youth Pastor / Director');
+            churchValueMapping.put('Youth pastor'.toLowerCase(),'Youth Pastor / Director');*/
             
             
             Set<String> affiliationsAwanaRoles = new Set<String>();
@@ -94,7 +94,7 @@ global class DQ_MERGE_OF_Dupl_HH_EMAIL implements Database.Batchable<sObject>,Da
             if(!contactIdSet.isEmpty()){
                 String accountField='',contactFields='';
                 contactFields = 'Select Id,MailingStreet,MailingCity,MailingState,MailingPostalCode,MailingCountry,OtherStreet,OtherCity,OtherState,OtherPostalCode,OtherCountry ';
-                accountField = 'Select Id';
+                accountField = 'Select Id,BillingCity,BillingCountry,BillingGeocodeAccuracy,BillingLatitude,BillingLongitude,BillingPostalCode,BillingState,BillingStreet,IntacctID__c';
                 List<Contact_Merge__mdt> contactMergeFieldInfoList = new List<Contact_Merge__mdt>();
                 List<Contact_Merge__mdt> AccountMergeFieldInfoList = new List<Contact_Merge__mdt>();
                 contactMergeFieldInfoList = [Select Id,Entity_Type__c,Label,Rule_Type__c,Field_API_Name__c from Contact_Merge__mdt where Rule_Type__c!=null AND  Entity_Type__c='Contact'];
@@ -298,6 +298,50 @@ global class DQ_MERGE_OF_Dupl_HH_EMAIL implements Database.Batchable<sObject>,Da
                                         System.debug('masterAccountId==>'+masterAccountId+'--mergerAccountId--'+mergerAccountId);
                                         //populate field in account
                                         //merege account start populate the fields START
+                                        //
+                                        //populate intact Id of merger Account record to Master Account Record
+                                        if(accountMap_withALL_field.get(masterAccountId).get('IntacctID__c')!=''){
+                                            if( accountMap_withALL_field.get(masterAccountId).get('Comments__c')!=null ){
+                                               accountMap_withALL_field.get(masterAccountId).put('Comments__c',String.valueOf(accountMap_withALL_field.get(masterAccountId).get('Comments__c')) + '  \n '+' Old Reserved Intacct Id= '+String.valueOf(accountMap_withALL_field.get(masterAccountId).get('IntacctID__c'))); 
+                                            }else{
+                                               accountMap_withALL_field.get(masterAccountId).put('Comments__c','Old Reserved Intacct Id= '+String.valueOf(accountMap_withALL_field.get(masterAccountId).get('IntacctID__c'))+' \n ');
+                                            }
+                                            
+                                        }
+                                        System.debug('intactIdAdd '+accountMap_withALL_field.get(masterAccountId).get('Comments__c'));
+                                        if(accountMap_withALL_field.get(masterAccountId).get('BillingCity') == null && accountMap_withALL_field.get(masterAccountId).get('BillingCountry') == null &&
+                                           accountMap_withALL_field.get(masterAccountId).get('BillingGeocodeAccuracy') == null && accountMap_withALL_field.get(masterAccountId).get('BillingLatitude') == null &&
+                                           accountMap_withALL_field.get(masterAccountId).get('BillingLongitude') == null && accountMap_withALL_field.get(masterAccountId).get('BillingPostalCode') == null &&
+                                           accountMap_withALL_field.get(masterAccountId).get('BillingState') == null  && accountMap_withALL_field.get(masterAccountId).get('BillingStreet') == null){
+                                               
+                                               if(accountMap_withALL_field.get(mergerAccountId).get('BillingCity')!=null){
+                                                   accountMap_withALL_field.get(masterAccountId).put('BillingCity',accountMap_withALL_field.get(mergerAccountId).get('BillingCity'));
+                                               }
+                                               if(accountMap_withALL_field.get(mergerAccountId).get('BillingCountry')!=null){
+                                                   accountMap_withALL_field.get(masterAccountId).put('BillingCountry',accountMap_withALL_field.get(mergerAccountId).get('BillingCountry'));
+                                               }
+                                               if(accountMap_withALL_field.get(mergerAccountId).get('BillingGeocodeAccuracy')!=null){
+                                                   accountMap_withALL_field.get(masterAccountId).put('BillingGeocodeAccuracy',accountMap_withALL_field.get(mergerAccountId).get('BillingGeocodeAccuracy'));
+                                               }
+                                               if(accountMap_withALL_field.get(mergerAccountId).get('BillingLatitude')!=null){
+                                                   accountMap_withALL_field.get(masterAccountId).put('BillingLatitude',accountMap_withALL_field.get(mergerAccountId).get('BillingLatitude'));
+                                               }
+                                               if(accountMap_withALL_field.get(mergerAccountId).get('BillingLongitude')!=null){
+                                                   accountMap_withALL_field.get(masterAccountId).put('BillingLongitude',accountMap_withALL_field.get(mergerAccountId).get('BillingLongitude'));
+                                               }
+                                               
+                                               if(accountMap_withALL_field.get(mergerAccountId).get('BillingPostalCode')!=null){
+                                                   accountMap_withALL_field.get(masterAccountId).put('BillingPostalCode',accountMap_withALL_field.get(mergerAccountId).get('BillingPostalCode'));
+                                               }
+                                               if(accountMap_withALL_field.get(mergerAccountId).get('BillingState')!=null){
+                                                   accountMap_withALL_field.get(masterAccountId).put('BillingState',accountMap_withALL_field.get(mergerAccountId).get('BillingState'));
+                                               }
+                                               if(accountMap_withALL_field.get(mergerAccountId).get('BillingStreet')!=null){
+                                                   accountMap_withALL_field.get(masterAccountId).put('BillingStreet',accountMap_withALL_field.get(mergerAccountId).get('BillingStreet'));
+                                               }
+                                               
+                                           }
+                                        
                                         for(Contact_Merge__mdt conMerge : AccountMergeFieldInfoList){
                                             System.debug('**merege Account fields'+conMerge);
                                             if(conMerge.Rule_Type__c.toLowerCase() == 'Default Behaviour' ){
@@ -347,6 +391,19 @@ global class DQ_MERGE_OF_Dupl_HH_EMAIL implements Database.Batchable<sObject>,Da
                                         }
                                         
                                         System.debug('accountMap_withALL_field.get(masterAccountId)=>'+accountMap_withALL_field.get(masterAccountId));
+                                        for(Contact_Merge__mdt fieldVal : AccountMergeFieldInfoList){
+                                            System.debug('fieldVal='+fieldVal.Field_API_Name__c+' ==> '+accountMap_withALL_field.get(masterAccountId).get(fieldVal.Field_API_Name__c));  
+                                        }
+                                        System.debug('fieldVal= BillingCity ==> '+accountMap_withALL_field.get(masterAccountId).get('BillingCity')); 
+                                        System.debug('fieldVal= BillingCountry ==> '+accountMap_withALL_field.get(masterAccountId).get('BillingCountry')); 
+                                        System.debug('fieldVal= BillingGeocodeAccuracy ==> '+accountMap_withALL_field.get(masterAccountId).get('BillingGeocodeAccuracy')); 
+                                        System.debug('fieldVal= BillingLatitude ==> '+accountMap_withALL_field.get(masterAccountId).get('BillingLatitude')); 
+                                        System.debug('fieldVal= BillingLongitude ==> '+accountMap_withALL_field.get(masterAccountId).get('BillingLongitude')); 
+                                        System.debug('fieldVal= BillingPostalCode ==> '+accountMap_withALL_field.get(masterAccountId).get('BillingPostalCode')); 
+                                        System.debug('fieldVal= BillingState ==> '+accountMap_withALL_field.get(masterAccountId).get('BillingState')); 
+                                        System.debug('fieldVal= BillingStreet ==> '+accountMap_withALL_field.get(masterAccountId).get('BillingStreet')); 
+                                       
+                                        
                                         //merege account start populate the fields END
                                         if(isMergeRecord){
                                             System.debug('**do not merge Account Records');
@@ -464,7 +521,7 @@ global class DQ_MERGE_OF_Dupl_HH_EMAIL implements Database.Batchable<sObject>,Da
                                                 System.debug('HH_AWANA_ROLE==>'+ String.valueOf(contact_MAP_WIthALLField.get(masterContactId).get('Awana_Role__c')));
                                                 //add awana to role new Affliation.
                                                 //create the affliation records on household  Start
-                                                if(contact_MAP_WIthALLField.containsKey(mergerContactId) && contact_MAP_WIthALLField.containsKey(masterContactId) 
+                                               /* if(contact_MAP_WIthALLField.containsKey(mergerContactId) && contact_MAP_WIthALLField.containsKey(masterContactId) 
                                                    && (contact_MAP_WIthALLField.get(mergerContactId).npe5__Affiliations__r ==null || 
                                                    contact_MAP_WIthALLField.get(mergerContactId).npe5__Affiliations__r.isEmpty())){
                                                        System.debug('*******creating affliation***');
@@ -508,7 +565,7 @@ global class DQ_MERGE_OF_Dupl_HH_EMAIL implements Database.Batchable<sObject>,Da
                                                        System.debug('affiliationObj=>'+affiliationObj);
                                                        affiliationList.add(affiliationObj);
                                                        
-                                                   }
+                                                   }*/
                                                 
                                                 
                                                 
