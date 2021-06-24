@@ -6,6 +6,7 @@ global class DQ_MERGE_OF_Dupl_HH_EMAIL implements Database.Batchable<sObject>,Da
     Global Integer recordCount = 0;
     Global String recordSetId = '';//0GK2C000000ADO2
     Global Boolean isMergeRecord = false;
+    Global String errorList='' ;
     global DQ_MERGE_OF_Dupl_HH_EMAIL(String recordSetId ,string ParentIdVal,boolean isMergeRecord){
         this.recordSetId = recordSetId;
         this.isMergeRecord = isMergeRecord;
@@ -22,7 +23,8 @@ global class DQ_MERGE_OF_Dupl_HH_EMAIL implements Database.Batchable<sObject>,Da
             query = 'SELECT Id FROM DuplicateRecordSet where  RecordCount = 2  AND ID=:recordSetId';
             
         }else{
-            query = 'SELECT Id FROM DuplicateRecordSet where  RecordCount = 2 AND ParentId=:ParentIdVal ';
+            //query = 'SELECT Id FROM DuplicateRecordSet where  RecordCount = 2 AND ParentId=:ParentIdVal ';
+            //NOTE check DQ_MERGE_OF_Dupl_ZIP_US_HH_V5 to add qualified check.
             if(String.isNotBlank(recordSetId)){
                 query = query +  ' AND ID=:recordSetId ';
             }
@@ -35,7 +37,6 @@ global class DQ_MERGE_OF_Dupl_HH_EMAIL implements Database.Batchable<sObject>,Da
     global void execute(Database.BatchableContext BC, List<DuplicateRecordSet> DuplicateRecordSetChunk) {
         Savepoint sp = Database.setSavepoint();
         try {
-            
             // Church Value Mapping
             /*Map<String,String> churchValueMapping = new Map<String,String>();
             churchValueMapping.put('Associate Pastor'.toLowerCase(),'Pastor / Associate Pastor');
@@ -639,7 +640,7 @@ global class DQ_MERGE_OF_Dupl_HH_EMAIL implements Database.Batchable<sObject>,Da
             }
         }catch(Exception e){
             Database.rollback(sp);
-            
+            errorList = errorList + ' get exception on line number-->'+e.getLineNumber()+' error is=>'+e.getMessage()+' chunkId=>'+DuplicateRecordSetChunk[0]+' <br>';
             System.debug('get exception on line number-->'+e.getLineNumber()+' error is=>'+e.getMessage()+' trace->'+e.getStackTraceString());
         }
     }  
@@ -647,6 +648,13 @@ global class DQ_MERGE_OF_Dupl_HH_EMAIL implements Database.Batchable<sObject>,Da
     
     global void finish(Database.BatchableContext BC) {
         
+        Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
+        String[] toAddresses = new String[] {'Prashant@infoglen.com'};
+            mail.setToAddresses(toAddresses);
+        mail.setSubject('Match Merge Batch ');
+        
+        mail.setHtmlBody(errorList);
+        Messaging.sendEmail(new Messaging.SingleEmailMessage[] { mail });
     }
     
     
