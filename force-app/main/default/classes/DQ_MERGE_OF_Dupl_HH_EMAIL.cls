@@ -205,7 +205,11 @@ global class DQ_MERGE_OF_Dupl_HH_EMAIL implements Database.Batchable<sObject>,Da
                     // do Processing on the duplicateRecordSet_TO_AccountIDs MAP
                     if(!HH_ContactIds.isEmpty() && !duplicateRecordSet_TO_AccountIDs.isEmpty()){
                         Map<Id,Account> accountMap_withRelatedList = new Map<Id,Account>([Select Id,(Select Id,createddate from Orders order by createddate desc Limit 1),
-                                                                                          (Select Id,createddate from Opportunities order by createddate desc Limit 1) from Account Where Id IN : relatedAccountIds_Set]);
+                                                                                          (Select Id,createddate from Opportunities where IsRecurring__c =false order by createddate desc Limit 1)
+                                                                                          from Account Where Id IN : relatedAccountIds_Set]);
+                        Map<Id,Account> accountMap_withRelatedList_recurr_donation = new Map<Id,Account>([Select Id,
+                                                                                                          (Select Id,createddate from Opportunities  where IsRecurring__c =true order by createddate desc Limit 1)
+                                                                                                          from Account Where Id IN : relatedAccountIds_Set]);
                         
                         System.debug('accountMap_withRelatedList=>'+accountMap_withRelatedList);
                         // start mergin the Account and contact  records.
@@ -245,7 +249,28 @@ global class DQ_MERGE_OF_Dupl_HH_EMAIL implements Database.Batchable<sObject>,Da
                                             masterAccountId = AccountId2;
                                             mergerAccountId = AccountId1;
                                         }
-                                        // check for doantions , if any
+                                        
+                                        // check for Recurring  doantions , if any
+                                        if(String.isBlank(masterAccountId)){
+                                            System.debug('*********check in Recurring donation*********');
+                                            if(!accountMap_withRelatedList_recurr_donation.get(AccountId1).Opportunities.isEmpty() && !accountMap_withRelatedList_recurr_donation.get(AccountId2).Opportunities.isEmpty()){
+                                                if(accountMap_withRelatedList_recurr_donation.get(AccountId1).Opportunities[0].createdDate > accountMap_withRelatedList_recurr_donation.get(AccountId2).Opportunities[0].createdDate){
+                                                    masterAccountId = AccountId1;
+                                                    mergerAccountId = AccountId2;
+                                                }else{
+                                                    masterAccountId = AccountId2;
+                                                    mergerAccountId = AccountId1;
+                                                }
+                                            }else if(!accountMap_withRelatedList_recurr_donation.get(AccountId1).Opportunities.isEmpty()){
+                                                masterAccountId = AccountId1;
+                                                mergerAccountId = AccountId2;
+                                                
+                                            }else if(!accountMap_withRelatedList_recurr_donation.get(AccountId2).Opportunities.isEmpty()){
+                                                masterAccountId = AccountId2;
+                                                mergerAccountId = AccountId1;
+                                            }
+                                        }
+                                        // check for simple doantions , if any
                                         if(String.isBlank(masterAccountId)){
                                             System.debug('*********check in donation*********');
                                             if(!accountMap_withRelatedList.get(AccountId1).Opportunities.isEmpty() && !accountMap_withRelatedList.get(AccountId2).Opportunities.isEmpty()){
