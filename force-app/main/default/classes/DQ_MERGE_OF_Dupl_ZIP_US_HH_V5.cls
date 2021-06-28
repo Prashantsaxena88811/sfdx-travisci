@@ -1,10 +1,11 @@
 global class DQ_MERGE_OF_Dupl_ZIP_US_HH_V5 implements Database.Batchable<sObject>,Database.Stateful{
     // DUPlicate US_HH based upon the zip code and consider only those where on one or on both the email is BLANK
     // no related list
-    Global String ParentIdVal = '0PB2C000000KykJWAS';
+    Global String ParentIdVal = '';
     Global Integer recordCount = 0;
     Global String recordSetId = '';
     Global Boolean isMergeRecord = false;
+    Global String errorList='' ;
     global DQ_MERGE_OF_Dupl_ZIP_US_HH_V5(String recordSetId ,string ParentIdVal,boolean isMergeRecord){
         this.recordSetId = recordSetId;
         this.isMergeRecord = isMergeRecord;
@@ -21,7 +22,12 @@ global class DQ_MERGE_OF_Dupl_ZIP_US_HH_V5 implements Database.Batchable<sObject
             query = 'SELECT Id FROM DuplicateRecordSet where  RecordCount = 2  AND ID=:recordSetId';
             
         }else{
-            query = 'SELECT Id FROM DuplicateRecordSet where  RecordCount = 2 AND ParentId=:ParentIdVal AND ID=:recordSetId ';
+            //query = 'SELECT Id FROM DuplicateRecordSet where  RecordCount = 2 AND ParentId=:ParentIdVal AND ID=:recordSetId ';
+            if(isMergeRecord){
+                query = 'SELECT Id FROM DuplicateRecordSet where  RecordCount = 2 AND ParentId=:ParentIdVal AND qualified__c=True ';
+            }else{
+                query = 'SELECT Id FROM DuplicateRecordSet where  RecordCount = 2 AND ParentId=:ParentIdVal  ';
+            }
         }
         
         return Database.getQueryLocator(query);
@@ -29,6 +35,7 @@ global class DQ_MERGE_OF_Dupl_ZIP_US_HH_V5 implements Database.Batchable<sObject
     }
     
     global void execute(Database.BatchableContext BC, List<DuplicateRecordSet> DuplicateRecordSetChunk) {
+        Savepoint sp = Database.setSavepoint();
         try {
             Map<String,String> churchValueMapping = new Map<String,String>();
             churchValueMapping.put('Associate Pastor'.toLowerCase(),'Pastor / Associate Pastor');
@@ -220,12 +227,14 @@ global class DQ_MERGE_OF_Dupl_ZIP_US_HH_V5 implements Database.Batchable<sObject
                                                                    
                                                                    //get value from US contact
                                                                    if(total_field_length - HH_field_length != 0){
-                                                                       if(HH_field_length !=0){
-                                                                           contactDataMap1.get(HH_contactID).put(conMerge.Field_API_Name__c,String.valueOf(contactDataMap1.get(HH_contactID).get(conMerge.Field_API_Name__c))+' '+String.valueOf(contactDataMap1.get(US_contactID).get(conMerge.Field_API_Name__c)).mid(0,total_field_length - (HH_field_length+1)));
-                                                                       }else{
-                                                                           System.debug('***null***************'+conMerge.Field_API_Name__c);
-                                                                           contactDataMap1.get(HH_contactID).put(conMerge.Field_API_Name__c,String.valueOf(contactDataMap1.get(US_contactID).get(conMerge.Field_API_Name__c)));
-                                                                           
+                                                                       if(contactDataMap1.get(US_contactID).get(conMerge.Field_API_Name__c)!=null){
+                                                                           if(HH_field_length !=0){
+                                                                               contactDataMap1.get(HH_contactID).put(conMerge.Field_API_Name__c,String.valueOf(contactDataMap1.get(HH_contactID).get(conMerge.Field_API_Name__c))+' '+String.valueOf(contactDataMap1.get(US_contactID).get(conMerge.Field_API_Name__c)).mid(0,total_field_length - (HH_field_length+1)));
+                                                                           }else{
+                                                                               System.debug('***null***************'+conMerge.Field_API_Name__c);
+                                                                               contactDataMap1.get(HH_contactID).put(conMerge.Field_API_Name__c,String.valueOf(contactDataMap1.get(US_contactID).get(conMerge.Field_API_Name__c)));
+                                                                               
+                                                                           }
                                                                        }
                                                                        System.debug(conMerge.Field_API_Name__c+' conMerge.Field_API_Name__c  ==>'+contactDataMap1.get(HH_contactID).get(conMerge.Field_API_Name__c));
                                                                    }
@@ -290,8 +299,9 @@ global class DQ_MERGE_OF_Dupl_ZIP_US_HH_V5 implements Database.Batchable<sObject
                                                }
                                                
                                                
-                                               //Merge contactDataMap1.get(HH_contactID)  US_contactID;
+                                               Merge contactDataMap1.get(HH_contactID)  US_contactID;
                                            }else{
+                                               DP_Set.qualified__c = true;
                                                System.debug('Do not merge Contact records');
                                                contact conObj = new Contact();
                                                conObj.Id = HH_contactID;
@@ -318,9 +328,10 @@ global class DQ_MERGE_OF_Dupl_ZIP_US_HH_V5 implements Database.Batchable<sObject
                          insert affiliationList;
                     }
                     if(!isMergeRecord){
+                        update recordSetList;
                         if(conList!=null && !conList.isEmpty()){
                             System.debug('conList==>'+conList); 
-                            //update conList;
+                            update conList;
                         } 
                     }
                 }
@@ -328,11 +339,21 @@ global class DQ_MERGE_OF_Dupl_ZIP_US_HH_V5 implements Database.Batchable<sObject
             }
         }catch(Exception e){
             System.debug('get exception on line number-->'+e.getLineNumber()+' error is=>'+e.getMessage()+' trace->'+e.getStackTraceString());
+            Database.rollback(sp);
+            errorList = errorList + ' get exception on line number-->'+e.getLineNumber()+' error is=>'+e.getMessage()+' chunkId=>'+DuplicateRecordSetChunk[0]+' <br>';
         }
         
     }   
     
     global void finish(Database.BatchableContext BC) {
+        
+        Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
+        String[] toAddresses = new String[] {'Prashant@infoglen.com'};
+            mail.setToAddresses(toAddresses);
+        mail.setSubject('Match Merge Batch DQ_MERGE_OF_Dupl_ZIP_US_HH_V5 '+ParentIdVal);
+        
+        mail.setHtmlBody(errorList);
+        Messaging.sendEmail(new Messaging.SingleEmailMessage[] { mail });
         
     }
 }
