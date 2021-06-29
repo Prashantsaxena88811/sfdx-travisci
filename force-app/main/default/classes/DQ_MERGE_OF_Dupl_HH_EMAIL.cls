@@ -23,10 +23,13 @@ global class DQ_MERGE_OF_Dupl_HH_EMAIL implements Database.Batchable<sObject>,Da
             query = 'SELECT Id FROM DuplicateRecordSet where  RecordCount = 2  AND ID=:recordSetId';
             
         }else{
-            //query = 'SELECT Id FROM DuplicateRecordSet where  RecordCount = 2 AND ParentId=:ParentIdVal ';
-            //NOTE check DQ_MERGE_OF_Dupl_ZIP_US_HH_V5 to add qualified check.
+            if(isMergeRecord){
+                query = 'SELECT Id FROM DuplicateRecordSet where  RecordCount = 2 AND ParentId=:ParentIdVal AND qualified__c=True ';
+            }else{
+                query = 'SELECT Id FROM DuplicateRecordSet where  RecordCount = 2 AND ParentId=:ParentIdVal  ';
+            }
             if(String.isNotBlank(recordSetId)){
-                query = query +  ' AND ID=:recordSetId ';
+                query = query+' AND ParentId=:recordSetId ';
             }
         }
         
@@ -131,6 +134,7 @@ global class DQ_MERGE_OF_Dupl_HH_EMAIL implements Database.Batchable<sObject>,Da
                     contact_MAP_WIthALLField.put(conObj.Id,conObj);
                 }
                 if(contactDataMap!=null && !contactDataMap.isEmpty()){
+                    Boolean bothHave_recurringDonation= false;
                     List<npe5__Affiliation__c> affiliationList = new List<npe5__Affiliation__c>();
                     List<Contact> contactToBeMarked = new List<Contact>();
                     List<Account> accountToBeMarked = new List<Account>();
@@ -254,13 +258,14 @@ global class DQ_MERGE_OF_Dupl_HH_EMAIL implements Database.Batchable<sObject>,Da
                                         if(String.isBlank(masterAccountId)){
                                             System.debug('*********check in Recurring donation*********');
                                             if(!accountMap_withRelatedList_recurr_donation.get(AccountId1).Opportunities.isEmpty() && !accountMap_withRelatedList_recurr_donation.get(AccountId2).Opportunities.isEmpty()){
-                                                if(accountMap_withRelatedList_recurr_donation.get(AccountId1).Opportunities[0].createdDate > accountMap_withRelatedList_recurr_donation.get(AccountId2).Opportunities[0].createdDate){
+                                                /*if(accountMap_withRelatedList_recurr_donation.get(AccountId1).Opportunities[0].createdDate > accountMap_withRelatedList_recurr_donation.get(AccountId2).Opportunities[0].createdDate){
                                                     masterAccountId = AccountId1;
                                                     mergerAccountId = AccountId2;
                                                 }else{
                                                     masterAccountId = AccountId2;
                                                     mergerAccountId = AccountId1;
-                                                }
+                                                }*/
+                                              bothHave_recurringDonation = true  ;
                                             }else if(!accountMap_withRelatedList_recurr_donation.get(AccountId1).Opportunities.isEmpty()){
                                                 masterAccountId = AccountId1;
                                                 mergerAccountId = AccountId2;
@@ -431,7 +436,7 @@ global class DQ_MERGE_OF_Dupl_HH_EMAIL implements Database.Batchable<sObject>,Da
                                        
                                         
                                         //merege account start populate the fields END
-                                        if(isMergeRecord){
+                                        if(isMergeRecord && (!bothHave_recurringDonation)){
                                             System.debug('**do not merge Account Records');
                                             Merge accountMap_withALL_field.get(masterAccountId)  mergerAccountId;  
                                         }else{
@@ -443,7 +448,11 @@ global class DQ_MERGE_OF_Dupl_HH_EMAIL implements Database.Batchable<sObject>,Da
                                             Account ac2 = new Account();
                                             ac2.Id = mergerAccountId;
                                             ac2.Record_Value__c = 'Merger';
-                                            
+                                            if(bothHave_recurringDonation){
+                                                ac1.Account_Have_Recurring_donation__c = true;
+                                                ac2.Account_Have_Recurring_donation__c = true;
+                                            }
+                                            DP_Set.qualified__c = True;
                                             accountToBeMarked.add(ac1);
                                             accountToBeMarked.add(ac2);
                                         }
@@ -472,7 +481,7 @@ global class DQ_MERGE_OF_Dupl_HH_EMAIL implements Database.Batchable<sObject>,Da
                                         
                                     }
                                     if(String.isNotBlank(masterContactId) && String.isNotBlank(mergerContactId)){
-                                        if(isMergeRecord){
+                                        if(isMergeRecord && (!bothHave_recurringDonation)){
                                             System.debug('******Mereging records***********');
                                             if(contact_MAP_WIthALLField.containsKey(masterContactId) && contact_MAP_WIthALLField.containsKey(mergerContactId)){
                                                 // get Other Addrss for US contact if HH contact having no mailing Address
@@ -606,16 +615,22 @@ global class DQ_MERGE_OF_Dupl_HH_EMAIL implements Database.Batchable<sObject>,Da
                                         }
                                         else{
                                             System.debug('Do not merge Contact records');
-                                               contact conObj = new Contact();
-                                               conObj.Id = masterContactId;
-                                               conObj.Record_Value__c = 'Master';
-                                               
-                                               contact conObj1 = new Contact();
-                                               conObj1.Id = mergerContactId;
-                                               conObj1.Record_Value__c = 'Merger';
-                                               
-                                               contactToBeMarked.add(conObj);
-                                               contactToBeMarked.add(conObj1);
+                                            contact conObj = new Contact();
+                                            conObj.Id = masterContactId;
+                                            conObj.Record_Value__c = 'Master';
+                                            
+                                            contact conObj1 = new Contact();
+                                            conObj1.Id = mergerContactId;
+                                            conObj1.Record_Value__c = 'Merger';
+                                            
+                                            if(bothHave_recurringDonation){
+                                                conObj1.Account_Have_Recurring_donation__c = true;
+                                                conObj.Account_Have_Recurring_donation__c = true;
+                                            }
+                                            
+                                            contactToBeMarked.add(conObj);
+                                            contactToBeMarked.add(conObj1);
+                                            DP_Set.qualified__c = True;
                                         }
                                         
                                        
@@ -636,6 +651,7 @@ global class DQ_MERGE_OF_Dupl_HH_EMAIL implements Database.Batchable<sObject>,Da
                         
                         
                     }
+                    update recordSetList;
                     if(affiliationList!=null && !affiliationList.isEmpty()){
                         System.debug('affiliationList==>'+affiliationList);
                         if(isMergeRecord){

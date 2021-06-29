@@ -72,9 +72,9 @@
 <members>	DQ_Update_transaction_Status_AND_Date	</members>
 <members>	DQ_Update_transaction_Status_DATE_Test	</members>
 <members>   DQ_MERGE_OF_Dupl_HH_EMAIL_Test  </members>
-<members>	EDQConstants	</members>
-<members>	Payment_ePDQ	</members>
-<members>	TrailheadQueue	</members>
+<members>	DQ_Delete_Contact_S1_V1	</members>
+<members>	DQ_Delete_Contact_S1_V2	</members>
+<members>	DQ_Delete_Contact_S1_V4	</members>
 
         <name>ApexClass</name>
     </types>
