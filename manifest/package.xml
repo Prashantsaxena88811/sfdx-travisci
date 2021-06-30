@@ -75,6 +75,7 @@
 <members>	DQ_Delete_Contact_S1_V1	</members>
 <members>	DQ_Delete_Contact_S1_V2	</members>
 <members>	DQ_Delete_Contact_S1_V4	</members>
+<members> DQ_Delete_Contact_S1_V1_with_count</members>
 
         <name>ApexClass</name>
     </types>

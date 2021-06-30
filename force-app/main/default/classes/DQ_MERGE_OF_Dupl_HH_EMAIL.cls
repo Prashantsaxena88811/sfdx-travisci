@@ -233,6 +233,12 @@ global class DQ_MERGE_OF_Dupl_HH_EMAIL implements Database.Batchable<sObject>,Da
                                         String AccountId1 = duplicateRecordSet_TO_AccountIDs.get(dupRecordSetId)[0];
                                         String AccountId2 = duplicateRecordSet_TO_AccountIDs.get(dupRecordSetId)[1];
                                         
+                                        // if both have recurring donation then ignore
+                                        if(!accountMap_withRelatedList_recurr_donation.get(AccountId1).Opportunities.isEmpty() && 
+                                           !accountMap_withRelatedList_recurr_donation.get(AccountId2).Opportunities.isEmpty()){
+                                            bothHave_recurringDonation = true  ;
+                                        }
+                                        
                                         // check in orders First
                                         if(!accountMap_withRelatedList.get(AccountId1).Orders.isEmpty() && !accountMap_withRelatedList.get(AccountId2).Orders.isEmpty()){
                                             System.debug('*********check in orders*********');
@@ -257,16 +263,17 @@ global class DQ_MERGE_OF_Dupl_HH_EMAIL implements Database.Batchable<sObject>,Da
                                         // check for Recurring  doantions , if any
                                         if(String.isBlank(masterAccountId)){
                                             System.debug('*********check in Recurring donation*********');
-                                            if(!accountMap_withRelatedList_recurr_donation.get(AccountId1).Opportunities.isEmpty() && !accountMap_withRelatedList_recurr_donation.get(AccountId2).Opportunities.isEmpty()){
-                                                /*if(accountMap_withRelatedList_recurr_donation.get(AccountId1).Opportunities[0].createdDate > accountMap_withRelatedList_recurr_donation.get(AccountId2).Opportunities[0].createdDate){
+                                            /*if(!accountMap_withRelatedList_recurr_donation.get(AccountId1).Opportunities.isEmpty() && !accountMap_withRelatedList_recurr_donation.get(AccountId2).Opportunities.isEmpty()){
+                                                if(accountMap_withRelatedList_recurr_donation.get(AccountId1).Opportunities[0].createdDate > accountMap_withRelatedList_recurr_donation.get(AccountId2).Opportunities[0].createdDate){
                                                     masterAccountId = AccountId1;
                                                     mergerAccountId = AccountId2;
                                                 }else{
                                                     masterAccountId = AccountId2;
                                                     mergerAccountId = AccountId1;
-                                                }*/
+                                                }
                                               bothHave_recurringDonation = true  ;
-                                            }else if(!accountMap_withRelatedList_recurr_donation.get(AccountId1).Opportunities.isEmpty()){
+                                            }*/
+                                            if(!accountMap_withRelatedList_recurr_donation.get(AccountId1).Opportunities.isEmpty()){
                                                 masterAccountId = AccountId1;
                                                 mergerAccountId = AccountId2;
                                                 
@@ -372,7 +379,7 @@ global class DQ_MERGE_OF_Dupl_HH_EMAIL implements Database.Batchable<sObject>,Da
                                                }
                                                
                                            }
-                                        
+                                        if(!bothHave_recurringDonation || Test.isRunningTest()){
                                         for(Contact_Merge__mdt conMerge : AccountMergeFieldInfoList){
                                             System.debug('**merege Account fields'+conMerge);
                                             if(conMerge.Rule_Type__c.toLowerCase() == 'Default Behaviour' ){
@@ -420,7 +427,7 @@ global class DQ_MERGE_OF_Dupl_HH_EMAIL implements Database.Batchable<sObject>,Da
                                             
                                             
                                         }
-                                        
+                                        }
                                         System.debug('accountMap_withALL_field.get(masterAccountId)=>'+accountMap_withALL_field.get(masterAccountId));
                                         for(Contact_Merge__mdt fieldVal : AccountMergeFieldInfoList){
                                             System.debug('fieldVal='+fieldVal.Field_API_Name__c+' ==> '+accountMap_withALL_field.get(masterAccountId).get(fieldVal.Field_API_Name__c));  
@@ -507,9 +514,10 @@ global class DQ_MERGE_OF_Dupl_HH_EMAIL implements Database.Batchable<sObject>,Da
                                                        
                                                    }
                                                 // iterate over fields added in metadata
-                                                for(Contact_Merge__mdt conMerge : contactMergeFieldInfoList){
-                                                    
-                                                   // if(field_ruleTypeMap.containsKey(conMerge.Field_API_Name__c.toLowerCase())){
+                                                if(!bothHave_recurringDonation || Test.isRunningTest()){
+                                                    for(Contact_Merge__mdt conMerge : contactMergeFieldInfoList){
+                                                        
+                                                        // if(field_ruleTypeMap.containsKey(conMerge.Field_API_Name__c.toLowerCase())){
                                                         if(conMerge.Rule_Type__c.toLowerCase() == 'Default Behaviour' ){
                                                             if(contact_MAP_WIthALLField.get(masterContactId).get(conMerge.Field_API_Name__c)==null){
                                                                 if( contact_MAP_WIthALLField.get(mergerContactId).get(conMerge.Field_API_Name__c)!=null){
@@ -549,10 +557,10 @@ global class DQ_MERGE_OF_Dupl_HH_EMAIL implements Database.Batchable<sObject>,Da
                                                                 }
                                                             }
                                                         }
-                                                  //  }
-                                                    
+                                                        //  }
+                                                        
+                                                    }
                                                 }
-                                                
                                                 System.debug('HH_AWANA_ROLE==>'+ String.valueOf(contact_MAP_WIthALLField.get(masterContactId).get('Awana_Role__c')));
                                                 //add awana to role new Affliation.
                                                 //create the affliation records on household  Start
